@@ -31,9 +31,22 @@ class DetalleActividad
     #[ORM\ManyToMany(targetEntity: Alumno::class, inversedBy: 'detalleActividads')]
     private Collection $asiste;
 
+    #[ORM\ManyToOne(inversedBy: 'detalleActividads')]
+    private ?Espacio $detalle_actividad_espacios = null;
+
+    /**
+     * @var Collection<int, Ponente>
+     */
+    #[ORM\OneToMany(targetEntity: Ponente::class, mappedBy: 'ponente_detalle_actividad')]
+    private Collection $ponentes;
+
+    #[ORM\ManyToOne(inversedBy: 'detalleActividads')]
+    private ?Actividad $detalle_actividad_evento = null;
+
     public function __construct()
     {
         $this->asiste = new ArrayCollection();
+        $this->ponentes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -97,6 +110,60 @@ class DetalleActividad
     public function removeAsiste(Alumno $asiste): static
     {
         $this->asiste->removeElement($asiste);
+
+        return $this;
+    }
+
+    public function getDetalleActividadEspacios(): ?Espacio
+    {
+        return $this->detalle_actividad_espacios;
+    }
+
+    public function setDetalleActividadEspacios(?Espacio $detalle_actividad_espacios): static
+    {
+        $this->detalle_actividad_espacios = $detalle_actividad_espacios;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, Ponente>
+     */
+    public function getPonentes(): Collection
+    {
+        return $this->ponentes;
+    }
+
+    public function addPonente(Ponente $ponente): static
+    {
+        if (!$this->ponentes->contains($ponente)) {
+            $this->ponentes->add($ponente);
+            $ponente->setPonenteDetalleActividad($this);
+        }
+
+        return $this;
+    }
+
+    public function removePonente(Ponente $ponente): static
+    {
+        if ($this->ponentes->removeElement($ponente)) {
+            // set the owning side to null (unless already changed)
+            if ($ponente->getPonenteDetalleActividad() === $this) {
+                $ponente->setPonenteDetalleActividad(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getDetalleActividadEvento(): ?Actividad
+    {
+        return $this->detalle_actividad_evento;
+    }
+
+    public function setDetalleActividadEvento(?Actividad $detalle_actividad_evento): static
+    {
+        $this->detalle_actividad_evento = $detalle_actividad_evento;
 
         return $this;
     }

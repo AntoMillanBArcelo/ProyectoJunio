@@ -22,6 +22,9 @@ class Ponente
     #[ORM\Column(length: 255)]
     private ?string $CArgo = null;
 
+    #[ORM\ManyToOne(inversedBy: 'ponentes')]
+    private ?DetalleActividad $ponente_detalle_actividad = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -59,6 +62,18 @@ class Ponente
     public function setCArgo(string $CArgo): static
     {
         $this->CArgo = $CArgo;
+
+        return $this;
+    }
+
+    public function getPonenteDetalleActividad(): ?DetalleActividad
+    {
+        return $this->ponente_detalle_actividad;
+    }
+
+    public function setPonenteDetalleActividad(?DetalleActividad $ponente_detalle_actividad): static
+    {
+        $this->ponente_detalle_actividad = $ponente_detalle_actividad;
 
         return $this;
     }

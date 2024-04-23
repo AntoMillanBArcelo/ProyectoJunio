@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\ActividadRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 
@@ -22,6 +24,17 @@ class Actividad
 
     #[ORM\ManyToOne(inversedBy: 'evento_actividad')]
     private ?Evento $evento = null;
+
+    /**
+     * @var Collection<int, DetalleActividad>
+     */
+    #[ORM\OneToMany(targetEntity: DetalleActividad::class, mappedBy: 'detalle_actividad_evento')]
+    private Collection $detalleActividads;
+
+    public function __construct()
+    {
+        $this->detalleActividads = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -60,6 +73,36 @@ class Actividad
     public function setEvento(?Evento $evento): static
     {
         $this->evento = $evento;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DetalleActividad>
+     */
+    public function getDetalleActividads(): Collection
+    {
+        return $this->detalleActividads;
+    }
+
+    public function addDetalleActividad(DetalleActividad $detalleActividad): static
+    {
+        if (!$this->detalleActividads->contains($detalleActividad)) {
+            $this->detalleActividads->add($detalleActividad);
+            $detalleActividad->setDetalleActividadEvento($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDetalleActividad(DetalleActividad $detalleActividad): static
+    {
+        if ($this->detalleActividads->removeElement($detalleActividad)) {
+            // set the owning side to null (unless already changed)
+            if ($detalleActividad->getDetalleActividadEvento() === $this) {
+                $detalleActividad->setDetalleActividadEvento(null);
+            }
+        }
 
         return $this;
     }
