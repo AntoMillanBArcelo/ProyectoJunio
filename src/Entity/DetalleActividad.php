@@ -43,6 +43,9 @@ class DetalleActividad
     #[ORM\ManyToOne(inversedBy: 'detalleActividads')]
     private ?Actividad $detalle_actividad_evento = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $URL = null;
+
     public function __construct()
     {
         $this->asiste = new ArrayCollection();
@@ -164,6 +167,18 @@ class DetalleActividad
     public function setDetalleActividadEvento(?Actividad $detalle_actividad_evento): static
     {
         $this->detalle_actividad_evento = $detalle_actividad_evento;
+
+        return $this;
+    }
+
+    public function getURL(): ?string
+    {
+        return $this->URL;
+    }
+
+    public function setURL(string $URL): static
+    {
+        $this->URL = $URL;
 
         return $this;
     }
