@@ -30,10 +30,17 @@ class Grupo
     #[ORM\OneToMany(targetEntity: NivelEducativo::class, mappedBy: 'grupo')]
     private Collection $grupo_niveleducativo;
 
+    /**
+     * @var Collection<int, User>
+     */
+    #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'grupos')]
+    private Collection $grupo_user;
+
     public function __construct()
     {
         $this->alumnos = new ArrayCollection();
         $this->grupo_niveleducativo = new ArrayCollection();
+        $this->grupo_user = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -109,6 +116,30 @@ class Grupo
                 $grupoNiveleducativo->setGrupo(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, User>
+     */
+    public function getGrupoUser(): Collection
+    {
+        return $this->grupo_user;
+    }
+
+    public function addGrupoUser(User $grupoUser): static
+    {
+        if (!$this->grupo_user->contains($grupoUser)) {
+            $this->grupo_user->add($grupoUser);
+        }
+
+        return $this;
+    }
+
+    public function removeGrupoUser(User $grupoUser): static
+    {
+        $this->grupo_user->removeElement($grupoUser);
 
         return $this;
     }
