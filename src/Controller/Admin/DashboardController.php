@@ -6,6 +6,13 @@ use App\Entity\Edificio;
 use App\Entity\Espacio;
 use App\Entity\Recurso;
 use App\Entity\User;
+use App\Entity\DetalleActividad;
+use App\Entity\Evento;
+use App\Entity\Actividad;
+use App\Entity\Ponente;
+use App\Entity\Alumno;
+use App\Entity\Grupo;
+use App\Entity\NivelEducativo;
 use EasyCorp\Bundle\EasyAdminBundle\Config\MenuItem;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Dashboard;
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractDashboardController;
@@ -56,6 +63,19 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Espacio', 'fa-solid fa-person-shelter', Espacio::class);
         yield MenuItem::linkToCrud('Recurso', 'fa-solid fa-desktop', Recurso::class);
         yield MenuItem::linkToCrud('User', 'fa-solid fa-desktop', User::class);
+
+        yield MenuItem::section('Eventos');
+        yield MenuItem::linkToCrud('Detalle Actividad', 'fa-solid fa-desktop', DetalleActividad::class);
+        yield MenuItem::linkToCrud('Actividad', 'fa-solid fa-desktop', Actividad::class);
+        yield MenuItem::linkToCrud('Evento', 'fa-solid fa-desktop', Evento::class);
+        yield MenuItem::linkToCrud('Ponente', 'fa-solid fa-desktop', Ponente::class);
+
+        
+        yield MenuItem::section('Alumnos');
+        yield MenuItem::linkToCrud('Alumno', 'fa-solid fa-desktop', Alumno::class);
+        yield MenuItem::linkToCrud('Nivel Educativo', 'fa-solid fa-desktop', NivelEducativo::class);
+        yield MenuItem::linkToCrud('Grupo', 'fa-solid fa-desktop', Grupo::class);
+
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
     }
 
