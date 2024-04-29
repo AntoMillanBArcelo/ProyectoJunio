@@ -76,4 +76,9 @@ class Edificio
 
         return $this;
     }
+
+    public function __toString(): string
+    {
+        return $this->getNombre() ?? 'Sin Nombre';
+    }
 }
