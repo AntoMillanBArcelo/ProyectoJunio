@@ -3,7 +3,7 @@
 namespace App\Controller\Admin;
 
 use App\Entity\Espacio;
-use App\Entity\Edificio; // Importa la entidad Edificio
+use App\Entity\Edificio; 
 use EasyCorp\Bundle\EasyAdminBundle\Controller\AbstractCrudController;
 use EasyCorp\Bundle\EasyAdminBundle\Field\AssociationField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\IdField;
@@ -12,6 +12,9 @@ use EasyCorp\Bundle\EasyAdminBundle\Field\TextField;
 use EasyCorp\Bundle\EasyAdminBundle\Field\TextEditorField;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Actions;
 use EasyCorp\Bundle\EasyAdminBundle\Config\Action;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
+use EasyCorp\Bundle\EasyAdminBundle\Field\Field;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 
 class EspacioCrudController extends AbstractCrudController
 {
@@ -33,7 +36,12 @@ class EspacioCrudController extends AbstractCrudController
             TextField::new('Nombre', 'Nombre del Espacio'),
             IntegerField::new('Aforo', 'Aforo'), 
             AssociationField::new('espacio_edificio', 'Edificio'), 
-            
+            AssociationField::new('recursos', 'Recursos')
+                ->setFormTypeOption('class', 'App\Entity\Recurso')
+                ->setFormTypeOption('multiple', true)
+                ->setFormTypeOption('required', true)
+                ->setHelp('ayuda'),
         ];
     }
+    
 }

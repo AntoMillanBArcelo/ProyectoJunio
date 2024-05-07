@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <script src="{{ asset('js/libreriaComun.js') }}"></script>
+    <script src="{{ asset('js/fichero.js') }}"></script>
+    <script src="{{ asset('js/select.js') }}"></script>
+</head>
+<body>
+    <label for="">Seleccione el fichero deseado</label>
+    <input type="file" id="fichero">
+    <hr>
+    <table>
+        <tr>
+            <td><select class="recursos" name="" id="fuente" size="20" multiple="multiple"></select></td>
+            <td>
+                <span id="pasarIzq">&lt;</span><br>
+                <span id="pasarIzqTodos">&lt;&lt;</span><br>
+                <span id="pasarDer">&gt;</span><br>
+                <span id="pasarDerTodos">&gt;&gt;</span><br>
+            </td>
+            <td><select class="recursos" name="" id="seleccionados" size="20" multiple="multiple"></select></td>
+        </tr>
+    </table>
+</body>
+</html>

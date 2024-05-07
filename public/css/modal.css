@@ -1,0 +1,37 @@
+/* public/css/modal.css */
+
+/* Estilos para la ventana modal */
+.modal {
+    /* Ocultar la ventana modal por defecto */
+    display: none;
+
+    /* Centrar la ventana modal verticalmente */
+    position: fixed;
+    top: 50%;
+    transform: translateY(-50%);
+
+    /* Centrar la ventana modal horizontalmente */
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+/* Estilos para el contenido de la ventana modal */
+.modal-content {
+    /* Ajustar el tamaño y el estilo de la ventana modal */
+    width: 80%;
+    max-width: 600px;
+    background-color: #fff;
+    padding: 20px;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    background-color: aqua;
+}
+
+/* Estilos para el botón de cerrar */
+.close {
+    /* Posicionar el botón en la esquina superior derecha del contenido */
+    position: absolute;
+    top: 8px;
+    right: 8px;
+    cursor: pointer;
+}

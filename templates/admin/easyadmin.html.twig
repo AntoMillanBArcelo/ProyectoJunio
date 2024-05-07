@@ -1,6 +1,23 @@
-{# templates/admin/easyadmin.html.twig #}
 {% extends '@EasyAdmin/layout.html.twig' %}
 
+{% block stylesheets %}
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/css.css') }}"> {# Estilos generales #}
+    <link rel="stylesheet" type="text/css" href="{{ asset('css/modal.css') }}"> {# Estilos para la ventana modal #}
+{% endblock %}
+
+{% block body_javascript %}
+    {{ parent() }}
+    
+    <script src="{{ asset('js/modal.js') }}"></script>
+    <script src="{{ asset('js/fichero.js') }}"></script>
+{% endblock %}
+
 {% block main %}
-    {# ... #}
+
+    {% set routeName = 'cargar' %}
+
+    <div class="iframe-container">
+        <iframe src="{{ path(routeName) }}" frameborder="0"></iframe>
+    </div>
 {% endblock main %}
+

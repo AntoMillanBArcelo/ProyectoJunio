@@ -76,6 +76,8 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Nivel Educativo', 'fa-solid fa-desktop', NivelEducativo::class);
         yield MenuItem::linkToCrud('Grupo', 'fa-solid fa-desktop', Grupo::class);
 
+        yield MenuItem::linkToRoute('s', 'fa-solid fa-desktop', 'cargar');
+        yield MenuItem::linkToUrl('sUrl', 'fa-solid fa-desktop', $this->generateUrl('cargar'));
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
     }
 
