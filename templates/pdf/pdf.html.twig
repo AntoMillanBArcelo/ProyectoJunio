@@ -1,0 +1,27 @@
+{# templates/pdf/pdf.html.twig #}
+
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>Ejemplo de PDF</title>
+    <style>
+        /* Estilos CSS para el PDF */
+        body {
+            font-family: Arial, sans-serif;
+        }
+        h1 {
+            color: #333;
+        }
+        p {
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+    <h1>Ejemplo de PDF</h1>
+    <p>Este es un ejemplo de contenido estático para un archivo PDF generado con dompdf en Symfony.</p>
+    <p>Puedes personalizar este contenido según tus necesidades.</p>
+    <img src='{{ absolute_url(asset('images/sc.jpg')) }}'/>
+</body>
+</html>
