@@ -1,0 +1,117 @@
+/* Estilo para el título del modal */
+.modal-title {
+    color: #333;
+    font-size: 24px;
+}
+
+/* Estilo para el cuerpo del modal */
+.modal-body {
+    background-color: #f7f7f7;
+    padding: 20px;
+}
+
+/* Estilo para los botones del modal */
+.modal-footer .btn {
+    border-radius: 5px;
+    padding: 10px 20px;
+}
+
+/* Estilo para el botón "Understood" */
+.modal-footer .btn-primary {
+    background-color: #007bff;
+    color: #fff;
+}
+
+/* Estilo para el botón "Close" */
+.modal-footer .btn-secondary {
+    background-color: #6c757d;
+    color: #fff;
+}
+
+/* Estilo para el botón de cerrar el modal */
+.btn-close {
+    color: #333;
+    font-size: 24px;
+    opacity: 0.7;
+}
+.modal-dialog {
+    max-width: 1000px;
+}
+th{
+    font-size: large;
+}
+td{
+    font-size: medium;
+}
+.custom-file-input::-webkit-file-upload-button {
+    visibility: hidden;
+  }
+  
+  .custom-file-input::before {
+    content: 'Select File';
+    display: inline-block;
+    background: linear-gradient(top, #f9f9f9, #e3e3e3);
+    border: 1px solid #999;
+    border-radius: 3px;
+    padding: 5px 8px;
+    outline: none;
+    white-space: nowrap;
+    -webkit-user-select: none;
+    cursor: pointer;
+    text-shadow: 1px 1px #fff;
+    font-weight: 700;
+    font-size: 10pt;
+  }
+  
+  .custom-file-input:hover::before {
+    border-color: black;
+  }
+  
+  .custom-file-input:active::before {
+    background: -webkit-linear-gradient(top, #e3e3e3, #f9f9f9);
+  }
+  .custom-file{
+    margin-bottom: 30px;
+  }
+  /* Estilo para la tabla */
+#dataTable {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+/* Estilo para las filas de la tabla */
+#dataTable tbody tr:hover {
+    background-color: #f0f0f0; /* Color de fondo cuando el ratón está encima */
+}
+
+/* Estilo para las celdas de la tabla */
+#dataTable td, #dataTable th {
+    padding: 8px;
+    border: 1px solid #ddd;
+}
+
+/* Estilo para las celdas de encabezado de la tabla */
+#dataTable th {
+    background-color: #f2f2f2;
+    text-align: left;
+}
+
+/* Estilo para el texto de las celdas de la tabla */
+#dataTable td {
+    font-size: 14px;
+}
+
+/* Estilo para las celdas de la primera columna de la tabla */
+#dataTable td:first-child, #dataTable th:first-child {
+    border-left: none;
+}
+
+/* Estilo para las celdas de la última columna de la tabla */
+#dataTable td:last-child, #dataTable th:last-child {
+    border-right: none;
+}
+
+/* Efecto de hover en las filas */
+#dataTable tbody tr:hover {
+    background-color: #f5f5f5;
+}

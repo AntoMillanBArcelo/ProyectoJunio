@@ -27,28 +27,87 @@
     {{ parent() }}
     {{ include('@EasyAdmin/includes/_css_assets.html.twig', { assets: ea_field_assets.cssAssets }, with_context = false) }}
     {{ include('@EasyAdmin/includes/_encore_link_tags.html.twig', { assets: ea_field_assets.webpackEncoreAssets }, with_context = false) }}
+     <link rel="stylesheet" type="text/css" href="{{ asset('css/ventanaModal.css') }}">
 {% endblock %}
 
 {% block configured_javascripts %}
     {{ parent() }}
     {{ include('@EasyAdmin/includes/_js_assets.html.twig', { assets: ea_field_assets.jsAssets }, with_context = false) }}
     {{ include('@EasyAdmin/includes/_encore_script_tags.html.twig', { assets: ea_field_assets.webpackEncoreAssets }, with_context = false) }}
+    <script src="{{ asset('js/tabla.js') }}"></script>
 {% endblock %}
 
 {% block content_title %}
     {%- apply spaceless -%}
-        {% set custom_page_title = ea.crud.customPageTitle('index', null, ea.i18n.translationParameters) %}
-        {{ custom_page_title is null
-            ? ea.crud.defaultPageTitle('index', null, ea.i18n.translationParameters)|trans|raw
-            : custom_page_title|trans|raw }}
-            {% if ea.i18n.translationParameters['%entity_name%'] == 'Edificio' %}
-                {{dump(ea.i18n.translationParameters)}}
-                <a href="/cargar" class="btn btn-primary">Alta masiva</a>
+        <div class="d-flex justify-content-between align-items-center"> <!-- Añadimos Flexbox con espacio entre elementos -->
+            <div>
+                {% set custom_page_title = ea.crud.customPageTitle('index', null, ea.i18n.translationParameters) %}
+                {{ custom_page_title is null
+                    ? ea.crud.defaultPageTitle('index', null, ea.i18n.translationParameters)|trans|raw
+                    : custom_page_title|trans|raw }}
+            </div>
+            {% if ea.i18n.translationParameters['%entity_name%']=='Edificio' or ea.i18n.translationParameters['%entity_name%']=='Alumno' or ea.i18n.translationParameters['%entity_name%']=='User' %}
+                <!-- Button trigger modal -->
+                <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#staticBackdrop" id="btnAlta" data-entidad={{ea.i18n.translationParameters['%entity_name%']}}>
+                    Alta Masiva
+                </button>
             {% endif %}
-            
-            
+        </div>
+
+        <!-- Modal -->
+        <div class="modal fade" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="staticBackdropLabel" aria-hidden="true">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <h1 class="modal-title fs-5" id="staticBackdropLabel">Importar {{ ea.i18n.translationParameters['%entity_name%']}}</h1>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                    </div>
+                    <div class="modal-body">
+                        {% if ea.i18n.translationParameters['%entity_name%']=='Edificio' %}
+                            <table class="table">
+                                <thead>
+                                    <tr>
+                                    <th scope="col">ID</th>
+                                    <th scope="col">NOMBRE</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                                </table>
+ 
+                        {% endif %}
+
+                        {% if ea.i18n.translationParameters['%entity_name%']=='Alumno' %}
+                        <div class="input-group">
+                            <div class="custom-file">
+                                <input type="file" class="custom-file-input" id="csvFileInput">
+                                <label class="custom-file-label" for="customFile">Selecciona un archivo</label>
+                            </div>
+                        </div>
+                            <table class="table" id="dataTable">
+                                <thead>
+                                    <tr>
+                                    <th scope="col">NOMBRE</th>
+                                    <th scope="col">NICK</th>
+                                    <th scope="col">CORREO</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                </tbody>
+                            </table>
+ 
+                        {% endif %}
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+                        <button type="button" class="btn btn-primary">Guardar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
     {%- endapply -%}
 {% endblock %}
+
 
 {% set has_batch_actions = batch_actions|length > 0 %}
 {% block page_actions %}
@@ -97,6 +156,7 @@
     {% set has_search = ea.crud.isSearchEnabled %}
     {% set has_filters = filters|length > 0 %}
     {% set num_results = entities|length %}
+
     <table class="table datagrid {{ entities is empty ? 'datagrid-empty' }}">
         {% if num_results > 0 %}
             <thead>
