@@ -20,6 +20,8 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
+
+
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
@@ -50,6 +52,7 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function __construct()
     {
         $this->grupos = new ArrayCollection();
+        $this->roles = []; // Agrega esta línea para inicializar roles como un array vacío
     }
 
     public function getId(): ?int

@@ -62,21 +62,24 @@ class DashboardController extends AbstractDashboardController
         yield MenuItem::linkToCrud('Edificio', 'fa-solid fa-building', Edificio::class);
         yield MenuItem::linkToCrud('Espacio', 'fa-solid fa-person-shelter', Espacio::class);
         yield MenuItem::linkToCrud('Recurso', 'fa-solid fa-desktop', Recurso::class);
-        yield MenuItem::linkToCrud('User', 'fa-solid fa-desktop', User::class);
+       
 
         yield MenuItem::section('Eventos');
-        yield MenuItem::linkToCrud('Detalle Actividad', 'fa-solid fa-desktop', DetalleActividad::class);
-        yield MenuItem::linkToCrud('Actividad', 'fa-solid fa-desktop', Actividad::class);
-        yield MenuItem::linkToCrud('Evento', 'fa-solid fa-desktop', Evento::class);
-        yield MenuItem::linkToCrud('Ponente', 'fa-solid fa-desktop', Ponente::class);
+        yield MenuItem::linkToCrud('Detalle Actividad', 'fa-solid fa-calendar-plus', DetalleActividad::class);
+        yield MenuItem::linkToCrud('Actividad', 'fa-solid fa-calendar-days', Actividad::class);
+        yield MenuItem::linkToCrud('Evento', 'fa-solid fa-calendar', Evento::class);
+        yield MenuItem::linkToCrud('Ponente', 'fa-solid fa-user-tie', Ponente::class);
         
         yield MenuItem::section('Alumnos');
-        yield MenuItem::linkToCrud('Alumno', 'fa-solid fa-desktop', Alumno::class);
-        yield MenuItem::linkToCrud('Nivel Educativo', 'fa-solid fa-desktop', NivelEducativo::class);
-        yield MenuItem::linkToCrud('Grupo', 'fa-solid fa-desktop', Grupo::class);
+        yield MenuItem::linkToCrud('Alumno', 'fa-solid fa-user-graduate', Alumno::class);
+        yield MenuItem::linkToCrud('Nivel Educativo', 'fa-solid fa-book', NivelEducativo::class);
+        yield MenuItem::linkToCrud('Grupo', 'fa-solid fa-user-group', Grupo::class);
+    
+        yield MenuItem::section('Usuario');
+        yield MenuItem::linkToCrud('Usuarios', 'fa-solid fa-user', User::class);
 
-        yield MenuItem::linkToRoute('s', 'fa-solid fa-desktop', 'cargar');
-        yield MenuItem::linkToUrl('sUrl', 'fa-solid fa-desktop', $this->generateUrl('cargar'));
+       /*  yield MenuItem::linkToRoute('s', 'fa-solid fa-desktop', 'cargar');
+        yield MenuItem::linkToUrl('sUrl', 'fa-solid fa-desktop', $this->generateUrl('cargar')); */
         // yield MenuItem::linkToCrud('The Label', 'fas fa-list', EntityClass::class);
     }
 

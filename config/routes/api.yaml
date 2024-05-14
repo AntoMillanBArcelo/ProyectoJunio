@@ -1,0 +1,60 @@
+api_edificio_list:
+    path: /api/edificios
+    controller: App\Controller\Api\EdificioApiController::index
+    methods: GET
+
+api_edificio_show:
+    path: /api/edificios/{id}
+    controller: App\Controller\Api\EdificioApiController::show
+    methods: GET
+
+api_edificio_create:
+    path: /api/edificios
+    controller: 'App\Controller\Api\EdificioApiController::create'
+    methods: ['POST']
+
+api_edificio_delete:
+    path: /api/edificios/{id}
+    controller: 'App\Controller\Api\EdificioApiController::delete'
+    methods: ['DELETE']
+
+
+api_alumno_list:
+    path: /api/alumnos
+    controller: App\Controller\Api\AlumnoApiController::index
+    methods: GET
+
+api_alumno_show:
+    path: /api/alumnos/{id}
+    controller: App\Controller\Api\AlumnoApiController::show
+    methods: GET
+
+api_alumno_create:
+    path: /api/alumnos
+    controller: 'App\Controller\Api\AlumnoApiController::create'
+    methods: ['POST']
+
+api_alumno_delete:
+    path: /api/alumnos/{id}
+    controller: 'App\Controller\Api\AlumnoApiController::delete'
+    methods: ['DELETE']
+
+api_user_list:
+    path: /api/users
+    controller: 'App\Controller\Api\UserController::index'
+    methods: ['GET']
+
+api_user_show:
+    path: /api/users/{id}
+    controller: 'App\Controller\Api\UserController::show'
+    methods: ['GET']
+
+api_user_create:
+    path: /api/users
+    controller: App\Controller\Api\UserApiController::create
+    methods: ['POST']
+
+api_user_delete:
+    path: /api/users/{id}
+    controller: App\Controller\Api\UserApiController::delete
+    methods: ['DELETE']
