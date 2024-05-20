@@ -1,5 +1,4 @@
 <?php
-
 namespace App\Controller\Api;
 
 use App\Entity\Alumno;
@@ -25,9 +24,9 @@ class AlumnoApiController extends AbstractController
     /**
      * @Route("/", name="api_alumno_list", methods={"GET"})
      */
-    public function index(EntityManagerInterface $entityManager): JsonResponse
+    public function index(): JsonResponse
     {
-        $repository = $entityManager->getRepository(Alumno::class);
+        $repository = $this->entityManager->getRepository(Alumno::class);
         $alumnos = $repository->findAll();
         $data = [];
     
@@ -41,9 +40,9 @@ class AlumnoApiController extends AbstractController
     /**
      * @Route("/{id}", name="api_alumno_show", methods={"GET"})
      */
-    public function show(int $id, EntityManagerInterface $entityManager): JsonResponse
+    public function show(int $id): JsonResponse
     {
-        $alumno = $entityManager->getRepository(Alumno::class)->find($id);
+        $alumno = $this->entityManager->getRepository(Alumno::class)->find($id);
 
         if (!$alumno) {
             return new JsonResponse(['message' => 'Alumno no encontrado'], Response::HTTP_NOT_FOUND);
@@ -70,7 +69,6 @@ class AlumnoApiController extends AbstractController
                ->setCorreo($data['correo'])
                ->setFechaNac(new \DateTime($data['fecha_nac']));
 
-       
         $this->entityManager->persist($alumno);
         $this->entityManager->flush();
 
@@ -86,7 +84,7 @@ class AlumnoApiController extends AbstractController
         $alumno = $this->entityManager->getRepository(Alumno::class)->find($id);
 
         if (!$alumno) {
-            return new JsonResponse(['message' => 'Alumno not found'], Response::HTTP_NOT_FOUND);
+            return new JsonResponse(['message' => 'Alumno no encontrado'], Response::HTTP_NOT_FOUND);
         }
 
         $this->entityManager->remove($alumno);
@@ -102,7 +100,6 @@ class AlumnoApiController extends AbstractController
             'nombre' => $alumno->getNombre(),
             'correo' => $alumno->getCorreo(),
             'fecha_nac' => $alumno->getFechaNac()->format('Y-m-d'),
-            // Si necesitas más atributos, añádelos aquí
         ];
     }
 }

@@ -34,6 +34,9 @@ class Alumno
     #[ORM\ManyToMany(targetEntity: DetalleActividad::class, mappedBy: 'asiste')]
     private Collection $detalleActividads;
 
+    #[ORM\Column(length: 25, nullable: true)]
+    private ?string $nick = null;
+
     public function __construct()
     {
         $this->detalleActividads = new ArrayCollection();
@@ -115,6 +118,18 @@ class Alumno
         if ($this->detalleActividads->removeElement($detalleActividad)) {
             $detalleActividad->removeAsiste($this);
         }
+
+        return $this;
+    }
+
+    public function getNick(): ?string
+    {
+        return $this->nick;
+    }
+
+    public function setNick(?string $nick): static
+    {
+        $this->nick = $nick;
 
         return $this;
     }

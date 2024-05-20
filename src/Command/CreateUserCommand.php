@@ -14,7 +14,7 @@ use Symfony\Component\Security\Core\User\PasswordAuthenticatedUserInterface;
 #[AsCommand(name: 'app:create-user')]
 class CreateUserCommand extends Command
 {
-    public function __construct( private UserPasswordHasherInterface $passwordHasher,){
+    /* public function __construct( private UserPasswordHasherInterface $passwordHasher,){
         parent::__construct();
     }
 
@@ -41,5 +41,5 @@ class CreateUserCommand extends Command
         $output->writeln('Username: '.$input->getArgument('username'));
         $output->writeln($passwordHasher -> hashPassword($pas));
         return Command::SUCCESS;
-    }
+    } */
 }
