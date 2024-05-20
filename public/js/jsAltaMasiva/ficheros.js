@@ -21,16 +21,32 @@ document.addEventListener("DOMContentLoaded", function() {
   let tabla = document.getElementById("ponentes");
 
   fichero.onchange = function() {
+
+    let btnAlta = document.getElementById("btnAlta");
+    let entidad = btnAlta.getAttribute("data-entidad");
+
     let ficheroSubido = this.files[0];
     if ((/\.csv$/i).test(ficheroSubido.name)) {
       let lector = new FileReader();
       lector.readAsText(ficheroSubido);
       lector.onload = function() {
-        let profesores = obtenerInformacion(this.result, /^([^;]+);([^;]+);(\d{4}-\d{2}-\d{2})\r?$/, 3);/*  /^.+;.{7}\d{3};.{7}\d{3}@.+\r?$/ */
-        console.log(profesores);
-        mostrarTabla(profesores);
+        if (entidad == 'User') 
+        {
+          let profesores = obtenerInformacion(this.result, /^.+;.{7}\d{3};.{7}\d{3}@.+\r?$/, 3);
+          console.log(profesores);
+          mostrarTabla(profesores);
+        }
+        if (entidad == 'Alumno') 
+        {
+          let alumno = obtenerInformacion(this.result, /^([^;]+);([^;]+);(\d{4}-\d{2}-\d{2})\r?$/, 3);
+          console.log(alumno);
+          mostrarTabla(alumno);
+        }
+        
       }
-    } else {
+    } 
+    else 
+    {
       alert("El fichero subido no tiene el formato csv");
     }
   };
