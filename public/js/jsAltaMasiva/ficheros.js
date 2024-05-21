@@ -33,7 +33,7 @@ document.addEventListener("DOMContentLoaded", function() {
         if (entidad === 'User') {
           datos = obtenerInformacion(this.result, /^.+;.{7}\d{3};.{7}\d{3}@.+\r?$/, 3);
         } else if (entidad === 'Alumno') {
-          datos = obtenerInformacion(this.result, /^([^;]+);([^;]+);(\d{4}-\d{2}-\d{2})\r?$/, 3);
+          datos = obtenerInformacion(this.result, /^([^;]+);([^;]+);(\d{2}-\d{2}-\d{4})\r?$/, 3);
         } else if (entidad === 'Edificio') {
           datos = obtenerInformacion(this.result, /^.*$/, 3);
         }
@@ -157,6 +157,7 @@ document.addEventListener("DOMContentLoaded", function() {
           });
         });
       }
+      window.location.reload();
     }
   };
 
