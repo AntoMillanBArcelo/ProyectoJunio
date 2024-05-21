@@ -9,17 +9,21 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Doctrine\ORM\EntityManagerInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
+use Symfony\Component\Validator\Constraints as Assert;
 
 /**
  * @Route("/api/users")
  */
-class UserController extends AbstractController
+class UserApiController extends AbstractController
 {
     private $entityManager;
+    private $validator;
 
-    public function __construct(EntityManagerInterface $entityManager)
+    public function __construct(EntityManagerInterface $entityManager, ValidatorInterface $validator)
     {
         $this->entityManager = $entityManager;
+        $this->validator = $validator;
     }
 
     /**
@@ -32,7 +36,7 @@ class UserController extends AbstractController
         $data = [];
 
         foreach ($users as $user) {
-            $data[] = $this->serializeUser($user);
+            $data[] = $user->toArray();
         }
 
         return new JsonResponse($data, Response::HTTP_OK);
@@ -49,10 +53,9 @@ class UserController extends AbstractController
             return new JsonResponse(['message' => 'User not found'], Response::HTTP_NOT_FOUND);
         }
 
-        $data = $this->serializeUser($user);
-
-        return new JsonResponse($data, Response::HTTP_OK);
+        return new JsonResponse($user->toArray(), Response::HTTP_OK);
     }
+
     /**
      * @Route("/", name="api_user_create", methods={"POST"})
      */
@@ -60,13 +63,30 @@ class UserController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        
+        // Validar datos
+        $constraint = new Assert\Collection([
+            'nombre' => new Assert\NotBlank(),
+            'nick' => new Assert\NotBlank(),
+            'email' => new Assert\Email(),
+        ]);
+        $violations = $this->validator->validate($data, $constraint);
+
+        if (count($violations) > 0) {
+            $errors = [];
+            foreach ($violations as $violation) {
+                $errors[] = $violation->getMessage();
+            }
+            return new JsonResponse(['errors' => $errors], Response::HTTP_BAD_REQUEST);
+        }
+
         $user = new User();
-        $user->setEmail($data['email']);
-    
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->persist($user);
-        $entityManager->flush();
+        $user->setNombre($data['nombre'])
+            ->setNick($data['nick'])
+            ->setEmail($data['email'])
+            ->setPassword('123456'); // O cualquier lógica para generar/establecer la contraseña
+
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
 
         return new JsonResponse(['message' => 'Usuario creado con éxito', 'user' => $user->toArray()], Response::HTTP_CREATED);
     }
@@ -76,27 +96,15 @@ class UserController extends AbstractController
      */
     public function delete(int $id): JsonResponse
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $user = $entityManager->getRepository(User::class)->find($id);
+        $user = $this->entityManager->getRepository(User::class)->find($id);
 
         if (!$user) {
             return new JsonResponse(['message' => 'Usuario no encontrado'], Response::HTTP_NOT_FOUND);
         }
 
-        $entityManager->remove($user);
-        $entityManager->flush();
+        $this->entityManager->remove($user);
+        $this->entityManager->flush();
 
         return new JsonResponse(['message' => 'Usuario eliminado con éxito'], Response::HTTP_NO_CONTENT);
-    }
-
-    private function serializeUser(User $user): array
-    {
-        return [
-            'id' => $user->getId(),
-            'email' => $user->getEmail(),
-            'roles' => $user->getRoles(),
-            'url' => $user->getURL(),
-            'rol' => $user->getRol()
-        ];
     }
 }

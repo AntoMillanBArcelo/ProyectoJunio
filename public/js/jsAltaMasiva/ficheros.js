@@ -20,36 +20,31 @@ document.addEventListener("DOMContentLoaded", function() {
   let btnGuardar = document.getElementById("btnGuardar");
   let tabla = document.getElementById("ponentes");
 
+  let btnAlta = document.getElementById("btnAlta");
+  let entidad = btnAlta.getAttribute("data-entidad");
+
   fichero.onchange = function() {
-
-    let btnAlta = document.getElementById("btnAlta");
-    let entidad = btnAlta.getAttribute("data-entidad");
-
     let ficheroSubido = this.files[0];
     if ((/\.csv$/i).test(ficheroSubido.name)) {
       let lector = new FileReader();
       lector.readAsText(ficheroSubido);
       lector.onload = function() {
-        if (entidad == 'User') 
-        {
-          let profesores = obtenerInformacion(this.result, /^.+;.{7}\d{3};.{7}\d{3}@.+\r?$/, 3);
-          console.log(profesores);
-          mostrarTabla(profesores);
+        let datos;
+        if (entidad === 'User') {
+          datos = obtenerInformacion(this.result, /^.+;.{7}\d{3};.{7}\d{3}@.+\r?$/, 3);
+        } else if (entidad === 'Alumno') {
+          datos = obtenerInformacion(this.result, /^([^;]+);([^;]+);(\d{4}-\d{2}-\d{2})\r?$/, 3);
+        } else if (entidad === 'Edificio') {
+          datos = obtenerInformacion(this.result, /^.*$/, 3);
         }
-        if (entidad == 'Alumno') 
-        {
-          let alumno = obtenerInformacion(this.result, /^([^;]+);([^;]+);(\d{4}-\d{2}-\d{2})\r?$/, 3);
-          console.log(alumno);
-          mostrarTabla(alumno);
-        }
-        
+        console.log(datos);
+        mostrarTabla(datos);
       }
-    } 
-    else 
-    {
+    } else {
       alert("El fichero subido no tiene el formato csv");
     }
   };
+
 
   let datosMostrar = [];
   for (let i = 0; i < datos.length; i++) {
@@ -125,34 +120,43 @@ document.addEventListener("DOMContentLoaded", function() {
       rows.forEach(row => {
         let rowData = {};
         row.querySelectorAll("td").forEach((cell, index) => {
-          if (index === 0) rowData['nombre'] = cell.innerText;
-          if (index === 1) rowData['correo'] = cell.innerText;
-          if (index === 2) rowData['fecha_nac'] = cell.innerText; 
+          if (entidad === 'User') {
+            if (index === 0) rowData['nombre'] = cell.innerText;
+            if (index === 1) rowData['nick'] = cell.innerText;
+            if (index === 2) rowData['email'] = cell.innerText;
+          } else if (entidad === 'Alumno') {
+            if (index === 0) rowData['nombre'] = cell.innerText;
+            if (index === 1) rowData['correo'] = cell.innerText;
+            if (index === 2) rowData['fecha_nac'] = cell.innerText;
+          }
         });
         tableData.push(rowData);
       });
 
-      tableData.forEach(data => {
-        fetch('http://127.0.0.1:8000/api/alumnos', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify(data),
-        })
-        .then(response => {
-          if (!response.ok) {
-            throw new Error('Network response was not ok');
-          }
-          return response.json();
-        })
-        .then(data => {
-          console.log('Success:', data);
-        })
-        .catch((error) => {
-          console.error('Error:', error);
+      let url = entidad === 'User' ? '/api/users' : (entidad === 'Alumno' ? 'http://127.0.0.1:8000/api/alumnos' : '');
+      if (url) {
+        tableData.forEach(data => {
+          fetch(url, {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json',
+            },
+            body: JSON.stringify(data),
+          })
+          .then(response => {
+            if (!response.ok) {
+              throw new Error('Network response was not ok');
+            }
+            return response.json();
+          })
+          .then(data => {
+            console.log('Success:', data);
+          })
+          .catch((error) => {
+            console.error('Error:', error);
+          });
         });
-      });
+      }
     }
   };
 
@@ -170,4 +174,5 @@ document.addEventListener("DOMContentLoaded", function() {
       tbody.appendChild(fila);
     });
   }
+     
 });

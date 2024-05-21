@@ -20,39 +20,34 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     #[ORM\Column]
     private ?int $id = null;
 
-
-
     #[ORM\Column(length: 180)]
     private ?string $email = null;
 
-    /**
-     * @var list<string> The user roles
-     */
     #[ORM\Column]
     private array $roles = [];
 
-    /**
-     * @var string The hashed password
-     */
     #[ORM\Column]
     private ?string $password = null;
 
-    /**
-     * @var Collection<int, Grupo>
-     */
     #[ORM\ManyToMany(targetEntity: Grupo::class, mappedBy: 'grupo_user')]
     private Collection $grupos;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $URL = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $Rol = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $nombre = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $nick = null;
 
     public function __construct()
     {
         $this->grupos = new ArrayCollection();
-        $this->roles = []; // Agrega esta línea para inicializar roles como un array vacío
+        $this->roles = [];
     }
 
     public function getId(): ?int
@@ -68,47 +63,27 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setEmail(string $email): static
     {
         $this->email = $email;
-
         return $this;
     }
 
-    /**
-     * A visual identifier that represents this user.
-     *
-     * @see UserInterface
-     */
     public function getUserIdentifier(): string
     {
         return (string) $this->email;
     }
 
-    /**
-     * @see UserInterface
-     *
-     * @return list<string>
-     */
     public function getRoles(): array
     {
         $roles = $this->roles;
-        // guarantee every user at least has ROLE_USER
         $roles[] = 'ROLE_USER';
-
         return array_unique($roles);
     }
 
-    /**
-     * @param list<string> $roles
-     */
     public function setRoles(array $roles): static
     {
         $this->roles = $roles;
-
         return $this;
     }
 
-    /**
-     * @see PasswordAuthenticatedUserInterface
-     */
     public function getPassword(): string
     {
         return $this->password;
@@ -117,22 +92,15 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setPassword(string $password): static
     {
         $this->password = $password;
-
         return $this;
     }
 
-    /**
-     * @see UserInterface
-     */
     public function eraseCredentials(): void
     {
-        // If you store any temporary, sensitive data on the user, clear it here
+        // Si almacenas datos sensibles temporales en el usuario, límpialos aquí
         // $this->plainPassword = null;
     }
 
-    /**
-     * @return Collection<int, Grupo>
-     */
     public function getGrupos(): Collection
     {
         return $this->grupos;
@@ -165,7 +133,6 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setURL(string $URL): static
     {
         $this->URL = $URL;
-
         return $this;
     }
 
@@ -177,7 +144,41 @@ class User implements UserInterface, PasswordAuthenticatedUserInterface
     public function setRol(string $Rol): static
     {
         $this->Rol = $Rol;
-
         return $this;
+    }
+
+    public function getNombre(): ?string
+    {
+        return $this->nombre;
+    }
+
+    public function setNombre(?string $nombre): static
+    {
+        $this->nombre = $nombre;
+        return $this;
+    }
+
+    public function getNick(): ?string
+    {
+        return $this->nick;
+    }
+
+    public function setNick(?string $nick): static
+    {
+        $this->nick = $nick;
+        return $this;
+    }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'email' => $this->getEmail(),
+            'nombre' => $this->getNombre(),
+            'nick' => $this->getNick(),
+            'roles' => $this->getRoles(),
+            'url' => $this->getURL(),
+            'rol' => $this->getRol(),
+        ];
     }
 }
