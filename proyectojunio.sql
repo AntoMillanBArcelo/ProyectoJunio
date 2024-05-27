@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 23-04-2024 a las 12:25:50
+-- Tiempo de generación: 27-05-2024 a las 09:12:56
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -18,7 +18,7 @@ SET time_zone = "+00:00";
 /*!40101 SET NAMES utf8mb4 */;
 
 --
--- Base de datos: `proyectojunio/app`
+-- Base de datos: `proyectojunio`
 --
 
 -- --------------------------------------------------------
@@ -45,8 +45,35 @@ CREATE TABLE `alumno` (
   `alumno_grupo_id` int(11) DEFAULT NULL,
   `nombre` varchar(255) NOT NULL,
   `correo` varchar(255) NOT NULL,
-  `fecha_nac` date NOT NULL
+  `fecha_nac` date NOT NULL,
+  `nick` varchar(25) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `alumno`
+--
+
+INSERT INTO `alumno` (`id`, `alumno_grupo_id`, `nombre`, `correo`, `fecha_nac`, `nick`) VALUES
+(7, NULL, 'Nombre del Edificio', 'Nombre del Edificio', '2002-02-04', NULL),
+(8, NULL, 'sdf', 'sdf', '2002-02-04', NULL),
+(9, NULL, 'Acosta Gautier, Tania', 'fleisin496@educiind.es', '2002-02-04', NULL),
+(10, NULL, 'Aguilar Campos, Natividad', 'rtormon359@educiind.es', '2002-02-04', NULL),
+(11, NULL, 'Acosta Gautier, Tania', 'fleisin496@educiind.es', '2002-03-30', NULL),
+(12, NULL, 'asdasdsad', 'rtormon359@educiind.es', '2002-12-12', NULL),
+(13, NULL, 'Acosta Gautier, Tania', 'fleisin496@educiind.es', '2002-02-04', NULL),
+(14, NULL, 'Acosta Gautier, Tania', 'fleisin496@educiind.es', '2002-02-04', NULL),
+(15, NULL, 'Acosta Griezmann, Antoine', 'antgri@educiind.es', '2002-02-04', NULL),
+(16, NULL, 'Acosta Gautier, Tania', 'fleisin496@educiind.es', '2002-02-04', NULL),
+(17, NULL, 'Acosta Griezmann, Antoine', 'antgri@educiind.es', '2002-02-04', NULL),
+(18, NULL, 'Acosta', 'fleisin496@educiind.es', '2002-02-04', NULL),
+(19, NULL, 'Acosta Griezmann, Antoine', 'antgri@educiind.es', '2002-02-04', NULL),
+(20, NULL, 'Acosta Gautier, Tania', 'fleisin496@educiind.es', '2002-02-04', NULL),
+(21, NULL, 'Acosta Griezmann, Antoine', 'antgri@educiind.es', '2002-02-04', NULL),
+(22, NULL, 'Acosta Gautier, Tania', 'fleisin496@educiind.es', '2002-02-04', NULL),
+(23, NULL, 'Barceló Millán, Antonio', 'amilbar951@educiind.es', '2002-02-05', NULL),
+(24, NULL, 'Acosta Griezmann, Antoine', 'antgri@educiind.es', '2002-02-04', NULL),
+(25, NULL, 'Acosta Gautier, Tania', 'fleisin496@educiind.es', '2002-02-04', NULL),
+(26, NULL, 'Acosta Griezmann, Antoine', 'antgri@educiind.es', '2002-02-04', NULL);
 
 -- --------------------------------------------------------
 
@@ -99,7 +126,10 @@ INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_
 ('DoctrineMigrations\\Version20240423083056', '2024-04-23 10:31:03', 69),
 ('DoctrineMigrations\\Version20240423085114', '2024-04-23 10:51:19', 131),
 ('DoctrineMigrations\\Version20240423095900', '2024-04-23 11:59:06', 224),
-('DoctrineMigrations\\Version20240423102451', '2024-04-23 12:25:05', 137);
+('DoctrineMigrations\\Version20240423102451', '2024-04-23 12:25:05', 137),
+('DoctrineMigrations\\Version20240520083748', '2024-05-20 10:42:25', 39),
+('DoctrineMigrations\\Version20240521073752', '2024-05-21 09:37:58', 45),
+('DoctrineMigrations\\Version20240521074738', '2024-05-21 09:47:41', 40);
 
 -- --------------------------------------------------------
 
@@ -111,6 +141,17 @@ CREATE TABLE `edificio` (
   `id` int(11) NOT NULL,
   `nombre` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `edificio`
+--
+
+INSERT INTO `edificio` (`id`, `nombre`) VALUES
+(1, 'Edificio A'),
+(2, 'Edificio B'),
+(3, 'Edificio C'),
+(4, 'Edificio D'),
+(5, 'Edificio E');
 
 -- --------------------------------------------------------
 
@@ -124,6 +165,15 @@ CREATE TABLE `espacio` (
   `nombre` varchar(255) NOT NULL,
   `espacio_edificio_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `espacio`
+--
+
+INSERT INTO `espacio` (`id`, `aforo`, `nombre`, `espacio_edificio_id`) VALUES
+(1, 25, 'Espacio 1', 1),
+(2, 22, 'Espacio 2', 2),
+(3, 34, 'Espacio 3', 5);
 
 -- --------------------------------------------------------
 
@@ -148,6 +198,14 @@ CREATE TABLE `grupo` (
   `id` int(11) NOT NULL,
   `nombre` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `grupo`
+--
+
+INSERT INTO `grupo` (`id`, `nombre`) VALUES
+(1, 'DAW'),
+(2, 'DAM');
 
 -- --------------------------------------------------------
 
@@ -188,6 +246,16 @@ CREATE TABLE `nivel_educativo` (
   `nombre` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Volcado de datos para la tabla `nivel_educativo`
+--
+
+INSERT INTO `nivel_educativo` (`id`, `grupo_id`, `nombre`) VALUES
+(1, 2, '1º'),
+(2, 2, '2º'),
+(3, 1, '1º'),
+(4, 1, '2º');
+
 -- --------------------------------------------------------
 
 --
@@ -213,6 +281,15 @@ CREATE TABLE `recurso` (
   `descripcion` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Volcado de datos para la tabla `recurso`
+--
+
+INSERT INTO `recurso` (`id`, `descripcion`) VALUES
+(1, 'Pizarra Digital'),
+(2, 'Pizarra'),
+(4, 'Ordenador');
+
 -- --------------------------------------------------------
 
 --
@@ -235,9 +312,38 @@ CREATE TABLE `user` (
   `email` varchar(180) NOT NULL,
   `roles` longtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL COMMENT '(DC2Type:json)' CHECK (json_valid(`roles`)),
   `password` varchar(255) NOT NULL,
-  `url` varchar(255) NOT NULL,
-  `rol` varchar(255) NOT NULL
+  `url` varchar(255) DEFAULT NULL,
+  `rol` varchar(255) DEFAULT NULL,
+  `nombre` varchar(255) DEFAULT NULL,
+  `nick` varchar(255) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `user`
+--
+
+INSERT INTO `user` (`id`, `email`, `roles`, `password`, `url`, `rol`, `nombre`, `nick`) VALUES
+(1, 'user@user', '[\"ROLE_ADMIN\",\"ROLE_PROFESOR\"]', '$2y$13$OruGY5MtdFlbFroh3QqlGelETRejvmSszbesKXuqLj3F6e/xnOFD.', 'https://symfony.com/doc/current/index.html', 'admin', NULL, NULL),
+(2, 'juan.perez@example.com', '[\"ROLE_ADMIN\",\"ROLE_PROFESOR\"]', '$2y$13$OruGY5MtdFlbFroh3QqlGelETRejvmSszbesKXuqLj3F6e/xnOFD.', NULL, NULL, 'Juan Perez', 'jperez'),
+(4, 'juan2.perez@example.com', '[]', '123456', NULL, NULL, 'Juan Perez', 'jperez'),
+(6, 'juan4.perez@example.com', '[]', '123456', NULL, NULL, 'Juan Perez', 'jperez'),
+(7, 'fleisin496@educiind.es', '[]', '123456', NULL, NULL, 'Acosta Gautier, Tania', 'fleisin496'),
+(8, 'rtormon359@educiind.es', '[]', '123456', NULL, NULL, 'Aguilar Campos, Natividad', 'rtirmin339'),
+(9, 'jvilent786@educiind.es', '[]', '123456', NULL, NULL, 'Aguilar Cañas, Ana', 'jvilent786'),
+(10, 'ipirrub884@ieslasfuentezuelas.com', '[]', '123456', NULL, NULL, 'Aguilera Moreno, Ortíz', 'ipirrub884'),
+(11, 'mperpen469@ieslasfuentezuelas.com', '[]', '123456', NULL, NULL, 'Alhambra Sumalinog, María Salud', 'mperpen469'),
+(12, 'mcizmir349@ieslasfuentezuelas.com', '[]', '123456', NULL, NULL, 'Alonso Fuentes, Gaspar', 'mcizmir349'),
+(13, 'isinchi993@ieslasfuentezuelas.com', '[]', '123456', NULL, NULL, 'Álvarez Murillo, Josefina', 'isinchi993'),
+(14, 'rcispei438@ieslasfuentezuelas.com', '[]', '123456', NULL, NULL, 'Alvear Martín-Bejarano, Antonella María', 'rcispei438'),
+(15, 'imirrid367@ieslasfuentezuelas.com', '[]', '123456', NULL, NULL, 'Araguez Gutiérrez, Catalina', 'imirrid367'),
+(16, 'mciligu646@ieslasfuentezuelas.com', '[]', '123456', NULL, NULL, 'Aranda Romero, Helena', 'mciligu646'),
+(17, 'rlipirr984@ieslasfuentezuelas.com', '[]', '123456', NULL, NULL, 'Baca Vargas, Maria Jose', 'rlipirr984'),
+(18, 'mbiresp444@ieslasfuentezuelas.com', '[]', '123456', NULL, NULL, 'Barba Molina, Elena', 'mbiresp444'),
+(19, 'mesclup893@ieslasfuentezuelas.com', '[]', '123456', NULL, NULL, 'Belan Delgado, Rocio', 'mesclup893'),
+(20, 'sminper834@ieslasfuentezuelas.com', '[]', '123456', NULL, NULL, 'Benavides Molina, Yolanda', 'sminper834'),
+(21, 'jmirfir988@ieslasfuentezuelas.com', '[]', '123456', NULL, NULL, 'Borrego Lago, Jose Carlos', 'jmirfir988'),
+(22, 'fcinmir769@ieslasfuentezuelas.com', '[]', '123456', NULL, NULL, 'Cabrera Calderon, Maria Deseada', 'fcinmir769'),
+(23, 'jgutgin438@ieslasfuentezuelas.com', '[]', '123456', NULL, NULL, 'Callejas Aranda, Antonio', 'jgutgin438');
 
 --
 -- Índices para tablas volcadas
@@ -370,7 +476,7 @@ ALTER TABLE `actividad`
 -- AUTO_INCREMENT de la tabla `alumno`
 --
 ALTER TABLE `alumno`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=35;
 
 --
 -- AUTO_INCREMENT de la tabla `detalle_actividad`
@@ -382,13 +488,13 @@ ALTER TABLE `detalle_actividad`
 -- AUTO_INCREMENT de la tabla `edificio`
 --
 ALTER TABLE `edificio`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- AUTO_INCREMENT de la tabla `espacio`
 --
 ALTER TABLE `espacio`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `evento`
@@ -400,7 +506,7 @@ ALTER TABLE `evento`
 -- AUTO_INCREMENT de la tabla `grupo`
 --
 ALTER TABLE `grupo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
 
 --
 -- AUTO_INCREMENT de la tabla `messenger_messages`
@@ -412,7 +518,7 @@ ALTER TABLE `messenger_messages`
 -- AUTO_INCREMENT de la tabla `nivel_educativo`
 --
 ALTER TABLE `nivel_educativo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `ponente`
@@ -424,13 +530,13 @@ ALTER TABLE `ponente`
 -- AUTO_INCREMENT de la tabla `recurso`
 --
 ALTER TABLE `recurso`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
 
 --
 -- AUTO_INCREMENT de la tabla `user`
 --
 ALTER TABLE `user`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=36;
 
 --
 -- Restricciones para tablas volcadas

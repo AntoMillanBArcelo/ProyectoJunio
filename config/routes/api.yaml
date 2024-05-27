@@ -58,3 +58,43 @@ api_user_delete:
     path: /api/users/{id}
     controller: App\Controller\Api\UserApiController::delete
     methods: ['DELETE']
+
+api_recurso_list:
+    path: /api/recursos
+    controller: App\Controller\Api\RecursoApiController::index
+    methods: ['GET']
+
+api_recurso_show:
+    path: /api/recursos/{id}
+    controller: App\Controller\Api\RecursoApiController::show
+    methods: ['GET']
+
+api_recurso_create:
+    path: /api/recursos
+    controller: App\Controller\Api\RecursoApiController::create
+    methods: ['POST']
+
+api_recurso_delete:
+    path: /api/recursos/{id}
+    controller: App\Controller\Api\RecursoApiController::delete
+    methods: ['DELETE']
+
+api_grupo_list:
+    path: /api/grupos
+    controller: App\Controller\Api\GrupoApiController::index
+    methods: ['GET']
+
+api_grupo_show:
+    path: /api/grupos/{id}
+    controller: App\Controller\Api\GrupoApiController::show
+    methods: ['GET']
+
+api_grupo_create:
+    path: /api/grupos
+    controller: App\Controller\Api\GrupoApiController::create
+    methods: ['POST']
+
+api_grupo_delete:
+    path: /api/grupos/{id}
+    controller: App\Controller\Api\GrupoApiController::delete
+    methods: ['DELETE']
