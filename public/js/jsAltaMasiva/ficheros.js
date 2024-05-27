@@ -22,7 +22,8 @@ document.addEventListener("DOMContentLoaded", function() {
   let btnRellenarTabla = document.getElementById("btnRellenarTabla");
   let btnAlta = document.getElementById("btnAlta");
   let entidad = btnAlta.getAttribute("data-entidad");
-
+  let apiUrl;
+  
   fichero.onchange = function() {
     let ficheroSubido = this.files[0];
     if ((/\.csv$/i).test(ficheroSubido.name)) {
@@ -179,11 +180,9 @@ document.addEventListener("DOMContentLoaded", function() {
 
  
   btnRellenarTabla.addEventListener("click", function() {
-    let tabla = document.getElementById("ponentes");
-    let fuente = document.getElementById("fuente");
-    let entidad = btnRellenarTabla.getAttribute("data-entidad");
-
-    let apiUrl;
+    
+   console.log(entidad);
+   console.log(apiUrl)
     if (entidad === 'User') {
       apiUrl = '/api/users';
     } else if (entidad === 'Alumno') {
