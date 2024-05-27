@@ -40,6 +40,7 @@
     </style>
     <!-- Responsive CSS -->
     <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/pestaña/s.css') }}">
     <!-- Favicon -->
     <link rel="icon" href="{{ asset('images/fevicon.png') }}" type="image/gif" />
     <!-- Scrollbar Custom CSS -->
@@ -60,16 +61,16 @@
     <!-- Tabs navs -->
     <ul class="nav nav-tabs mb-3" id="ex1" role="tablist">
         <li class="nav-item" role="presentation">
-            <a class="nav-link active" id="ex1-tab-1" data-mdb-toggle="tab" href="#ex1-tabs-1" role="tab" aria-controls="ex1-tabs-1" aria-selected="true">Tab 1</a>
+            <a class="nav-link active" id="ex1-tab-1" data-mdb-toggle="tab" href="#ex1-tabs-1" role="tab" aria-controls="ex1-tabs-1" aria-selected="true">Actividad</a>
         </li>
         <li class="nav-item" role="presentation">
-            <a class="nav-link" id="ex1-tab-2" data-mdb-toggle="tab" href="#ex1-tabs-2" role="tab" aria-controls="ex1-tabs-2" aria-selected="false">Tab 2</a>
+            <a class="nav-link" id="ex1-tab-2" data-mdb-toggle="tab" href="#ex1-tabs-2" role="tab" aria-controls="ex1-tabs-2" aria-selected="false">Recursos</a>
         </li>
         <li class="nav-item" role="presentation">
-            <a class="nav-link" id="ex1-tab-3" data-mdb-toggle="tab" href="#ex1-tabs-3" role="tab" aria-controls="ex1-tabs-3" aria-selected="false">Tab 3</a>
+            <a class="nav-link" id="ex1-tab-3" data-mdb-toggle="tab" href="#ex1-tabs-3" role="tab" aria-controls="ex1-tabs-3" aria-selected="false">Ponentes</a>
         </li>
         <li class="nav-item" role="presentation">
-            <a class="nav-link" id="ex1-tab-4" data-mdb-toggle="tab" href="#ex1-tabs-4" role="tab" aria-controls="ex1-tabs-4" aria-selected="false">Tab 4</a>
+            <a class="nav-link" id="ex1-tab-4" data-mdb-toggle="tab" href="#ex1-tabs-4" role="tab" aria-controls="ex1-tabs-4" aria-selected="false">Grupos</a>
         </li>
     </ul>
     <!-- Tabs navs -->
@@ -77,17 +78,73 @@
     <!-- Tabs content -->
     <div class="tab-content" id="ex1-content">
         <div class="tab-pane fade show active" id="ex1-tabs-1" role="tabpanel" aria-labelledby="ex1-tab-1">
-            Tab 1 content
+            <a href="#tab1">Actividad</a>
+            <div class="tab-content">
+                <select name="" id="">
+                    <option value="simple">Simple</option>
+                    <option value="compuesta">Compuesta</option>
+                </select>
+                <input type="text" readonly>
+                <br>
+                <label for="">Descripción</label>
+                <textarea name="" id="" cols="30" rows="10"></textarea>
+                <br>
+                <label for="">Aforo</label>
+                <input type="number" id="aforo" name="aforo" min="1" step="1">
+                <br>
+                <label for="">Inicio</label>
+                <input type="date">
+                <br>
+                <label for="">Fin</label>
+                <input type="date">
+            </div> 
         </div>
         <div class="tab-pane fade" id="ex1-tabs-2" role="tabpanel" aria-labelledby="ex1-tab-2">
-            Tab 2 content
+            <table id="form-table">
+                    <tr>
+                      <td>
+                        <select class="select-box" name="fuente" id="fuente" size="20" multiple="multiple"></select>
+                      </td>
+                      <td>
+                        <div class="arrow-container">
+                          <span class="arrow-btn" id="pasarIzq">&lt;</span><br>
+                          <span class="arrow-btn" id="pasarIzqTodos">&lt;&lt;</span><br>
+                          <span class="arrow-btn" id="pasarDer">&gt;</span><br>
+                          <span class="arrow-btn" id="pasarDerTodos">&gt;&gt;</span><br>
+                        </div>
+                      </td>
+                      <td>
+                        <select class="select-box" name="seleccionados" id="seleccionados" size="20" multiple="multiple"></select>
+                      </td>
+                    </tr>
+                  </table>
+                  <input type="button" value="Buscar" id="btnBuscar">
+                  <select class="multi-select" name="multiSelect" id="multiSelect" multiple="multiple"></select>
         </div>
         <div class="tab-pane fade" id="ex1-tabs-3" role="tabpanel" aria-labelledby="ex1-tab-3">
-            Tab 3 content
+            <table id="ponentes">
+                    <thead>
+                        <tr>
+                            <th>Nombre</th><th>Cargo</th><th>URL</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Dato11</td><td>dato12</td><td class="editada">dato13</td>
+                        </tr>
+                        <tr>
+                            <td>dato21</td><td>dato22</td><td>dato23</td>
+                        </tr>
+                    </tbody>
+                </table>
         </div>
         <div class="tab-pane fade" id="ex1-tabs-4" role="tabpanel" aria-labelledby="ex1-tab-4">
-            Tab 4 content
+            <a href="#tab4">Grupos</a>
+            <div class="tab-content">
+                <div id="grupos-container"></div>
+            </div>
         </div>
+
     </div>
     <!-- Tabs content -->
 
@@ -112,7 +169,8 @@
         });
     </script>
     {% block javascripts %}
-      <script src="js/tablas.js"></script>
+        <script src="js/jsAltaMasiva/pestaña.js"></script>
+        <script src="js/jsAltaMasiva/tablas.js"></script>
     {% endblock %}
 </body>
 </html>

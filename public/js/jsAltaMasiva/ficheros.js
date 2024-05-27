@@ -19,7 +19,7 @@ document.addEventListener("DOMContentLoaded", function() {
   let checkActEdTabla = document.getElementById("actEdTabla");
   let btnGuardar = document.getElementById("btnGuardar");
   let tabla = document.getElementById("ponentes");
-
+  let btnRellenarTabla = document.getElementById("btnRellenarTabla");
   let btnAlta = document.getElementById("btnAlta");
   let entidad = btnAlta.getAttribute("data-entidad");
 
@@ -136,6 +136,7 @@ document.addEventListener("DOMContentLoaded", function() {
       let url = entidad === 'User' ? '/api/users' : (entidad === 'Alumno' ? 'http://127.0.0.1:8000/api/alumnos' : '');
       if (url) {
         tableData.forEach(data => {
+          debugger
           fetch(url, {
             method: 'POST',
             headers: {
@@ -175,5 +176,39 @@ document.addEventListener("DOMContentLoaded", function() {
       tbody.appendChild(fila);
     });
   }
-     
+
+ 
+  btnRellenarTabla.addEventListener("click", function() {
+    let tabla = document.getElementById("ponentes");
+    let fuente = document.getElementById("fuente");
+    let entidad = btnRellenarTabla.getAttribute("data-entidad");
+
+    let apiUrl;
+    if (entidad === 'User') {
+      apiUrl = '/api/users';
+    } else if (entidad === 'Alumno') {
+      apiUrl = '/api/alumnos';
+    } else if (entidad === 'Edificio') {
+      apiUrl = '/api/edificios';
+    }
+
+    fetch(apiUrl)
+      .then(response => response.json())
+      .then(data => {
+        tabla.querySelector("tbody").innerHTML = "";
+        
+        data.forEach(item => {
+          let row = document.createElement("tr");
+          Object.values(item).forEach(value => {
+            let cell = document.createElement("td");
+            cell.textContent = value;
+            row.appendChild(cell);
+          });
+          tabla.querySelector("tbody").appendChild(row);
+        });
+      })
+      .catch(error => {
+        console.error('Error al obtener los datos:', error);
+      });
+  });
 });

@@ -82,7 +82,7 @@ class AlumnoApiController extends AbstractController
      */
     public function delete(int $id): JsonResponse
     {
-        $this->denyAccessUnlessGranted('ROLE_ADMIN');
+        
         
         $alumno = $this->entityManager->getRepository(Alumno::class)->find($id);
 

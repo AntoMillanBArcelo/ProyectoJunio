@@ -28,6 +28,7 @@
     {{ include('@EasyAdmin/includes/_css_assets.html.twig', { assets: ea_field_assets.cssAssets }, with_context = false) }}
     {{ include('@EasyAdmin/includes/_encore_link_tags.html.twig', { assets: ea_field_assets.webpackEncoreAssets }, with_context = false) }}
      <link rel="stylesheet" type="text/css" href="{{ asset('css/ventanaModal.css') }}">
+     <link rel="stylesheet" type="text/css" href="{{ asset('css/pestaña/s.css') }}">
 {% endblock %}
 
 {% block configured_javascripts %}
@@ -38,6 +39,7 @@
     <script src="{{ asset('js/jsAltaMasiva/libreriaComun.js') }}"></script>
     <script src="{{ asset('js/jsAltaMasiva/select.js') }}"></script>
     <script src="{{ asset('js/jsAltaMasiva/tablas.js') }}"></script>
+    <script src="{{ asset('js/jsAltaMasiva/pestaña.js') }}"></script>
 {% endblock %}
 
 {% block content_title %}
@@ -55,6 +57,19 @@
                     Alta Masiva
                 </button>
             {% endif %}
+
+            {% if ea.i18n.translationParameters['%entity_name%'] == 'Actividad' %}
+               
+                <button type="button" class="btn btn-primary"  data-bs-target="#staticBackdrop" id="btnPestaña" data-entidad="{{ ea.i18n.translationParameters['%entity_name%'] }}">
+                    Añadir Actividad
+                </button>
+            {% endif %}
+
+        </div>
+        <div class="iframe-container" id="iframeContainer" style="display: none;">
+                   
+            <iframe src="{{ path('app_pestañas') }}" frameborder="0"></iframe>
+   
         </div>
 
         <!-- Modal -->

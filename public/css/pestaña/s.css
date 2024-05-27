@@ -1,0 +1,12 @@
+#iframeContent {
+    width: 100%;
+    height: 100vh; /* Esto establece la altura del iframe para que ocupe el 100% del alto de la ventana del navegador */
+    border: none; /* Esto elimina el borde del iframe */
+}
+iframe{
+    width: 100%;
+    height: 70vh; /* Esto establece la altura del iframe para que ocupe el 100% del alto de la ventana del navegador */
+}
+select{
+    width: 120px;
+}
