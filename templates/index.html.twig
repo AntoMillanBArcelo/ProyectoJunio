@@ -21,7 +21,7 @@
       <!-- Responsive-->
       <link rel="stylesheet" href="css/responsive.css">
       <!-- fevicon -->
-      <link rel="icon" href="images/fevicon.png" type="image/gif" />
+      <link rel="icon" href="images/logo.png" type="image/gif" />
       <!-- Scrollbar Custom CSS -->
       <link rel="stylesheet" href="css/jquery.mCustomScrollbar.min.css">
       <!-- Tweaks for older IEs-->
@@ -61,7 +61,7 @@
                         <div class="collapse navbar-collapse" id="navbarsExample04">
                         <ul class="navbar-nav mr-auto">
                            <li class="nav-item active">
-                                 <a class="nav-link" href="index.html">Home</a>
+                                 <a class="nav-link" href="index.html">Inicio</a>
                            </li>
                            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                                  {% if is_granted('ROLE_ADMIN') %}
@@ -74,11 +74,11 @@
                                  </li>
                            {% else %}
                                  <li class="nav-item">
-                                    <a class="nav-link" href="{{ path('app_login') }}">Login</a>
+                                    <a class="nav-link" href="{{ path('app_login') }}">Iniciar sesión</a>
                                  </li>
                            {% endif %}
                            <li class="nav-item">
-                                 <a class="nav-link" href="we-do.html">What we do</a>
+                                 <a class="nav-link" href="we-do.html">Tipos De Activiades</a>
                            </li>
                            <li class="nav-item">
                                  <a class="nav-link" href="pricing.html">Pricing</a>
@@ -118,11 +118,11 @@
                      <div class="carousel-caption relative">
                         <div class="row d_flex">
                            <div class="col-md-6">
-                              <img class="bann_img" src="images/banner_ing.jpg" alt="#"/>
+                              <img class="bann_img" src="images/a.jpg" alt="#" id="cartel"/>
                            </div>
                            <div class="col-md-6">
                               <span>01/03</span>
-                              <h1>Milina nail Salon Creating Beauty</h1>
+                              <h1>II Jornada de formación profesional</h1>
                               <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempo</p>
                               <a class="get_btn" href="Javascript:void(0)" role="button">Get Appoinment</a>
                            </div>
@@ -182,44 +182,106 @@
             <div class="row">
                <div class="col-md-12">
                   <div class="titlepage">
-                     <h2>What We Do </h2>
+                     <h2>Tpos De Actividades</h2>
                   </div>
                </div>
             </div>
             <div class="row">
-               <div class="col-lg-10 offset-lg-1 col-md-12">
-                  <div class="row">
-                     <div class="col-md-3 col-sm-6">
-                        <div class="we_box">
-                           <i><img src="images/weicon1.png" alt="#"/></i>
-                           <h3>Nail Art</h3>
-                           <p>Lorem ipsum dolor sit amet, consectetur </p>
-                        </div>
-                     </div>
-                     <div class="col-md-3 col-sm-6">
-                        <div class="we_box">
-                           <i><img src="images/weicon2.png" alt="#"/></i>
-                           <h3>Manicure</h3>
-                           <p>Lorem ipsum dolor sit amet, consectetur </p>
-                        </div>
-                     </div>
-                     <div class="col-md-3 col-sm-6">
-                        <div class="we_box">
-                           <i><img src="images/weicon3.png" alt="#"/></i>
-                           <h3>Pedicure</h3>
-                           <p>Lorem ipsum dolor sit amet, consectetur </p>
-                        </div>
-                     </div>
-                     <div class="col-md-3 col-sm-6">
-                        <div class="we_box">
-                           <i><img src="images/weicon4.png" alt="#"/></i>
-                           <h3>Paraffin wax</h3>
-                           <p>Lorem ipsum dolor sit amet, consectetur </p>
-                        </div>
-                     </div>
+         <div class="col-lg-10 offset-lg-1 col-md-12">
+            <div class="row">
+               
+               
+             
+             
+               
+            </div>
+         </div>
+      </div>
+      
+<div class="container-fluid">
+	<div class="row">
+		<div class="col-md-12">
+			<div class="row">
+				<div class="col-md-3">
+				</div>
+				<div class="col-md-3">
+            <div class="col-md-12 col-sm-6">
+                  <div class="we_box">
+                     <i><img src="images/weicon1.png" alt="#"/></i>
+                     <h3>Nail Art</h3>
+                     <p>Lorem ipsum dolor sit amet, consectetur </p>
                   </div>
                </div>
-            </div>
+				</div>
+				<div class="col-md-3">
+            <div class="col-md-12 col-sm-6">
+                  <div class="we_box">
+                     <i><img src="images/weicon2.jpg" alt="#"/></i>
+                     <h3>Manicure</h3>
+                     <p>Lorem ipsum dolor sit amet, consectetur </p>
+                  </div>
+               </div>
+				</div>
+				<div class="col-md-3">
+            
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-3">
+              <div class="col-md-12 col-sm-6">
+                  <div class="we_box">
+                     <i><img src="images/weicon3.png" alt="#"/></i>
+                     <h3>Pedicure</h3>
+                     <p>Lorem ipsum dolor sit amet, consectetur </p>
+                  </div>
+               </div>
+				</div>
+				<div class="col-md-3">
+            
+				</div>
+				<div class="col-md-3">
+            
+				</div>
+				<div class="col-md-3">
+            <div class="col-md-12 col-sm-6">
+                  <div class="we_box">
+                     <i><img src="images/weicon4.png" alt="#"/></i>
+                     <h3>Paraffin wax</h3>
+                     <p>Lorem ipsum dolor sit amet, consectetur </p>
+                  </div>
+               </div>
+				</div>
+			</div>
+			<div class="row">
+				<div class="col-md-3">
+            
+				</div>
+				<div class="col-md-3">
+              
+               <div class="col-md-12 col-sm-6">
+                  <div class="we_box">
+                     <i><img src="images/weicon5.jpg" alt="#"/></i>
+                     <h3>Gel Polish</h3>
+                     <p>Lorem ipsum dolor sit amet, consectetur </p>
+                  </div>
+               </div>
+				</div>
+				<div class="col-md-3">
+            <div class="col-md-12 col-sm-6">
+                  <div class="we_box">
+                     <i><img src="images/weicon6.jpg" alt="#"/></i>
+                     <h3>Spa Treatment</h3>
+                     <p>Lorem ipsum dolor sit amet, consectetur </p>
+                  </div>
+               </div>
+				</div>
+				<div class="col-md-3">
+            
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
          </div>
       </div>
       <!-- end what we do  -->

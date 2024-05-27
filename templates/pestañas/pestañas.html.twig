@@ -37,6 +37,11 @@
         .tab-content > .active {
             display: block;
         }
+        .nav-link.disabled {
+            pointer-events: none;
+            color: #6c757d;
+            background-color: #e9ecef;
+        }
     </style>
     <!-- Responsive CSS -->
     <link rel="stylesheet" href="{{ asset('css/responsive.css') }}">
@@ -80,7 +85,7 @@
         <div class="tab-pane fade show active" id="ex1-tabs-1" role="tabpanel" aria-labelledby="ex1-tab-1">
             <a href="#tab1">Actividad</a>
             <div class="tab-content">
-                <select name="" id="">
+                <select name="" id="actividad-select">
                     <option value="simple">Simple</option>
                     <option value="compuesta">Compuesta</option>
                 </select>
@@ -101,42 +106,42 @@
         </div>
         <div class="tab-pane fade" id="ex1-tabs-2" role="tabpanel" aria-labelledby="ex1-tab-2">
             <table id="form-table">
-                    <tr>
-                      <td>
+                <tr>
+                    <td>
                         <select class="select-box" name="fuente" id="fuente" size="20" multiple="multiple"></select>
-                      </td>
-                      <td>
+                    </td>
+                    <td>
                         <div class="arrow-container">
-                          <span class="arrow-btn" id="pasarIzq">&lt;</span><br>
-                          <span class="arrow-btn" id="pasarIzqTodos">&lt;&lt;</span><br>
-                          <span class="arrow-btn" id="pasarDer">&gt;</span><br>
-                          <span class="arrow-btn" id="pasarDerTodos">&gt;&gt;</span><br>
+                            <span class="arrow-btn" id="pasarIzq">&lt;</span><br>
+                            <span class="arrow-btn" id="pasarIzqTodos">&lt;&lt;</span><br>
+                            <span class="arrow-btn" id="pasarDer">&gt;</span><br>
+                            <span class="arrow-btn" id="pasarDerTodos">&gt;&gt;</span><br>
                         </div>
-                      </td>
-                      <td>
+                    </td>
+                    <td>
                         <select class="select-box" name="seleccionados" id="seleccionados" size="20" multiple="multiple"></select>
-                      </td>
-                    </tr>
-                  </table>
-                  <input type="button" value="Buscar" id="btnBuscar">
-                  <select class="multi-select" name="multiSelect" id="multiSelect" multiple="multiple"></select>
+                    </td>
+                </tr>
+            </table>
+            <input type="button" value="Buscar" id="btnBuscar">
+            <select class="multi-select" name="multiSelect" id="multiSelect" multiple="multiple"></select>
         </div>
         <div class="tab-pane fade" id="ex1-tabs-3" role="tabpanel" aria-labelledby="ex1-tab-3">
             <table id="ponentes">
-                    <thead>
-                        <tr>
-                            <th>Nombre</th><th>Cargo</th><th>URL</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        <tr>
-                            <td>Dato11</td><td>dato12</td><td class="editada">dato13</td>
-                        </tr>
-                        <tr>
-                            <td>dato21</td><td>dato22</td><td>dato23</td>
-                        </tr>
-                    </tbody>
-                </table>
+                <thead>
+                    <tr>
+                        <th>Nombre</th><th>Cargo</th><th>URL</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td>Dato11</td><td>dato12</td><td class="editada">dato13</td>
+                    </tr>
+                    <tr>
+                        <td>dato21</td><td>dato22</td><td>dato23</td>
+                    </tr>
+                </tbody>
+            </table>
         </div>
         <div class="tab-pane fade" id="ex1-tabs-4" role="tabpanel" aria-labelledby="ex1-tab-4">
             <a href="#tab4">Grupos</a>
@@ -144,7 +149,6 @@
                 <div id="grupos-container"></div>
             </div>
         </div>
-
     </div>
     <!-- Tabs content -->
 
@@ -166,6 +170,27 @@
                     target.classList.add('show', 'active');
                 });
             });
+
+            // Control tabs accessibility based on select input
+            var actividadSelect = document.getElementById('actividad-select');
+            var tabLinks = document.querySelectorAll('.nav-link');
+
+            actividadSelect.addEventListener('change', function() {
+                if (actividadSelect.value === 'compuesta') {
+                    tabLinks.forEach(function(link, index) {
+                        if (index > 0) { // Disable tabs 2, 3, and 4
+                            link.classList.add('disabled');
+                        }
+                    });
+                } else {
+                    tabLinks.forEach(function(link) {
+                        link.classList.remove('disabled');
+                    });
+                }
+            });
+
+            // Initialize state based on the default selection
+            actividadSelect.dispatchEvent(new Event('change'));
         });
     </script>
     {% block javascripts %}
