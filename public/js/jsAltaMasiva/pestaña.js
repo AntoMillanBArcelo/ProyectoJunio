@@ -6,6 +6,7 @@ document.addEventListener('DOMContentLoaded', function() {
     const apiUrl = '/api/recursos';
     const apiUrl2 = '/api/grupos';
     const gruposContainer = document.getElementById('grupos-container');
+    const gruposSelect = document.getElementById('grupos-select');
 
     if (btnPestaña) {
         btnPestaña.addEventListener('click', function() {
@@ -39,16 +40,17 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // API de grupo
     fetch(apiUrl2)
-        .then(response => response.json())
-        .then(data => {  
-            gruposContainer.innerHTML = '';  
-            data.forEach(grupo => {
-                const grupoElement = document.createElement('div');
-                grupoElement.textContent = grupo.Nombre;
-                gruposContainer.appendChild(grupoElement);
-            });
-        })
-        .catch(error => {
-            console.error('Error al obtener los grupos:', error);
+    .then(response => response.json())
+    .then(data => {
+        gruposSelect.innerHTML = '';
+        data.forEach(grupo => {
+            const optionElement = document.createElement('option');
+            optionElement.textContent = grupo.Nombre;
+            optionElement.value = grupo.Id; // Asegúrate de que cada grupo tenga un campo "Id" o similar
+            gruposSelect.appendChild(optionElement);
         });
+    })
+    .catch(error => {
+        console.error('Error al obtener los grupos:', error);
+    });
 });

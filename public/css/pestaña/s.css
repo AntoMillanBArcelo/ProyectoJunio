@@ -10,3 +10,63 @@ iframe{
 select{
     width: 120px;
 }
+
+.form-container {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    max-width: 800px;
+    margin: auto;
+}
+
+.form-row {
+    display: flex;
+    gap: 20px;
+}
+
+.form-group {
+    display: flex;
+    flex-direction: column;
+    flex: 1;
+    min-width: 200px;
+}
+
+.form-group.full-width {
+    flex: 1 0 100%;
+}
+
+.form-group label {
+    margin-bottom: 5px;
+    font-weight: bold;
+}
+
+.form-group select,
+.form-group input[type="number"],
+.form-group input[type="date"],
+.form-group textarea {
+    padding: 5px;
+    font-size: 16px;
+    width: 100%;
+    box-sizing: border-box;
+    height: 38px; /* Ajuste de la altura */
+}
+
+.form-group textarea {
+    resize: vertical;
+    height: auto; /* Permite que textarea ajuste su altura según el contenido */
+    height: 150px;
+}
+
+.styled {
+    background-color: #007bff;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    cursor: pointer;
+    margin-top: 10px;
+}
+
+.styled:hover {
+    background-color: #0056b3;
+}
+
