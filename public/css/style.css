@@ -1037,3 +1037,9 @@ ul.link_menu li a:hover {
  .hex-container .hex:nth-child(3n+2) {
      transform: translateY(52px);
  }
+.iconos{
+width: 140px;
+}
+#logo{
+     width: 100px;
+}
