@@ -31,6 +31,12 @@ class Actividad
     #[ORM\OneToMany(targetEntity: DetalleActividad::class, mappedBy: 'detalle_actividad_evento')]
     private Collection $detalleActividads;
 
+    #[ORM\Column(length: 255)]
+    private ?string $descripcion = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $tipo = null;
+
     public function __construct()
     {
         $this->detalleActividads = new ArrayCollection();
@@ -103,6 +109,30 @@ class Actividad
                 $detalleActividad->setDetalleActividadEvento(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getDescripcion(): ?string
+    {
+        return $this->descripcion;
+    }
+
+    public function setDescripcion(string $descripcion): static
+    {
+        $this->descripcion = $descripcion;
+
+        return $this;
+    }
+
+    public function getTipo(): ?string
+    {
+        return $this->tipo;
+    }
+
+    public function setTipo(string $tipo): static
+    {
+        $this->tipo = $tipo;
 
         return $this;
     }

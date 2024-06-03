@@ -183,5 +183,18 @@ class DetalleActividad
         return $this;
     }
 
+    public function setActividad(?Actividad $actividad): self
+    {
+        $this->actividad = $actividad;
+
+        return $this;
+    }
+
+    public function setEspacio(?Espacio $espacio): self
+    {
+        $this->detalle_actividad_espacios = $espacio;
+
+        return $this;
+    }
     
 }
