@@ -7,6 +7,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const apiUrl2 = '/api/grupos';
     const gruposContainer = document.getElementById('grupos-container');
     const gruposSelect = document.getElementById('grupos-select');
+    var guardarActividadBtn = document.querySelector('#ex1-tabs-1 .styled'); // Selecciona el botón de guardar dentro del primer tab-pane
+    var actividadForm = document.querySelector('#ex1-tabs-1 .form-container'); // Selecciona el formulario dentro del primer tab-pane
 
     if (btnPestaña) {
         btnPestaña.addEventListener('click', function() {
@@ -17,6 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
             mainSection.style.display = 'none';
         });
     }
+    
    
     //API de recursos
     fetch(apiUrl)

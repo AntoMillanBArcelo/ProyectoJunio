@@ -71,7 +71,6 @@ class ActividadApiController extends AbstractController
         return $data;
     }
 
-    //Método que sirve para crear una nueva actividad
     #[Route('/actividades', name: 'actividad_create', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $em): Response
     {
@@ -113,7 +112,6 @@ class ActividadApiController extends AbstractController
                 $detalleActividad->setFechaHoraIni($fechaInicio);
                 $detalleActividad->setFechaHoraFin($fechaFin);
                 
-                // Asegúrate de que se proporciona una cadena vacía si el valor de la URL es null
                 $detalleActividad->setURL($data['url'] ?? '');
 
                 $detalleActividad->setActividad($actividad);
@@ -161,7 +159,8 @@ class ActividadApiController extends AbstractController
                 if (!$evento) {
                     return $this->json(['error' => 'Evento no encontrado'], Response::HTTP_NOT_FOUND);
                 }
-                $actividad->setEvento($evento);
+                $actividad->
+                setEvento($evento);
 
                 $em->persist($actividad);
                 $em->flush();
@@ -187,7 +186,6 @@ class ActividadApiController extends AbstractController
             return $this->json(['error' => 'Error interno del servidor: ' . $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
 
     private function updatePonentes(EntityManagerInterface $em, DetalleActividad $detalleActividad, array $ponentesData)
     {
