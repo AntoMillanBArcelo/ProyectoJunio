@@ -70,3 +70,6 @@ select{
     background-color: #0056b3;
 }
 
+table.datagrid {
+    display: none;
+}

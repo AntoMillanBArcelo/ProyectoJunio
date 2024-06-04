@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 27-05-2024 a las 09:12:56
+-- Tiempo de generación: 04-06-2024 a las 10:15:25
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -31,8 +31,20 @@ CREATE TABLE `actividad` (
   `id` int(11) NOT NULL,
   `evento_id` int(11) DEFAULT NULL,
   `fecha_hora_ini` datetime NOT NULL,
-  `fecha_hora_fin` datetime NOT NULL
+  `fecha_hora_fin` datetime NOT NULL,
+  `descripcion` varchar(255) NOT NULL,
+  `tipo` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+--
+-- Volcado de datos para la tabla `actividad`
+--
+
+INSERT INTO `actividad` (`id`, `evento_id`, `fecha_hora_ini`, `fecha_hora_fin`, `descripcion`, `tipo`) VALUES
+(16, 1, '2024-06-10 10:00:00', '2024-06-10 12:00:00', 'Taller de Programación', '1'),
+(17, 1, '2024-06-04 12:12:12', '1212-03-12 00:00:00', 'asd', 'compuesta'),
+(18, NULL, '2024-06-04 09:12:23', '2024-06-04 09:12:23', '', 'compuesta'),
+(19, 1, '2024-06-04 12:31:23', '2024-06-04 12:32:31', 'weqeqw', 'compuesta');
 
 -- --------------------------------------------------------
 
@@ -91,6 +103,13 @@ CREATE TABLE `detalle_actividad` (
   `url` varchar(255) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Volcado de datos para la tabla `detalle_actividad`
+--
+
+INSERT INTO `detalle_actividad` (`id`, `fecha_hora_ini`, `fecha_hora_fin`, `titulo`, `detalle_actividad_espacios_id`, `detalle_actividad_evento_id`, `url`) VALUES
+(11, '2024-06-10 10:00:00', '2024-06-10 12:00:00', 'Taller de Programación', 2, NULL, '');
+
 -- --------------------------------------------------------
 
 --
@@ -129,7 +148,9 @@ INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_
 ('DoctrineMigrations\\Version20240423102451', '2024-04-23 12:25:05', 137),
 ('DoctrineMigrations\\Version20240520083748', '2024-05-20 10:42:25', 39),
 ('DoctrineMigrations\\Version20240521073752', '2024-05-21 09:37:58', 45),
-('DoctrineMigrations\\Version20240521074738', '2024-05-21 09:47:41', 40);
+('DoctrineMigrations\\Version20240521074738', '2024-05-21 09:47:41', 40),
+('DoctrineMigrations\\Version20240603074910', '2024-06-03 09:49:17', 47),
+('DoctrineMigrations\\Version20240603074959', '2024-06-03 09:50:07', 8);
 
 -- --------------------------------------------------------
 
@@ -188,6 +209,13 @@ CREATE TABLE `evento` (
   `fecha_fin` date NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Volcado de datos para la tabla `evento`
+--
+
+INSERT INTO `evento` (`id`, `titulo`, `fecha_inicio`, `fecha_fin`) VALUES
+(1, 'Evento 1', '2024-06-11', '2024-06-23');
+
 -- --------------------------------------------------------
 
 --
@@ -205,7 +233,8 @@ CREATE TABLE `grupo` (
 
 INSERT INTO `grupo` (`id`, `nombre`) VALUES
 (1, 'DAW'),
-(2, 'DAM');
+(2, 'DAM'),
+(3, 'Grupo de Prueba');
 
 -- --------------------------------------------------------
 
@@ -270,6 +299,15 @@ CREATE TABLE `ponente` (
   `ponente_detalle_actividad_id` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
+--
+-- Volcado de datos para la tabla `ponente`
+--
+
+INSERT INTO `ponente` (`id`, `nombre`, `url`, `cargo`, `ponente_detalle_actividad_id`) VALUES
+(1, 'Nombre del Ponente 1', 'URL del Ponente 1', 'Cargo del Ponente 1', 11),
+(2, 'Nombre del Ponente 2', 'URL del Ponente 2', 'Cargo del Ponente 2', 11),
+(3, 'Nombre del Ponente 3', 'URL del Ponente 3', 'Cargo del Ponente 3', 11);
+
 -- --------------------------------------------------------
 
 --
@@ -288,7 +326,9 @@ CREATE TABLE `recurso` (
 INSERT INTO `recurso` (`id`, `descripcion`) VALUES
 (1, 'Pizarra Digital'),
 (2, 'Pizarra'),
-(4, 'Ordenador');
+(4, 'Ordenador'),
+(5, 'Tiza'),
+(6, 'Tiza');
 
 -- --------------------------------------------------------
 
@@ -470,7 +510,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT de la tabla `actividad`
 --
 ALTER TABLE `actividad`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
 
 --
 -- AUTO_INCREMENT de la tabla `alumno`
@@ -482,7 +522,7 @@ ALTER TABLE `alumno`
 -- AUTO_INCREMENT de la tabla `detalle_actividad`
 --
 ALTER TABLE `detalle_actividad`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=12;
 
 --
 -- AUTO_INCREMENT de la tabla `edificio`
@@ -500,13 +540,13 @@ ALTER TABLE `espacio`
 -- AUTO_INCREMENT de la tabla `evento`
 --
 ALTER TABLE `evento`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=2;
 
 --
 -- AUTO_INCREMENT de la tabla `grupo`
 --
 ALTER TABLE `grupo`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `messenger_messages`
@@ -524,13 +564,13 @@ ALTER TABLE `nivel_educativo`
 -- AUTO_INCREMENT de la tabla `ponente`
 --
 ALTER TABLE `ponente`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
 
 --
 -- AUTO_INCREMENT de la tabla `recurso`
 --
 ALTER TABLE `recurso`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT de la tabla `user`
