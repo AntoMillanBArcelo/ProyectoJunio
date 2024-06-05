@@ -770,8 +770,7 @@ ul.social_icon li a:hover {
      background: #fff;
      color: #737272;
      font-size: 18px;
-     font-weight: normal;
-     box-shadow: 0px 0px 13px rgba(14, 14, 13, 0.17);
+
 }
 
 .main_form .textarea {
@@ -783,7 +782,7 @@ ul.social_icon li a:hover {
      font-size: 18px;
      font-weight: normal;
      padding: 50px 15px 0 15px;
-     box-shadow: 0px 0px 13px rgba(14, 14, 13, 0.17);
+
      height: 150px;
 }
 

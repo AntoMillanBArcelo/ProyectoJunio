@@ -1,0 +1,61 @@
+<div class="header">
+            <div class="container-fluid">
+               <div class="row">
+                  <div class="col-xl-3 col-lg-3 col-md-3 col-sm-3 col logo_section">
+                     <div class="full">
+                        <div class="center-desk">
+                           <div class="logo">
+                              <a href="index.html"><img src="images/logo.png" alt="#" id="logo"/></a>
+                           </div>
+                        </div>
+                     </div>
+                  </div>
+                 <div class="col-xl-7 col-lg-7 col-md-9 col-sm-9">
+                  <nav class="navigation navbar navbar-expand-md navbar-dark">
+                     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarsExample04" aria-controls="navbarsExample04" aria-expanded="false" aria-label="Toggle navigation">
+                           <span class="navbar-toggler-icon"></span>
+                     </button>
+                        <div class="collapse navbar-collapse" id="navbarsExample04">
+                        <ul class="navbar-nav mr-auto">
+                           <li class="nav-item active">
+                                 <a class="nav-link" href="{{ path('app_index') }}">Inicio</a>
+                           </li>
+                           {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                                 {% if is_granted('ROLE_ADMIN') %}
+                                    <li class="nav-item">
+                                       <a class="nav-link" href="{{ path('admin') }}">Administración</a>
+                                    </li>
+                                 {% endif %}
+                                 <li class="nav-item">
+                                    <a class="nav-link" href="{{ path('app_logout') }}">Logout</a>
+                                 </li>
+                           {% else %}
+                                 <li class="nav-item">
+                                    <a class="nav-link" href="{{ path('app_login') }}">Iniciar sesión</a>
+                                 </li>
+                           {% endif %}
+                           <li class="nav-item">
+                                 <a class="nav-link" href="{{ path('eventos_index') }}">Tipos De Activiades</a>
+                           </li>
+                           <li class="nav-item">
+                                 <a class="nav-link" href="pricing.html">Pricing</a>
+                           </li>
+                          
+                        </ul>
+                     </div>
+
+                     </nav>
+                  </div>
+
+                  <div class="col-md-2">
+                     <ul class="social_icon">
+                        <li><a href="#"><i class="fa fa-facebook" aria-hidden="true"></i></a></li>
+                        <li><a href="#"><i class="fa fa-twitter" aria-hidden="true"></i></a></li>
+                        <li><a href="#"><i class="fa fa-linkedin" aria-hidden="true"></i></a></li>
+                        <li><a href="#"><i class="fa fa-instagram" aria-hidden="true"></i></a></li>
+                     </ul>
+                  </div>
+               </div>
+            </div>
+         </div>
+      </header>

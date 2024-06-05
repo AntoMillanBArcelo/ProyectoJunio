@@ -1,7 +1,17 @@
 document.addEventListener('DOMContentLoaded', function() {
-    
-    var buttons = document.querySelectorAll('.btnPestaña');
+    var openModalButtons = document.querySelectorAll('.openPestañasModal');
+    var modal = new bootstrap.Modal(document.getElementById('pestañasModal'), {
+        backdrop: 'static',
+        keyboard: false
+    });
 
+    openModalButtons.forEach(function(openModalButton) {
+        openModalButton.addEventListener('click', function() {
+            modal.show();
+        });
+    });
+
+    var buttons = document.querySelectorAll('.btnPestaña');
     buttons.forEach(function(button) {
         button.addEventListener('click', function() {
             document.getElementById('iframeContainer2').style.display = 'block';
@@ -10,17 +20,4 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     });
-
-     // Obtiene el botón "Añadir Actividad" por su ID
-     var openModalButton = document.getElementById('openPestañasModal');
-     // Obtiene el modal por su ID
-     var modal = document.getElementById('pestañasModal');
-
-     // Agrega un evento de clic al botón "Añadir Actividad"
-     openModalButton.addEventListener('click', function() {
-         // Muestra el modal
-         modal.style.display = 'block';
-         // Asegúrate de que Bootstrap modal lo maneje adecuadamente
-         $(modal).modal('show');
-     });
 });

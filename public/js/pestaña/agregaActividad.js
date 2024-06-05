@@ -1,17 +1,17 @@
 document.addEventListener('DOMContentLoaded', function() {
     var tabs = document.querySelectorAll('[data-mdb-toggle="tab"]');
     var btnGuardarSimple = document.getElementById('g1');
-    var buttons = document.querySelectorAll('.btnPestaña');
+    var openModalButtons = document.querySelectorAll('.openPestañasModal');
     
-    
-    buttons.forEach(function(button) {
-        
-        button.addEventListener('click', function() { 
-            var entityId = this.data.id;
-            document.getElementById('iframeContainer2').style.display = 'block';
-            console.log(entityId);
-            debugger;
+
+    openModalButtons.forEach(function(openModalButton) {
+        openModalButton.addEventListener('click', function() {
+            // Obtener el valor del atributo data-id del botón clicado
+            var entityId = openModalButton.getAttribute('data-id');
+            // Establecer el valor del campo id en el formulario dentro del modal
             document.getElementById('idd').value = entityId;
+            // Mostrar el modal
+            modal.show();
         });
     });
 

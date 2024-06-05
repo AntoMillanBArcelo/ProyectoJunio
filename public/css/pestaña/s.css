@@ -70,6 +70,8 @@ select{
     background-color: #0056b3;
 }
 
-table.datagrid {
-    display: none;
+.modal-dialog {
+    width: 200%; /* Ancho relativo del modal */
+    background-color: #0056b3;
 }
+

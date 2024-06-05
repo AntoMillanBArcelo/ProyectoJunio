@@ -1,0 +1,64 @@
+{# templates/eventos/eventos.html.twig #}
+
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <!-- Basic meta tags -->
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    <!-- Site meta tags -->
+    <title>{% block title %}IES Las Fuentezuelas{% endblock %}</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    <!-- Favicon -->
+    <link rel="icon" href="{{ asset('images/fevicon.png') }}" type="image/gif" />
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+    <!-- Fancybox -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
+    <!-- MDBootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.0/mdb.min.css" />
+    {% block stylesheets %}{% endblock %}
+</head>
+<body>
+    {% include 'header.html.twig' %}
+
+    <div class="container mt-4">
+        {% for eventoConDias in eventosConDiasRestantes %}
+            {% set evento = eventoConDias.evento %}
+            {% set diasRestantes = eventoConDias.diasRestantes %}
+            {% set haTerminado = eventoConDias.haTerminado %}
+            <div class="card text-center mb-3">
+                <div class="card-header">
+                    {{ evento.Titulo }}
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">{{ evento.Titulo }}</h5>
+                    <p class="card-text">Del {{ evento.FechaInicio|date('d-m-Y') }} al {{ evento.FechaFin|date('d-m-Y') }}</p>
+                    
+                  <a href="{{ path('evento_actividades', {'id': evento.id}) }}">Ver Actividades</a>
+
+
+                </div>
+                <div class="card-footer text-muted">
+                    {% if haTerminado %}
+                        <p class="card-text text-danger">El evento ha terminado.</p>
+                    {% else %}
+                        <p class="card-text">Quedan {{ diasRestantes }} días para que termine el evento.</p>
+                    {% endif %}
+                </div>
+            </div>
+        {% else %}
+            <p>No hay eventos disponibles.</p>
+        {% endfor %}
+    </div>
+
+    <!-- Scripts de JavaScript necesarios -->
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>
