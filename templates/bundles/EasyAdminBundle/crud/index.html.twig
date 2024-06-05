@@ -32,22 +32,19 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('css/pestaña/s.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('css/tablaActividad/style.css') }}">
     <link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
-	
 {% endblock %}
 
 {% block configured_javascripts %}
     {{ parent() }}
     {{ include('@EasyAdmin/includes/_js_assets.html.twig', { assets: ea_field_assets.jsAssets }, with_context = false) }}
     {{ include('@EasyAdmin/includes/_encore_script_tags.html.twig', { assets: ea_field_assets.webpackEncoreAssets }, with_context = false) }}
-    <script src="{{ asset('js/jsAltaMasiva/ficheros.js') }}"></script>
+    <!--<script src="{{ asset('js/jsAltaMasiva/ficheros.js') }}"></script>-->
     <script src="{{ asset('js/jsAltaMasiva/libreriaComun.js') }}"></script>
     <script src="{{ asset('js/jsAltaMasiva/select.js') }}"></script>
     <script src="{{ asset('js/jsAltaMasiva/tablas.js') }}"></script>
     <script src="{{ asset('js/jsAltaMasiva/pestaña.js') }}"></script>
-    <script src="{{ asset('js/tablaActividad/main.js') }}"></script>
-    <script src="{{ asset('js/tablaActividad/popper.js') }}"></script>
-    <script src="{{ asset('js/tablaActividad/boostrap.min.js') }}"></script>
-    <script src="{{ asset('js/tablaActividad/jquery.min.js') }}"></script>
+    <script src="{{ asset('js/a.js') }}"></script>
+    <script src="{{ asset('js/pestaña/agregaActividad.js') }}"></script>
     <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
 {% endblock %}
@@ -253,74 +250,76 @@
     {% set has_search = ea.crud.isSearchEnabled %}
     {% set has_filters = filters|length > 0 %}
     {% set num_results = entities|length %}
-<link href='https://fonts.googleapis.com/css?family=Roboto:400,100,300,700' rel='stylesheet' type='text/css'>
 
-	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
-	<link rel="stylesheet" href="css/style.css">
-	</head>
-	<section class="ftco-section">
-	<div class="container">
-		<div class="row">
-			<div class="col-md-12">
-				<div class="table-wrap">
-					<table class="table myaccordion table-hover" id="accordion">
-					  <thead>
-					    <tr>
-					     {% if has_batch_actions %}
-					        <th>
-					            <div class="form-check">
-					                <span><input type="checkbox" class="form-check-input form-batch-checkbox-all" id="form-batch-checkbox-all"></span>
-					            </div>
-					        </th>
-					    {% endif %}
-					      <th>#</th>
-					      <th>Actividad</th>
-					      <th>Fecha Inicio</th>
-					      <th>Fecha Fin</th>
-					      <th>Tipo</th>
-					      <th>&nbsp;</th>
-					    </tr>
-					  </thead>
-					  <tbody>
-					  	{% for entity in entities %}
-					    {% if entity.isAccessible %}
-					    <tr data-toggle="collapse" data-target="#collapse{{ loop.index }}" aria-expanded="false" aria-controls="collapse{{ loop.index }}" class="collapsed">
-					        {% if has_batch_actions %}
-					        <td class="batch-actions-selector">
-					            <div class="form-check">
-					                <input type="checkbox" class="form-check-input form-batch-checkbox" id="form-batch-checkbox-{{ loop.index0 }}" value="{{ entity.primaryKeyValue }}">
-					            </div>
-					        </td>
-					        {% endif %}
-					        <th scope="row">{{ loop.index }}</th>
-					        <td>{{ entity.getDescripcion() }}</td>
-					        <td>{{ entity.getFechaHoraIni()|date('Y-m-d H:i') }}</td>
-					        <td>{{ entity.getFechaHoraFin()|date('Y-m-d H:i') }}</td>
-					        <td>{{ entity.getTipo() }}</td>
-					        <td>
-					        	<i class="fa" aria-hidden="true"></i>
-					        </td>
-					    </tr>
-					    <tr>
-					    	<td colspan="6" id="collapse{{ loop.index }}" class="collapse acc" data-parent="#accordion">
-					    		<p>Detalles adicionales de la actividad: {{ entity.getDescripcion() }}</p>
-					    	</td>
-					    </tr>
-					    {% endif %}
-					    {% endfor %}
-					  </tbody>
-					</table>
-				</div>
-			</div>
-		</div>
-	</div>
-</section>
+ {% for entity in entities %}
+    <div class="card w-75 cartasAC">
+        <div class="card-body">
+            <table class="table"> 
+                <thead> 
+                    <tr>
+                        {% set ea_sort_asc = constant('EasyCorp\\Bundle\\EasyAdminBundle\\Config\\Option\\SortOrder::ASC') %}
+                        {% set ea_sort_desc = constant('EasyCorp\\Bundle\\EasyAdminBundle\\Config\\Option\\SortOrder::DESC') %}
+                        {% for field in entities|filter(e => e.isAccessible)|first.fields ?? [] %}
+                            {% set is_sorting_field = ea.search.isSortingField(field.property) %}
+                            {% set next_sort_direction = is_sorting_field ? (ea.search.sortDirection(field.property) == ea_sort_desc ? ea_sort_asc : ea_sort_desc) : ea_sort_desc %}
+                            {% set column_icon = is_sorting_field ? (next_sort_direction == ea_sort_desc ? 'fa-arrow-up' : 'fa-arrow-down') : 'fa-sort' %}
+                            <th data-column="{{ field.property }}" class="{{ is_sorting_field ? 'sorted' }} {{ field.isVirtual ? 'field-virtual' }} header-for-{{ field.cssClass|split(' ')|filter(class => class starts with 'field-')|join('') }} text-{{ field.textAlign }}" dir="{{ ea.i18n.textDirection }}">
+                                {% if field.isSortable %}
+                                    <a href="{{ ea_url({ page: 1, sort: { (field.property): next_sort_direction } }) }}">
+                                        {{ field.label|trans|raw }} <i class="fa fa-fw {{ column_icon }}"></i>
+                                    </a>
+                                {% else %}
+                                    <span>{{ field.label|trans|raw }}</span>
+                                {% endif %}
+                            </th>
+                        {% endfor %}
+                        <th>Acciones</th>
+                    </tr>
+                </thead>
+                <tbody> 
+                    {% if entity.isAccessible %}
+                        <tr data-id="{{ entity.primaryKeyValueAsString }}">
+                            {% for field in entity.fields %}
+                                <td data-column="{{ field.property }}" data-label="{{ field.label|trans|e('html_attr') }}" class="{{ field.property == sort_field_name ? 'sorted' }} text-{{ field.textAlign }} {{ field.cssClass }}" dir="{{ ea.i18n.textDirection }}" data-id="{{ entity.primaryKeyValueAsString }}">
+                                    {{ include(field.templatePath, { field: field, entity: entity }, with_context = false) }}
+                                </td>
+                            {% endfor %}
+                            <td> 
+                                <button id="openPestañasModal" class="btn btn-primary">Añadir Actividad</button>
 
+                                <button type="button" class="btn btn-primary btnPestaña" data-id="{{ entity.primaryKeyValueAsString }}" id="btnEditActivity">
+                                    Editar Actividad
+                                </button>
+                                <button type="button" class="btn btn-danger" data-id="{{ entity.primaryKeyValueAsString }}" id="btnDeleteActivity">
+                                    Borrar Actividad
+                                </button>
+                            </td>
+                        </tr>
+                    {% endif %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+{% endfor %}
 
-	<script src="js/jquery.min.js"></script>
-  <script src="js/popper.js"></script>
-  <script src="js/bootstrap.min.js"></script>
-  <script src="js/main.js"></script>
+        <!-- Modal -->
+<div class="modal fade" id="pestañasModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Agregar Actividad</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+      <div class="modal-body">
+        {% include 'pestañas/pestañas.html.twig' %}
+      </div>
+    </div>
+  </div>
+</div>
+
+    
 
 
 
@@ -368,7 +367,7 @@
         {% block table_body %}
             {% for entity in entities %}
                 {% if entity.isAccessible %}
-                    <tr data-id="{{ entity.primaryKeyValueAsString }}">
+                    <tr data-id="{{ entity.primaryKeyValueAsString }}" id="idPadre" data-id="{{ entity.primaryKeyValueAsString }}">
                         {% if has_batch_actions %}
                             <td class="batch-actions-selector">
                                 <div class="form-check">
@@ -474,3 +473,4 @@
         {{ include('@EasyAdmin/crud/includes/_batch_action_modal.html.twig', {}, with_context = false) }}
     {% endif %}
 {% endblock main %}
+

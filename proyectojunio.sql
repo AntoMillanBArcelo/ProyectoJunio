@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Servidor: 127.0.0.1
--- Tiempo de generación: 04-06-2024 a las 10:15:25
+-- Tiempo de generación: 05-06-2024 a las 13:19:54
 -- Versión del servidor: 10.4.32-MariaDB
 -- Versión de PHP: 8.2.12
 
@@ -33,18 +33,20 @@ CREATE TABLE `actividad` (
   `fecha_hora_ini` datetime NOT NULL,
   `fecha_hora_fin` datetime NOT NULL,
   `descripcion` varchar(255) NOT NULL,
-  `tipo` varchar(255) NOT NULL
+  `tipo` varchar(255) NOT NULL,
+  `id_padre` int(11) DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
 
 --
 -- Volcado de datos para la tabla `actividad`
 --
 
-INSERT INTO `actividad` (`id`, `evento_id`, `fecha_hora_ini`, `fecha_hora_fin`, `descripcion`, `tipo`) VALUES
-(16, 1, '2024-06-10 10:00:00', '2024-06-10 12:00:00', 'Taller de Programación', '1'),
-(17, 1, '2024-06-04 12:12:12', '1212-03-12 00:00:00', 'asd', 'compuesta'),
-(18, NULL, '2024-06-04 09:12:23', '2024-06-04 09:12:23', '', 'compuesta'),
-(19, 1, '2024-06-04 12:31:23', '2024-06-04 12:32:31', 'weqeqw', 'compuesta');
+INSERT INTO `actividad` (`id`, `evento_id`, `fecha_hora_ini`, `fecha_hora_fin`, `descripcion`, `tipo`, `id_padre`) VALUES
+(16, 1, '2024-06-10 10:00:00', '2024-06-10 12:00:00', 'Taller de Programación', '1', NULL),
+(17, 1, '2024-06-04 12:12:12', '1212-03-12 00:00:00', 'asd', 'compuesta', NULL),
+(18, NULL, '2024-06-04 09:12:23', '2024-06-04 09:12:23', '', 'compuesta', NULL),
+(19, 1, '2024-06-04 12:31:23', '2024-06-04 12:32:31', 'weqeqw', 'compuesta', NULL),
+(20, 1, '2024-06-05 13:23:12', '0123-03-12 00:00:00', '213', 'compuesta', NULL);
 
 -- --------------------------------------------------------
 
@@ -150,7 +152,8 @@ INSERT INTO `doctrine_migration_versions` (`version`, `executed_at`, `execution_
 ('DoctrineMigrations\\Version20240521073752', '2024-05-21 09:37:58', 45),
 ('DoctrineMigrations\\Version20240521074738', '2024-05-21 09:47:41', 40),
 ('DoctrineMigrations\\Version20240603074910', '2024-06-03 09:49:17', 47),
-('DoctrineMigrations\\Version20240603074959', '2024-06-03 09:50:07', 8);
+('DoctrineMigrations\\Version20240603074959', '2024-06-03 09:50:07', 8),
+('DoctrineMigrations\\Version20240605074057', '2024-06-05 09:41:05', 50);
 
 -- --------------------------------------------------------
 
@@ -510,7 +513,7 @@ ALTER TABLE `user`
 -- AUTO_INCREMENT de la tabla `actividad`
 --
 ALTER TABLE `actividad`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT de la tabla `alumno`

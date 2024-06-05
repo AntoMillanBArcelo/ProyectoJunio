@@ -21,7 +21,7 @@ document.addEventListener("DOMContentLoaded", function() {
   let tabla = document.getElementById("ponentes");
   let btnRellenarTabla = document.getElementById("btnRellenarTabla");
   let btnAlta = document.getElementById("btnAlta");
-  let entidad = btnAlta.getAttribute("data-entidad");
+  //let entidad = btnAlta.getAttribute("data-entidad");
   let apiUrl;
   
   fichero.onchange = function() {

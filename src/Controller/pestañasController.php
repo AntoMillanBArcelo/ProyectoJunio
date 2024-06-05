@@ -38,6 +38,10 @@ class pestañasController extends AbstractController
             return $this->redirectToRoute('app_pestañas');
         }
 
-        return $this->render('pestañas/pestañas.html.twig');
+        $actividades = $entityManager->getRepository(Actividad::class)->findAll();
+
+        return $this->render('pestañas/pestañas.html.twig', [
+            'actividades' => $actividades,
+        ]);
     }
 }

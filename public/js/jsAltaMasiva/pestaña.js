@@ -5,17 +5,14 @@ document.addEventListener('DOMContentLoaded', function() {
     let selectElement = document.getElementById("fuente");
     const apiUrl = '/api/recursos';
     const apiUrl2 = '/api/grupos';
-    const gruposContainer = document.getElementById('grupos-container');
-    const gruposSelect = document.getElementById('grupos-select');
-    var guardarActividadBtn = document.querySelector('#ex1-tabs-1 .styled'); // Selecciona el botón de guardar dentro del primer tab-pane
-    var actividadForm = document.querySelector('#ex1-tabs-1 .form-container'); // Selecciona el formulario dentro del primer tab-pane
 
+    const gruposSelect = document.getElementById('grupos-select');
+    
+  
     if (btnPestaña) {
         btnPestaña.addEventListener('click', function() {
-            // Mostrar el iframeContainer
             iframeContainer.style.display = 'block';
 
-            // Ocultar el mainSection después de que se muestre el iframeContainer
             mainSection.style.display = 'none';
         });
     }
@@ -25,7 +22,7 @@ document.addEventListener('DOMContentLoaded', function() {
     fetch(apiUrl)
     .then(response => response.json())
     .then(data => {
-        console.log(data); // Imprime los datos en la consola para verificar su estructura
+        
         
         selectElement.innerHTML = '';
         

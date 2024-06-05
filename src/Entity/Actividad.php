@@ -37,6 +37,9 @@ class Actividad
     #[ORM\Column(length: 255)]
     private ?string $tipo = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $id_padre = null;
+
     public function __construct()
     {
         $this->detalleActividads = new ArrayCollection();
@@ -125,6 +128,7 @@ class Actividad
         return $this;
     }
 
+
     public function getTipo(): ?string
     {
         return $this->tipo;
@@ -133,6 +137,18 @@ class Actividad
     public function setTipo(string $tipo): static
     {
         $this->tipo = $tipo;
+
+        return $this;
+    }
+
+    public function getIdPadre(): ?int
+    {
+        return $this->id_padre;
+    }
+
+    public function setIdPadre(?int $id_padre): static
+    {
+        $this->id_padre = $id_padre;
 
         return $this;
     }
