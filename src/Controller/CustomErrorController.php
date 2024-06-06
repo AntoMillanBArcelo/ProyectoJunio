@@ -15,9 +15,9 @@ class CustomErrorController extends AbstractController
         return $this->render('error/not_found.html.twig');
     }
 
-    #[Route('/{any}', name: 'handle_wildcard')]
+   /*  #[Route('/{any}', name: 'handle_wildcard')]
     public function handleWildcard(): Response
     {
         return $this->render('error/not_found.html.twig');
-    }
+    } */
 }
