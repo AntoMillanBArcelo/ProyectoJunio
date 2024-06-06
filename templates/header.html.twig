@@ -5,7 +5,9 @@
                      <div class="full">
                         <div class="center-desk">
                            <div class="logo">
-                              <a href="index.html"><img src="images/logo.png" alt="#" id="logo"/></a>
+                              <a href="{{ path('app_index') }}">
+                                 <img src="{{ asset('images/logo.png') }}" alt="#" id="logo"/>
+                              </a>
                            </div>
                         </div>
                      </div>
@@ -31,11 +33,11 @@
                                  </li>
                            {% else %}
                                  <li class="nav-item">
-                                    <a class="nav-link" href="{{ path('app_login') }}">Iniciar sesión</a>
+                                    <a class="nav-link" href="{{ path('app_login') }}">Iniciar Sesión</a>
                                  </li>
                            {% endif %}
                            <li class="nav-item">
-                                 <a class="nav-link" href="{{ path('eventos_index') }}">Tipos De Activiades</a>
+                                 <a class="nav-link" href="{{ path('eventos_index') }}">Ver Eventos</a>
                            </li>
                            <li class="nav-item">
                                  <a class="nav-link" href="pricing.html">Pricing</a>

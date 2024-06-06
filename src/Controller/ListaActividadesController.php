@@ -1,5 +1,5 @@
 <?php
-
+// src/Controller/ListaActividadesController.php
 namespace App\Controller;
 
 use App\Repository\EventoRepository;
@@ -7,27 +7,50 @@ use App\Repository\ActividadRepository;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Dompdf\Dompdf;
+use Dompdf\Options;
 
 class ListaActividadesController extends AbstractController
 {
     #[Route('/evento/{id}/actividades', name: 'evento_actividades')]
     public function actividadesDelEvento(int $id, EventoRepository $eventoRepository, ActividadRepository $actividadRepository): Response
     {
-        // Obtener el evento por su ID
         $evento = $eventoRepository->find($id);
-
-        // Obtener las actividades relacionadas con el evento
         $actividades = $actividadRepository->findBy(['evento' => $evento]);
-
-        // Obtener una lista de todas las imágenes en la carpeta de imágenes
         $images = glob('images/actividades/*');
-
-        // Seleccionar una imagen aleatoria de la lista
-        $randomImage = $images[array_rand($images)];
+        shuffle($images);
 
         return $this->render('actividades/actividades.html.twig', [
             'actividades' => $actividades,
-            'random_image' => $randomImage,
+            'random_images' => $images,
         ]);
+    }
+
+    #[Route('/actividad/{id}/descargar', name: 'actividad_descargar')]
+    public function descargarActividad(int $id, ActividadRepository $actividadRepository): Response
+    {
+        $actividad = $actividadRepository->find($id);
+
+        $pdfOptions = new Options();
+        $pdfOptions->set('defaultFont', 'Arial');
+        $pdfOptions->set('isRemoteEnabled', false);
+
+        $dompdf = new Dompdf($pdfOptions);
+       
+        $html = $this->renderView('pdf/pdf.html.twig', [
+            'actividad' => $actividad,
+        ]);
+
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        $output = $dompdf->output();
+        $response = new Response($output);
+
+        $response->headers->set('Content-Type', 'application/pdf');
+        $response->headers->set('Content-Disposition', 'attachment; filename="actividad.pdf"');
+
+        return $response;
     }
 }
