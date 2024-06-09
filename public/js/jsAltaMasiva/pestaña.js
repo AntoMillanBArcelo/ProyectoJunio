@@ -1,3 +1,4 @@
+//pestaña.js
 document.addEventListener('DOMContentLoaded', function() {
     var btnPestaña = document.getElementById('btnPestaña');
     var iframeContainer = document.getElementById('iframeContainer');

@@ -8,6 +8,7 @@ datos=[["cañ","Cañon de Proyección"],
 datos2=[["portL","Portatil Linux"],
  ["internet","Conexión a Internet"]
 ];
+//ficheros.js
 document.addEventListener("DOMContentLoaded", function() {
   let fichero = document.getElementById("fichero");
   let fuente = document.getElementById("fuente");

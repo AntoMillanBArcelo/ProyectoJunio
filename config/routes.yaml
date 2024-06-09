@@ -8,10 +8,3 @@ not_found:
     path: /error/not_found
     controller: App\Controller\CustomErrorController::notFound
 
-# Ruta comodín para manejar todas las demás solicitudes
-wildcard:
-    path: /{any}
-    controller: App\Controller\CustomErrorController::handleWildcard
-    requirements:
-        any: .*
-

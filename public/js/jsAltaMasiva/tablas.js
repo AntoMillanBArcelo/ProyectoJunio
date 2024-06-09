@@ -1,3 +1,4 @@
+//tablas.js
 HTMLTableElement.prototype.editada=false;
 HTMLTableElement.prototype.noEditable=[];
 
