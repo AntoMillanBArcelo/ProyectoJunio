@@ -1,4 +1,4 @@
-//agregaActividad.js
+//agregaPonente.js
 document.addEventListener('DOMContentLoaded', function() 
 {
     const eventoSelect = document.getElementById('evento');

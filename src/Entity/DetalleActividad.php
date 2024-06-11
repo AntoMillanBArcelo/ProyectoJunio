@@ -50,7 +50,7 @@ class DetalleActividad
     private ?string $descripcion = null;
 
     #[ORM\ManyToOne(inversedBy: "detalleActividads")]
-    #[ORM\JoinColumn(nullable: false)]
+    #[ORM\JoinColumn(name: "detalle_actividad_evento_id", referencedColumnName: "id", nullable: false)]
     private ?Evento $evento = null;
 
     public function __construct()
@@ -176,10 +176,7 @@ class DetalleActividad
         $this->descripcion = $descripcion;
         return $this;
     }
-
-
     
-
     public function getEvento(): ?Evento
     {
         return $this->evento;

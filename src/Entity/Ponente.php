@@ -92,4 +92,18 @@ class Ponente
 
         return $this;
     }
+
+    public function setActividad(?DetalleActividad $actividad): static
+    {
+        $this->ponente_detalle_actividad = $actividad;
+
+        return $this;
+    }
+    
+    public function setActividadId(int $actividadId): static
+    {
+        $this->ponente_detalle_actividad_id = $actividadId;
+        return $this;
+    }
+    
 }

@@ -142,6 +142,8 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(data => {
             console.log('Actividad simple agregada exitosamente:', data);
+            updatePonentesWithActividadId(data.id, data.ponentes);
+            
         })
         .catch(error => {
             console.error('Error al agregar la actividad simple:', error);

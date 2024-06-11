@@ -96,16 +96,19 @@ class ActividadApiController extends AbstractController
         try {
             $em->persist($detalleActividad);
             $em->flush();
-
+            $this->updatePonentesWithActividadId($detalleActividad, $data['ponentes']);
+        
             if (isset($data['ponentes']) && is_array($data['ponentes'])) {
                 $this->updatePonentes($em, $detalleActividad, $data['ponentes']);
             }
 
             $em->getConnection()->commit();
+            
         } catch (\Exception $e) {
             $em->getConnection()->rollBack();
             return $this->json(['error' => 'Error interno del servidor: ' . $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
+        
 
         return $this->json([
             'id' => $detalleActividad->getId(),
@@ -142,4 +145,21 @@ class ActividadApiController extends AbstractController
 
         $em->flush();
     }
+
+    private function updatePonentesWithActividadId(EntityManagerInterface $em, DetalleActividad $detalleActividad, array $ponentesData): void
+{
+    foreach ($ponentesData as $ponenteData) {
+        $ponenteId = $ponenteData['id']; 
+        $ponente = $em->getRepository(Ponente::class)->find($ponenteId);
+
+        if ($ponente) {
+            $ponente->setPonenteDetalleActividad($detalleActividad);
+        }
+    }
+
+    $em->flush();
+}
+
+
+
 }
