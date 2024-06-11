@@ -70,12 +70,12 @@ class ActividadApiController extends AbstractController
             return $this->json(['error' => 'Error interno del servidor: ' . $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
     #[Route('/actividades/simple', name: 'api_actividades_simple', methods: ['POST'])]
     public function createSimple(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
 
-        // Validación de que estos campos sean obligatorios
         if (!isset($data['descripcion']) || !isset($data['fechaInicio']) || !isset($data['fechaFin']) || !isset($data['evento'])) {
             return $this->json(['error' => 'Datos incompletos'], Response::HTTP_BAD_REQUEST);
         }
@@ -92,73 +92,90 @@ class ActividadApiController extends AbstractController
         }
         $detalleActividad->setEvento($evento);
 
+        // Establecer id_padre si está presente
+        if (isset($data['id_padre'])) {
+            $detalleActividad->setIdPadre($data['id_padre']);
+            // Debugging log
+            error_log('ID Padre establecido: ' . $data['id_padre']);
+        } else {
+            // Debugging log
+            error_log('ID Padre no está presente en la solicitud.');
+        }
+
         $em->getConnection()->beginTransaction();
         try {
             $em->persist($detalleActividad);
             $em->flush();
-            $this->updatePonentesWithActividadId($detalleActividad, $data['ponentes']);
-        
+
+            $ponentes = [];
             if (isset($data['ponentes']) && is_array($data['ponentes'])) {
-                $this->updatePonentes($em, $detalleActividad, $data['ponentes']);
+                $this->updatePonentesWithActividadId($em, $detalleActividad, $data['ponentes']);
+                $ponentes = $data['ponentes'];
             }
 
             $em->getConnection()->commit();
-            
+
+            return $this->json([
+                'id' => $detalleActividad->getId(),
+                'descripcion' => $detalleActividad->getDescripcion(),
+                'fechaInicio' => $detalleActividad->getFechaHoraIni()->format('Y-m-d H:i:s'),
+                'fechaFin' => $detalleActividad->getFechaHoraFin()->format('Y-m-d H:i:s'),
+                'evento' => [
+                    'id' => $evento->getId(),
+                    'nombre' => $evento->getTitulo()
+                ],
+                'tipo' => 'simple',
+                'ponentes' => $ponentes
+            ], Response::HTTP_CREATED);
         } catch (\Exception $e) {
             $em->getConnection()->rollBack();
             return $this->json(['error' => 'Error interno del servidor: ' . $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
-        
-
-        return $this->json([
-            'id' => $detalleActividad->getId(),
-            'descripcion' => $detalleActividad->getDescripcion(),
-            'fechaInicio' => $detalleActividad->getFechaHoraIni()->format('Y-m-d H:i:s'),
-            'fechaFin' => $detalleActividad->getFechaHoraFin()->format('Y-m-d H:i:s'),
-            'evento' => [
-                'id' => $evento->getId(),
-                'nombre' => $evento->getTitulo()
-            ],
-            'tipo' => 'simple'
-        ], Response::HTTP_CREATED);
     }
 
-    private function updatePonentes(EntityManagerInterface $em, DetalleActividad $detalleActividad, array $ponentesData)
-    {
-        if (!is_array($ponentesData)) {
-            throw new \InvalidArgumentException('Los datos de los ponentes deben ser proporcionados como un array.');
-        }
 
+
+    private function updatePonentesWithActividadId(EntityManagerInterface $em, DetalleActividad $detalleActividad, array $ponentesData): void
+    {
         foreach ($ponentesData as $ponenteData) {
-            if (!isset($ponenteData['nombre']) || !isset($ponenteData['cargo']) || !isset($ponenteData['recurso'])) {
-                throw new \InvalidArgumentException('Los datos de cada ponente deben incluir "nombre", "cargo" y "recurso".');
+            if (!isset($ponenteData['id'])) {
+                throw new \InvalidArgumentException('Cada ponente debe tener un ID.');
             }
 
-            $ponente = new Ponente();
-            $ponente->setNombre($ponenteData['nombre']);
-            $ponente->setCargo($ponenteData['cargo']);
-            $ponente->setUrl($ponenteData['recurso']);
-            $ponente->setPonenteDetalleActividad($detalleActividad);
+            $ponenteId = $ponenteData['id'];
+            $ponente = $em->getRepository(Ponente::class)->find($ponenteId);
 
-            $em->persist($ponente);
+            if ($ponente) {
+                $ponente->setPonenteDetalleActividad($detalleActividad);
+            }
         }
 
         $em->flush();
     }
 
-    private function updatePonentesWithActividadId(EntityManagerInterface $em, DetalleActividad $detalleActividad, array $ponentesData): void
-{
-    foreach ($ponentesData as $ponenteData) {
-        $ponenteId = $ponenteData['id']; 
-        $ponente = $em->getRepository(Ponente::class)->find($ponenteId);
+    #[Route('/actividades/update-ponentes', name: 'update_ponentes', methods: ['POST'])]
+    public function updatePonentes(Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
 
-        if ($ponente) {
-            $ponente->setPonenteDetalleActividad($detalleActividad);
+        if (!isset($data['actividad_id']) || !isset($data['ponentes'])) {
+            return $this->json(['error' => 'Datos incompletos'], Response::HTTP_BAD_REQUEST);
         }
+
+        $detalleActividad = $em->getRepository(DetalleActividad::class)->find($data['actividad_id']);
+        if (!$detalleActividad) {
+            return $this->json(['error' => 'Actividad no encontrada'], Response::HTTP_NOT_FOUND);
+        }
+
+        try {
+            $this->updatePonentesWithActividadId($em, $detalleActividad, $data['ponentes']);
+        } catch (\Exception $e) {
+            return $this->json(['error' => 'Error al actualizar los ponentes: ' . $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return $this->json(['status' => 'Ponentes actualizados exitosamente']);
     }
 
-    $em->flush();
-}
 
 
 

@@ -1,4 +1,3 @@
-//agregaActividad.js
 document.addEventListener('DOMContentLoaded', function() {
     var tabs = document.querySelectorAll('[data-mdb-toggle="tab"]');
     var btnGuardarSimple = document.getElementById('g2');
@@ -28,8 +27,6 @@ document.addEventListener('DOMContentLoaded', function() {
     var actividadSelect = document.getElementById('actividad-select');
     var tabLinks = document.querySelectorAll('.nav-link');
 
-
-    //Esto bloquea la navegacion de pestana si es compuesto
     actividadSelect.addEventListener('change', function() {
         if (actividadSelect.value === 'compuesta') {
             tabLinks.forEach(function(link, index) {
@@ -46,19 +43,15 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
-   
-        var actividadSelect = document.getElementById('actividad-select');
-        var tituloContainer = document.getElementById('titulo-container');
-    
-        actividadSelect.addEventListener('change', function() {
-            if (actividadSelect.value === 'simple') {
-                tituloContainer.style.display = 'block';
-            } else {
-                tituloContainer.style.display = 'none';
-            }
-        });
-  
-    
+    var tituloContainer = document.getElementById('titulo-container');
+    actividadSelect.addEventListener('change', function() {
+        if (actividadSelect.value === 'simple') {
+            tituloContainer.style.display = 'block';
+        } else {
+            tituloContainer.style.display = 'none';
+        }
+    });
+
     btnGuardarCompuesta.addEventListener('click', function(event) {
         event.preventDefault();
 
@@ -101,54 +94,80 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    btnGuardarSimple.addEventListener('click', function(event) {
-        event.preventDefault();
+   document.addEventListener('DOMContentLoaded', function() {
+    const btnGuardarSimple = document.getElementById('btnGuardarSimple');
     
-        var descripcion = document.getElementById('descripcion').value;
-        var inicio = document.getElementById('inicio').value;
-        var fin = document.getElementById('fin').value;
-        var evento = document.getElementById('evento').value;
-        var aforo = document.getElementById('aforo').value;
-        var idPadre = document.getElementById('idd').value;
-        var titulo = document.getElementById('titulo').value; 
-    
-        var recursos = Array.from(document.getElementById('seleccionados').options).map(option => option.value);
-        var grupos = Array.from(document.getElementById('grupos-select').options).map(option => option.value);
-    
-        var actividadDataSimple = {
-            descripcion: descripcion,
-            fechaInicio: inicio,
-            fechaFin: fin,
-            evento: evento,
-            aforo: aforo,
-            id_padre: parseInt(idPadre, 10), // Convertir id_padre a entero
-            recursos: recursos,
-            grupos: grupos,
-            titulo: titulo 
-        };
-    
-        fetch('/API/actividades/simple', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(actividadDataSimple)
-        })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(err => { throw err; });
-            }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Actividad simple agregada exitosamente:', data);
-            updatePonentesWithActividadId(data.id, data.ponentes);
-            
-        })
-        .catch(error => {
-            console.error('Error al agregar la actividad simple:', error);
-            alert(`Error al agregar la actividad simple: ${error.message || error}`);
-        });
-    });
+    if (btnGuardarSimple) {
+        btnGuardarSimple.addEventListener('click', function(event) {
+            event.preventDefault();
+
+            var descripcion = document.getElementById('descripcion').value;
+            var inicio = document.getElementById('inicio').value;
+            var fin = document.getElementById('fin').value;
+            var evento = document.getElementById('evento').value;
+            var aforo = document.getElementById('aforo').value;
+            var idPadre = document.getElementById('idd').value;
+            var titulo = document.getElementById('titulo').value;
+
+            var recursos = Array.from(document.getElementById('seleccionados').options).map(option => option.value);
+            var grupos = Array.from(document.getElementById('grupos-select').options).map(option => option.value);
+            var ponentes = Array.from(document.getElementById('ponentes-select').selectedOptions).map(option => ({ id: option.value }));
+
+            var actividadDataSimple = {
+                descripcion: descripcion,
+                fechaInicio: inicio,
+                fechaFin: fin,
+                evento: evento,
+                aforo: aforo,
+                id_padre: parseInt(idPadre, 10),
+                recursos: recursos,
+                grupos: grupos,
+                titulo: titulo,
+                ponentes: ponentes
+            };
+
+            fetch('/API/actividades/simple', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(actividadDataSimple)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { throw err; });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Actividad simple agregada exitosamente:', data);
+                if (data.ponentes && data.ponentes.length > 0) {
+                    fetch('/API/actividades/update-ponentes', {
+                        method: 'POST',
+                        headers: {
+                            'Content-Type': 'application/json'
+                        },
+                        body: JSON.stringify({ actividad_id: data.id, ponentes: data.ponentes })
+                    })
+                    .then(response => response.json())
+                    .then(updateData => {
+                        console.log('Ponentes actualizados exitosamente:', updateData);
+                    })
+                    .catch(error => {
+                        console.error('Error al actualizar los ponentes:', error);
+                    });
+                }
+                
+                // Recargar la página después de guardar la actividad exitosamente
+                location.reload();
+            })
+            .catch(error => {
+                console.error('Error al agregar la actividad simple:', error);
+                alert(`Error al agregar la actividad simple: ${error.message || error}`);
+            });
+        }, { once: true });  
+    }
+});
+
     
 });

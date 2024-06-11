@@ -53,6 +53,9 @@ class DetalleActividad
     #[ORM\JoinColumn(name: "detalle_actividad_evento_id", referencedColumnName: "id", nullable: false)]
     private ?Evento $evento = null;
 
+    #[ORM\Column(nullable: true)]
+    private ?int $id_padre = null;
+
     public function __construct()
     {
         $this->asiste = new ArrayCollection();
@@ -185,6 +188,18 @@ class DetalleActividad
     public function setEvento(?Evento $evento): self
     {
         $this->evento = $evento;
+        return $this;
+    }
+
+    public function getIdPadre(): ?int
+    {
+        return $this->id_padre;
+    }
+
+    public function setIdPadre(?int $id_padre): static
+    {
+        $this->id_padre = $id_padre;
+
         return $this;
     }
 
