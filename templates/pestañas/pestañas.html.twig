@@ -102,6 +102,12 @@
                             <label for="id">ID</label>
                             <input type="number" id="idd" name="id" disabled>
                         </div>
+                        <div class="form-row" id="titulo-container" style="display: none;">
+                            <div class="form-group full-width">
+                                <label for="titulo">Título</label>
+                                <input type="text" id="titulo" name="titulo">
+                            </div>
+                        </div>
                         <div class="form-group">
                             <label for="aforo">Aforo</label>
                             <input type="number" id="aforo" name="aforo" min="1" step="1">
@@ -122,10 +128,6 @@
                         <label for="evento">Evento</label>
                         <select id="evento" name="evento">
                             <option value="">Seleccione un evento</option>
-                            <!-- Aquí puedes agregar opciones para cada evento disponible -->
-                            <option value="1">Evento 1</option>
-                            <option value="2">Evento 2</option>
-                            <!-- Asegúrate de que el value de cada opción coincida con el ID del evento -->
                         </select>
                     </div>
                     <div class="form-row">
@@ -174,7 +176,7 @@
                 </div>
                 <div class="form-group">
                     <label for="recurso">Recurso</label>
-                    <input type="text" id="url" name="recurso">
+                    <input type="text" id="recurso" name="recurso">
                 </div>
                 <div class="form-group">
                     <input class="styled" type="button" value="Guardar" id="guardarPonente">
@@ -247,6 +249,7 @@
         <script src="js/jsAltaMasiva/pestaña.js"></script>
         <script src="js/jsAltaMasiva/tablas.js"></script>
         <script src="js/pestaña/agregaActividad.js"></script>
+        <script src="js/pestaña/agregaPonente.js"></script>
     {% endblock %}
 </body>
 </html>

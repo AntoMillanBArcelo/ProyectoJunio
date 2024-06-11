@@ -25,6 +25,9 @@ class Ponente
     #[ORM\ManyToOne(inversedBy: 'ponentes')]
     private ?DetalleActividad $ponente_detalle_actividad = null;
 
+    #[ORM\ManyToOne(targetEntity: Evento::class)]
+    private ?Evento $evento = null;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -74,6 +77,18 @@ class Ponente
     public function setPonenteDetalleActividad(?DetalleActividad $ponente_detalle_actividad): static
     {
         $this->ponente_detalle_actividad = $ponente_detalle_actividad;
+
+        return $this;
+    }
+
+    public function getEvento(): ?Evento
+    {
+        return $this->evento;
+    }
+
+    public function setEvento(?Evento $evento): static
+    {
+        $this->evento = $evento;
 
         return $this;
     }

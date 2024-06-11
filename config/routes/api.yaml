@@ -98,3 +98,28 @@ api_grupo_delete:
     path: /api/grupos/{id}
     controller: App\Controller\Api\GrupoApiController::delete
     methods: ['DELETE']
+
+api_evento_list:
+    path: /api/eventos
+    controller: App\Controller\Api\EventoApiController::index
+    methods: GET
+
+api_evento_show:
+    path: /api/eventos/{id}
+    controller: App\Controller\Api\EventoApiController::show
+    methods: GET
+
+api_evento_create:
+    path: /api/eventos
+    controller: App\Controller\Api\EventoApiController::create
+    methods: POST
+
+api_evento_delete:
+    path: /api/eventos/{id}
+    controller: App\Controller\Api\EventoApiController::delete
+    methods: DELETE
+
+api_actividades_simple:
+    path: /API/actividades/simple
+    controller: App\Controller\Api\ActividadApiController::createSimple
+    methods: [POST]

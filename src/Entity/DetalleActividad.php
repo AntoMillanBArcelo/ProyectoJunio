@@ -43,8 +43,15 @@ class DetalleActividad
     #[ORM\ManyToOne(inversedBy: 'detalleActividads')]
     private ?Actividad $detalle_actividad_evento = null;
 
-    #[ORM\Column(length: 255)]
+    #[ORM\Column(length: 255, nullable: true)]
     private ?string $URL = null;
+
+    #[ORM\Column(length: 255, nullable: true)]
+    private ?string $descripcion = null;
+
+    #[ORM\ManyToOne(inversedBy: "detalleActividads")]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Evento $evento = null;
 
     public function __construct()
     {
@@ -159,42 +166,29 @@ class DetalleActividad
         return $this;
     }
 
-    public function getDetalleActividadEvento(): ?Actividad
+    public function getDescripcion(): string
     {
-        return $this->detalle_actividad_evento;
+        return $this->descripcion;
     }
 
-    public function setDetalleActividadEvento(?Actividad $detalle_actividad_evento): static
+    public function setDescripcion(string $descripcion): self
     {
-        $this->detalle_actividad_evento = $detalle_actividad_evento;
-
+        $this->descripcion = $descripcion;
         return $this;
     }
 
-    public function getURL(): ?string
-    {
-        return $this->URL;
-    }
 
-    public function setURL(string $URL): static
-    {
-        $this->URL = $URL;
-
-        return $this;
-    }
-
-    public function setActividad(?Actividad $actividad): self
-    {
-        $this->actividad = $actividad;
-
-        return $this;
-    }
-
-    public function setEspacio(?Espacio $espacio): self
-    {
-        $this->detalle_actividad_espacios = $espacio;
-
-        return $this;
-    }
     
+
+    public function getEvento(): ?Evento
+    {
+        return $this->evento;
+    }
+
+    public function setEvento(?Evento $evento): self
+    {
+        $this->evento = $evento;
+        return $this;
+    }
+
 }

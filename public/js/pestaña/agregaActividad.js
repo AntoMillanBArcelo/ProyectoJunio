@@ -1,3 +1,4 @@
+//agregaActividad.js
 document.addEventListener('DOMContentLoaded', function() {
     var tabs = document.querySelectorAll('[data-mdb-toggle="tab"]');
     var btnGuardarSimple = document.getElementById('g2');
@@ -27,6 +28,8 @@ document.addEventListener('DOMContentLoaded', function() {
     var actividadSelect = document.getElementById('actividad-select');
     var tabLinks = document.querySelectorAll('.nav-link');
 
+
+    //Esto bloquea la navegacion de pestana si es compuesto
     actividadSelect.addEventListener('change', function() {
         if (actividadSelect.value === 'compuesta') {
             tabLinks.forEach(function(link, index) {
@@ -43,6 +46,19 @@ document.addEventListener('DOMContentLoaded', function() {
         }
     });
 
+   
+        var actividadSelect = document.getElementById('actividad-select');
+        var tituloContainer = document.getElementById('titulo-container');
+    
+        actividadSelect.addEventListener('change', function() {
+            if (actividadSelect.value === 'simple') {
+                tituloContainer.style.display = 'block';
+            } else {
+                tituloContainer.style.display = 'none';
+            }
+        });
+  
+    
     btnGuardarCompuesta.addEventListener('click', function(event) {
         event.preventDefault();
 
@@ -87,22 +103,18 @@ document.addEventListener('DOMContentLoaded', function() {
 
     btnGuardarSimple.addEventListener('click', function(event) {
         event.preventDefault();
-
+    
         var descripcion = document.getElementById('descripcion').value;
         var inicio = document.getElementById('inicio').value;
         var fin = document.getElementById('fin').value;
         var evento = document.getElementById('evento').value;
         var aforo = document.getElementById('aforo').value;
         var idPadre = document.getElementById('idd').value;
-
+        var titulo = document.getElementById('titulo').value; 
+    
         var recursos = Array.from(document.getElementById('seleccionados').options).map(option => option.value);
-
-        var nombrePonente = document.getElementById('nombre').value;
-        var cargoPonente = document.getElementById('cargo').value;
-        var recursoPonente = document.getElementById('url').value;
-
         var grupos = Array.from(document.getElementById('grupos-select').options).map(option => option.value);
-
+    
         var actividadDataSimple = {
             descripcion: descripcion,
             fechaInicio: inicio,
@@ -111,14 +123,10 @@ document.addEventListener('DOMContentLoaded', function() {
             aforo: aforo,
             id_padre: parseInt(idPadre, 10), // Convertir id_padre a entero
             recursos: recursos,
-            ponente: {
-                nombre: nombrePonente,
-                cargo: cargoPonente,
-                url: recursoPonente
-            },
-            grupos: grupos
+            grupos: grupos,
+            titulo: titulo 
         };
-
+    
         fetch('/API/actividades/simple', {
             method: 'POST',
             headers: {
@@ -140,4 +148,5 @@ document.addEventListener('DOMContentLoaded', function() {
             alert(`Error al agregar la actividad simple: ${error.message || error}`);
         });
     });
+    
 });

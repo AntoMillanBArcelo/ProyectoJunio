@@ -1,11 +1,10 @@
 <?php
+// src/Controller/Api/ActividadApiController.php
+
 namespace App\Controller\Api;
 
-use App\Entity\Actividad;
 use App\Entity\DetalleActividad;
-use App\Entity\Espacio;
 use App\Entity\Evento;
-use App\Entity\Ponente;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -16,97 +15,6 @@ use Symfony\Component\Routing\Annotation\Route;
 #[Route('/API')]
 class ActividadApiController extends AbstractController
 {
-    #[Route('/actividades/simple', name: 'actividad_create_simple', methods: ['POST'])]
-    public function createSimple(Request $request, EntityManagerInterface $em): JsonResponse
-    {
-        $data = json_decode($request->getContent(), true);
-
-        // Verifica que todos los datos requeridos estén presentes
-        if (!isset($data['descripcion']) || !isset($data['fechaInicio']) || !isset($data['fechaFin']) || !isset($data['evento'])) {
-            return $this->json(['error' => 'Datos incompletos'], Response::HTTP_BAD_REQUEST);
-        }
-
-        $fechaInicio = new \DateTime($data['fechaInicio']);
-        $fechaFin = new \DateTime($data['fechaFin']);
-
-        // Crear una nueva instancia de Actividad
-        $actividad = new Actividad();
-        $actividad->setDescripcion($data['descripcion']);
-        $actividad->setFechaHoraIni($fechaInicio);
-        $actividad->setFechaHoraFin($fechaFin);
-        $actividad->setTipo('simple'); // Establecer el tipo como 'simple'
-        
-        // Si existe un ID de padre, establecerlo en la actividad
-        if (isset($data['id_padre'])) {
-            $actividad->setIdPadre($data['id_padre']);
-        }
-
-        // Obtener y establecer el evento asociado
-        $evento = $em->getRepository(Evento::class)->find($data['evento']);
-        if (!$evento) {
-            return $this->json(['error' => 'Evento no encontrado'], Response::HTTP_NOT_FOUND);
-        }
-        $actividad->setEvento($evento);
-
-        // Manejo de transacciones y errores
-        $em->getConnection()->beginTransaction();
-        try {
-            $em->persist($actividad);
-            $em->flush();
-            $em->getConnection()->commit();
-        } catch (\Exception $e) {
-            $em->getConnection()->rollBack();
-            return $this->json(['error' => 'Error interno del servidor: ' . $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-
-        // Devolver la respuesta JSON con los datos de la actividad creada
-        return $this->json([
-            'id' => $actividad->getId(),
-            'descripcion' => $actividad->getDescripcion(),
-            'fechaInicio' => $actividad->getFechaHoraIni()->format('Y-m-d H:i:s'),
-            'fechaFin' => $actividad->getFechaHoraFin()->format('Y-m-d H:i:s'),
-            'evento' => [
-                'id' => $evento->getId(),
-                'nombre' => $evento->getTitulo()
-            ],
-            'tipo' => $actividad->getTipo()
-        ], Response::HTTP_CREATED);
-    }
-
-    private function serializeActividad(Actividad $actividad): array
-    {
-        $data = [
-            'id' => $actividad->getId(),
-            'descripcion' => $actividad->getDescripcion(),
-            'fechaHoraInicio' => $actividad->getFechaHoraIni()->format('d-m-Y H:i:s'),
-            'fechaHoraFin' => $actividad->getFechaHoraFin()->format('d-m-Y H:i:s'),
-            'tipo' => $actividad->getTipo(),
-            'evento' => $actividad->getEvento() ? [
-                'id' => $actividad->getEvento()->getId(),
-                'titulo' => $actividad->getEvento()->getTitulo()
-            ] : null,
-        ];
-
-        if ($actividad->getDetalleActividads()) {
-            $subactividades = [];
-            foreach ($actividad->getDetalleActividads() as $subactividad) {
-                $subactividades[] = [
-                    'id' => $subactividad->getId(),
-                    'titulo' => $subactividad->getTitulo(),
-                    'fechaHoraInicio' => $subactividad->getFechaHoraIni()->format('d-m-Y H:i:s'),
-                    'fechaHoraFin' => $subactividad->getFechaHoraFin()->format('d-m-Y H:i:s'),
-                    'espacio' => $subactividad->getEspacio() ? [
-                        'id' => $subactividad->getEspacio()->getId(),
-                        'nombre' => $subactividad->getEspacio()->getNombre()
-                    ] : null,
-                ];
-            }
-            $data['subactividades'] = $subactividades;
-        }
-
-        return $data;
-    }
-
     #[Route('/actividades', name: 'actividad_create', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $em): Response
     {
@@ -162,6 +70,55 @@ class ActividadApiController extends AbstractController
             return $this->json(['error' => 'Error interno del servidor: ' . $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+    #[Route('/actividades/simple', name: 'api_actividades_simple', methods: ['POST'])]
+    public function createSimple(Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        $data = json_decode($request->getContent(), true);
+
+        // Validación de que estos campos sean obligatorios
+        if (!isset($data['descripcion']) || !isset($data['fechaInicio']) || !isset($data['fechaFin']) || !isset($data['evento'])) {
+            return $this->json(['error' => 'Datos incompletos'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $detalleActividad = new DetalleActividad();
+        $detalleActividad->setDescripcion($data['descripcion']);
+        $detalleActividad->setFechaHoraIni(new \DateTime($data['fechaInicio']));
+        $detalleActividad->setFechaHoraFin(new \DateTime($data['fechaFin']));
+        $detalleActividad->setTitulo($data['titulo']);
+
+        $evento = $em->getRepository(Evento::class)->find($data['evento']);
+        if (!$evento) {
+            return $this->json(['error' => 'Evento no encontrado'], Response::HTTP_NOT_FOUND);
+        }
+        $detalleActividad->setEvento($evento);
+
+        $em->getConnection()->beginTransaction();
+        try {
+            $em->persist($detalleActividad);
+            $em->flush();
+
+            if (isset($data['ponentes']) && is_array($data['ponentes'])) {
+                $this->updatePonentes($em, $detalleActividad, $data['ponentes']);
+            }
+
+            $em->getConnection()->commit();
+        } catch (\Exception $e) {
+            $em->getConnection()->rollBack();
+            return $this->json(['error' => 'Error interno del servidor: ' . $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
+
+        return $this->json([
+            'id' => $detalleActividad->getId(),
+            'descripcion' => $detalleActividad->getDescripcion(),
+            'fechaInicio' => $detalleActividad->getFechaHoraIni()->format('Y-m-d H:i:s'),
+            'fechaFin' => $detalleActividad->getFechaHoraFin()->format('Y-m-d H:i:s'),
+            'evento' => [
+                'id' => $evento->getId(),
+                'nombre' => $evento->getTitulo()
+            ],
+            'tipo' => 'simple'
+        ], Response::HTTP_CREATED);
+    }
 
     private function updatePonentes(EntityManagerInterface $em, DetalleActividad $detalleActividad, array $ponentesData)
     {
@@ -170,33 +127,19 @@ class ActividadApiController extends AbstractController
         }
 
         foreach ($ponentesData as $ponenteData) {
-            if (!isset($ponenteData['nombre']) || !isset($ponenteData['cargo']) || !isset($ponenteData['url'])) {
-                throw new \InvalidArgumentException('Los datos de cada ponente deben incluir "nombre", "cargo" y "url".');
+            if (!isset($ponenteData['nombre']) || !isset($ponenteData['cargo']) || !isset($ponenteData['recurso'])) {
+                throw new \InvalidArgumentException('Los datos de cada ponente deben incluir "nombre", "cargo" y "recurso".');
             }
+
+            $ponente = new Ponente();
+            $ponente->setNombre($ponenteData['nombre']);
+            $ponente->setCargo($ponenteData['cargo']);
+            $ponente->setUrl($ponenteData['recurso']);
+            $ponente->setPonenteDetalleActividad($detalleActividad);
+
+            $em->persist($ponente);
         }
-        
-        $ponenteRepository = $em->getRepository(Ponente::class);
-        
-        try {
-            $ponentesExistentes = $ponenteRepository->findBy(['ponente_detalle_actividad' => $detalleActividad]);
-            foreach ($ponentesExistentes as $ponenteExistente) {
-                $em->remove($ponenteExistente);
-            }
-            $em->flush();
 
-            foreach ($ponentesData as $ponenteData) {
-                $ponente = new Ponente();
-                $ponente->setNombre($ponenteData['nombre']);
-                $ponente->setCargo($ponenteData['cargo']);
-                $ponente->setURL($ponenteData['url']);
-                $ponente->setPonenteDetalleActividad($detalleActividad);
-
-                $em->persist($ponente);
-            }
-
-            $em->flush();
-        } catch (\Exception $e) {
-            throw $e;
-        }
+        $em->flush();
     }
 }

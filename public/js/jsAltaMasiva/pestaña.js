@@ -6,7 +6,8 @@ document.addEventListener('DOMContentLoaded', function() {
     let selectElement = document.getElementById("fuente");
     const apiUrl = '/api/recursos';
     const apiUrl2 = '/api/grupos';
-
+    let eventoSelect = document.getElementById("evento");
+    const apiUrlEventos = '/api/eventos';
     const gruposSelect = document.getElementById('grupos-select');
     
   
@@ -54,4 +55,21 @@ document.addEventListener('DOMContentLoaded', function() {
     .catch(error => {
         console.error('Error al obtener los grupos:', error);
     });
+
+   // API de eventos
+   fetch(apiUrlEventos)
+   .then(response => response.json())
+   .then(data => {
+       eventoSelect.innerHTML = '<option value="">Seleccione un evento</option>';
+       
+       data.forEach(evento => {
+           const option = document.createElement('option');
+           option.value = evento.id; // Asigna el ID del evento al valor de la opción
+           option.textContent = evento.titulo; // Asigna el título del evento al texto de la opción
+           eventoSelect.appendChild(option);
+       });
+   })
+   .catch(error => {
+       console.error('Error al obtener los eventos:', error);
+   });
 });
