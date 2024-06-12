@@ -4,6 +4,7 @@
 namespace App\Controller\Api;
 
 use App\Entity\DetalleActividad;
+use App\Entity\Actividad;
 use App\Entity\Evento;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -179,7 +180,50 @@ class ActividadApiController extends AbstractController
         return $this->json(['status' => 'Ponentes actualizados exitosamente']);
     } 
 
+    #[Route('/subactividades/{id}', name: 'api_delete_subactivity', methods: ['DELETE'])]
+    public function deleteSubactivity(int $id, EntityManagerInterface $em): JsonResponse
+    {
+        $subactividad = $em->getRepository(DetalleActividad::class)->find($id);
 
+        if (!$subactividad) {
+            return $this->json(['error' => 'Subactividad no encontrada'], JsonResponse::HTTP_NOT_FOUND);
+        }
 
+        $em->getConnection()->beginTransaction();
+        try {
+            $em->remove($subactividad);
+            $em->flush();
+            $em->getConnection()->commit();
+            
+            return $this->json(['status' => 'Subactividad borrada exitosamente']);
+        } catch (\Exception $e) {
+            $em->getConnection()->rollBack();
+            error_log('Error al borrar la subactividad: ' . $e->getMessage());
+            return $this->json(['error' => 'Error al borrar la subactividad: ' . $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    #[Route('/actividades/{id}', name: 'actividad_delete', methods: ['DELETE'])]
+    public function delete(int $id, EntityManagerInterface $em): JsonResponse
+    {
+        $actividad = $em->getRepository(Actividad::class)->find($id);
+
+        if (!$actividad) {
+            return $this->json(['error' => 'actividad no encontrada'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        $em->getConnection()->beginTransaction();
+        try {
+            $em->remove($actividad);
+            $em->flush();
+            $em->getConnection()->commit();
+            
+            return $this->json(['status' => 'actividad borrada exitosamente']);
+        } catch (\Exception $e) {
+            $em->getConnection()->rollBack();
+            error_log('Error al borrar la actividad: ' . $e->getMessage());
+            return $this->json(['error' => 'Error al borrar la actividad: ' . $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+        }
+    }
 
 }

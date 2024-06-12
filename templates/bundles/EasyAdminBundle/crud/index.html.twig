@@ -48,6 +48,9 @@
     <script src="{{ asset('js/jsAltaMasiva/pestaña.js') }}"></script>
     <script src="{{ asset('js/a.js') }}"></script>
     <script src="{{ asset('js/pestaña/agregaActividad.js') }}"></script>
+    {% if ea.i18n.translationParameters['%entity_name%'] == 'Actividad' %}
+        <script src="{{ asset('js/subactividadmodal.js') }}"></script>
+    {% endif %}
 {% endblock %}
 
 
@@ -254,45 +257,33 @@
     {% set num_results = entities|length %}
 
  {% if ea.i18n.translationParameters['%entity_name%']=='Actividad' %}
- {% for entity in entities %}
+{% for entity in entities %}
     <div class="card w-75 cartasAC">
         <div class="card-body">
-            <table class="table"> 
-                <thead> 
+            <table class="table">
+                <thead>
                     <tr>
-                        {% set ea_sort_asc = constant('EasyCorp\\Bundle\\EasyAdminBundle\\Config\\Option\\SortOrder::ASC') %}
-                        {% set ea_sort_desc = constant('EasyCorp\\Bundle\\EasyAdminBundle\\Config\\Option\\SortOrder::DESC') %}
                         {% for field in entities|filter(e => e.isAccessible)|first.fields ?? [] %}
-                            {% set is_sorting_field = ea.search.isSortingField(field.property) %}
-                            {% set next_sort_direction = is_sorting_field ? (ea.search.sortDirection(field.property) == ea_sort_desc ? ea_sort_asc : ea_sort_asc) %}
-                            {% set column_icon = is_sorting_field ? (next_sort_direction == ea_sort_desc ? 'fa-arrow-up' : 'fa-arrow-down') : 'fa-sort' %}
-                            <th data-column="{{ field.property }}" class="{{ is_sorting_field ? 'sorted' }} {{ field.isVirtual ? 'field-virtual' }} header-for-{{ field.cssClass|split(' ')|filter(class => class starts with 'field-')|join('') }} text-{{ field.textAlign }}" dir="{{ ea.i18n.textDirection }}">
-                                {% if field.isSortable %}
-                                    <a href="{{ ea_url({ page: 1, sort: { (field.property): next_sort_direction } }) }}">
-                                        {{ field.label|trans|raw }} <i class="fa fa-fw {{ column_icon }}"></i>
-                                    </a>
-                                {% else %}
-                                    <span>{{ field.label|trans|raw }}</span>
-                                {% endif %}
-                            </th>
+                            <th>{{ field.label|trans|raw }}</th>
                         {% endfor %}
                         <th>Acciones</th>
                     </tr>
                 </thead>
-                <tbody> 
+                <tbody>
                     {% if entity.isAccessible %}
                         <tr data-id="{{ entity.primaryKeyValueAsString }}">
                             {% for field in entity.fields %}
-                                <td data-column="{{ field.property }}" data-label="{{ field.label|trans|e('html_attr') }}" class="{{ field.property == sort_field_name ? 'sorted' }} text-{{ field.textAlign }} {{ field.cssClass }}" dir="{{ ea.i18n.textDirection }}" data-id="{{ entity.primaryKeyValueAsString }}">
-                                    {{ include(field.templatePath, { field: field, entity: entity }, with_context = false) }}
-                                </td>
+                                <td>{{ include(field.templatePath, { field: field, entity: entity }, with_context = false) }}</td>
                             {% endfor %}
-                            <td> 
+                            <td>
                                 <button class="btn btn-primary openPestañasModal" data-id="{{ entity.primaryKeyValueAsString }}">
                                     Añadir Actividad
                                 </button>
                                 <button type="button" class="btn btn-primary btnPestaña" data-id="{{ entity.primaryKeyValueAsString }}" id="btnEditActivity">
                                     Editar Actividad
+                                </button>
+                                <button type="button" class="btn btn-info" data-id="{{ entity.primaryKeyValueAsString }}" id="btnViewSubactivities">
+                                    Ver Subactividades
                                 </button>
                                 <button type="button" class="btn btn-danger" data-id="{{ entity.primaryKeyValueAsString }}" id="btnDeleteActivity">
                                     Borrar Actividad
@@ -305,6 +296,7 @@
         </div>
     </div>
 {% endfor %}
+
 {% endif %}
 
 <!-- Modal -->
@@ -321,6 +313,23 @@
     </div>
   </div>
 </div>
+
+<!-- Modal for Subactivities -->
+<div class="modal fade" id="subactividadesModal" tabindex="-1" aria-labelledby="subactividadesModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="subactividadesModalLabel">Subactividades</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <div id="subactividadesContent"></div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
 
     <table class="table datagrid {{ entities is empty ? 'datagrid-empty' }}">
         {% if num_results > 0 %}

@@ -154,6 +154,10 @@ class Actividad
         return $this;
     }
 
-   
+
+    public function hasSubactividades(): bool
+    {
+        return !$this->detalleActividads->isEmpty();
+    }
 
 }

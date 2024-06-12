@@ -1,59 +1,59 @@
-{% extends 'base.html.twig' %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mi Tabla</title>
+ <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.11.8/dist/umd/popper.min.js" integrity="sha384-I7E8VVD/ismYTF4hNIPjVp/Zjvgyol6VFvRkX/vR+Vc4jQkC+hVqc2pM8ODewa9r" crossorigin="anonymous"></script>
+ <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
+</head>
+<body>
+  <table id="myTable" class="table table-striped table-bordered">
+    <thead>
+      <tr>
+        <th>Name</th>
+        <th>Email</th>
+        <th>Status</th>
+        <th></th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td>John Doe</td>
+        <td>johndoe@example.com</td>
+        <td>Active</td>
+        <td><button class="btn btn-sm btn-primary" id="toggle-btn-1">Toggle</button></td>
+      </tr>
+      <tr>
+        <td>Jane Doe</td>
+        <td>janedoe@example.com</td>
+        <td>Inactive</td>
+        <td><button class="btn btn-sm btn-primary" id="toggle-btn-2">Toggle</button></td>
+      </tr>
+    </tbody>
+  </table>
 
-{% block body %}
-<div class="container">
-    <div class="d-flex justify-content-between align-items-center mb-3">
-        <h1 class="mb-0">ACTIVIDADES</h1>
-        <button class="btn btn-primary" style="background-color: #5368d5;" data-toggle="modal" data-target="#modalAgregarActividad">AÑADIR ACTIVIDAD</button>
-    </div>
+  <script>
+    $(document).ready(function() {
+      $('#myTable').DataTable({
+        "paging": false,
+        "ordering": false,
+        "info": false,
+        "searching": false
+      });
 
-    <div id="actividades">
-        {% for actividad in actividades %}
-            <div class="card mb-3">
-                <div class="card-body">
-                    <div class="d-flex justify-content-between align-items-center">
-                        <h5 class="card-title">{{ actividad.descripcion }}</h5>
-                        <div>
-                            <button class="btn btn-warning btn-sm" 
-                                    onclick="editarActividad(this)" 
-                                    data-actividad-id="{{ actividad.id }}"
-                                    data-actividad-descripcion="{{ actividad.descripcion }}"
-                                    data-actividad-tipo="{{ actividad.tipo }}"
-                                    data-actividad-evento="{{ actividad.evento ? actividad.evento.id : '' }}">
-                                EDITAR
-                            </button>
-                            <button class="btn btn-danger btn-sm" onclick="eliminarActividad({{ actividad.id }})">ELIMINAR</button>
-                            <button class="btn btn-primary btn-sm" 
-                                    onclick="agregarSubactividad(this)" 
-                                    data-actividad-id="{{ actividad.id }}" 
-                                    data-actividad-evento="{{ actividad.evento ? actividad.evento.id : '' }}" 
-                                    data-actividad-fechainicio="{{ actividad.FechaHoraIni ? actividad.FechaHoraIni|date('Y-m-d') : '' }}" 
-                                    data-actividad-fechafin="{{ actividad.FechaHoraFin ? actividad.FechaHoraFin|date('Y-m-d') : '' }}">
-                                AÑADIR SUBACTIVIDAD
-                            </button>
-                        </div>
-                    </div>
-                    <div class="subactividades mt-2">
-                        {% for subactividad in actividad.detalleActividads %}
-                            <div class="d-flex justify-content-between align-items-center subactividad-item">
-                                <div class="card-text">{{ subactividad.titulo }}</div>
-                                <div>
-                                    <button class="btn btn-warning btn-sm" 
-                                            onclick="editarSubactividad(this)" 
-                                            data-subactividad-id="{{ subactividad.id }}"
-                                            data-subactividad-titulo="{{ subactividad.titulo }}">
-                                        EDITAR
-                                    </button>
-                                    <button class="btn btn-danger btn-sm" onclick="eliminarSubactividad({{ subactividad.id }})">ELIMINAR</button>
-                                </div>
-                            </div>
-                        {% endfor %}
-                    </div>
-                </div>
-            </div>
-        {% endfor %}
-    </div>
-</div>
-
-
-{% endblock %}
+      $('#myTable tbody tr').on('click', 'button', function() {
+        var tr = $(this).closest('tr');
+        var status = $(this).text();
+        if (status === 'Toggle') {
+          $(this).text('Active');
+          tr.find('td:eq(2)').text('Active');
+        } else {
+          $(this).text('Toggle');
+          tr.find('td:eq(2)').text('Inactive');
+        }
+      });
+    });
+  </script>
+</body>
+</html>

@@ -270,4 +270,29 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }, { once: true });  
     
+        //Borrar actividades
+        document.querySelectorAll('button[id="btnDeleteActivity"]').forEach(button => {
+            button.addEventListener('click', function () {
+                const activityId = this.getAttribute('data-id');
+                console.log(activityId);
+                fetch(`/API/actividades/${activityId}`, {
+                    method: 'DELETE'
+                })
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Error al borrar la actividad');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    const row = this.closest('tr');
+                    row.parentNode.removeChild(row);
+                   
+                    console.log(data.message);
+                })
+                .catch(error => {
+                    console.error(error.message);
+                });
+            });
+        });
 });
