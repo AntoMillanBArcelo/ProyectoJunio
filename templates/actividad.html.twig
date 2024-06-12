@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+<div class="container">
+    <div class="d-flex justify-content-between align-items-center mb-3">
+        <h1 class="mb-0">ACTIVIDADES</h1>
+        <button class="btn btn-primary" style="background-color: #5368d5;" data-toggle="modal" data-target="#modalAgregarActividad">AÑADIR ACTIVIDAD</button>
+    </div>
+
+    <div id="actividades">
+        {% for actividad in actividades %}
+            <div class="card mb-3">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <h5 class="card-title">{{ actividad.descripcion }}</h5>
+                        <div>
+                            <button class="btn btn-warning btn-sm" 
+                                    onclick="editarActividad(this)" 
+                                    data-actividad-id="{{ actividad.id }}"
+                                    data-actividad-descripcion="{{ actividad.descripcion }}"
+                                    data-actividad-tipo="{{ actividad.tipo }}"
+                                    data-actividad-evento="{{ actividad.evento ? actividad.evento.id : '' }}">
+                                EDITAR
+                            </button>
+                            <button class="btn btn-danger btn-sm" onclick="eliminarActividad({{ actividad.id }})">ELIMINAR</button>
+                            <button class="btn btn-primary btn-sm" 
+                                    onclick="agregarSubactividad(this)" 
+                                    data-actividad-id="{{ actividad.id }}" 
+                                    data-actividad-evento="{{ actividad.evento ? actividad.evento.id : '' }}" 
+                                    data-actividad-fechainicio="{{ actividad.FechaHoraIni ? actividad.FechaHoraIni|date('Y-m-d') : '' }}" 
+                                    data-actividad-fechafin="{{ actividad.FechaHoraFin ? actividad.FechaHoraFin|date('Y-m-d') : '' }}">
+                                AÑADIR SUBACTIVIDAD
+                            </button>
+                        </div>
+                    </div>
+                    <div class="subactividades mt-2">
+                        {% for subactividad in actividad.detalleActividads %}
+                            <div class="d-flex justify-content-between align-items-center subactividad-item">
+                                <div class="card-text">{{ subactividad.titulo }}</div>
+                                <div>
+                                    <button class="btn btn-warning btn-sm" 
+                                            onclick="editarSubactividad(this)" 
+                                            data-subactividad-id="{{ subactividad.id }}"
+                                            data-subactividad-titulo="{{ subactividad.titulo }}">
+                                        EDITAR
+                                    </button>
+                                    <button class="btn btn-danger btn-sm" onclick="eliminarSubactividad({{ subactividad.id }})">ELIMINAR</button>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    </div>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+
+{% endblock %}

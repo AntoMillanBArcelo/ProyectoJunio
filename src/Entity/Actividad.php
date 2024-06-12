@@ -94,6 +94,7 @@ class Actividad
         return $this->detalleActividads;
     }
 
+
     public function addDetalleActividad(DetalleActividad $detalleActividad): static
     {
         if (!$this->detalleActividads->contains($detalleActividad)) {
@@ -152,4 +153,7 @@ class Actividad
 
         return $this;
     }
+
+   
+
 }

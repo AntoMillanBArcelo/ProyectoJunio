@@ -75,51 +75,48 @@ class ActividadApiController extends AbstractController
     public function createSimple(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-
+    
         if (!isset($data['descripcion']) || !isset($data['fechaInicio']) || !isset($data['fechaFin']) || !isset($data['evento'])) {
             return $this->json(['error' => 'Datos incompletos'], Response::HTTP_BAD_REQUEST);
         }
-
+    
         $detalleActividad = new DetalleActividad();
         $detalleActividad->setDescripcion($data['descripcion']);
         $detalleActividad->setFechaHoraIni(new \DateTime($data['fechaInicio']));
         $detalleActividad->setFechaHoraFin(new \DateTime($data['fechaFin']));
         $detalleActividad->setTitulo($data['titulo']);
-
+    
         $evento = $em->getRepository(Evento::class)->find($data['evento']);
         if (!$evento) {
             return $this->json(['error' => 'Evento no encontrado'], Response::HTTP_NOT_FOUND);
         }
         $detalleActividad->setEvento($evento);
-
-        // Establecer id_padre si está presente
+    
         if (isset($data['id_padre'])) {
             $detalleActividad->setIdPadre($data['id_padre']);
-            // Debugging log
             error_log('ID Padre establecido: ' . $data['id_padre']);
         } else {
-            // Debugging log
             error_log('ID Padre no está presente en la solicitud.');
         }
-
+    
         $em->getConnection()->beginTransaction();
         try {
             $em->persist($detalleActividad);
             $em->flush();
-
+    
             $ponentes = [];
             if (isset($data['ponentes']) && is_array($data['ponentes'])) {
                 $this->updatePonentesWithActividadId($em, $detalleActividad, $data['ponentes']);
                 $ponentes = $data['ponentes'];
             }
-
+    
             $em->getConnection()->commit();
-
+    
             return $this->json([
                 'id' => $detalleActividad->getId(),
                 'descripcion' => $detalleActividad->getDescripcion(),
-                'fechaInicio' => $detalleActividad->getFechaHoraIni()->format('Y-m-d H:i:s'),
-                'fechaFin' => $detalleActividad->getFechaHoraFin()->format('Y-m-d H:i:s'),
+                'fechaInicio' => $detalleActividad->getFechaHoraIni()->format('d-m-Y H:i:s'),
+                'fechaFin' => $detalleActividad->getFechaHoraFin()->format('d-m-Y H:i:s'),
                 'evento' => [
                     'id' => $evento->getId(),
                     'nombre' => $evento->getTitulo()
@@ -132,6 +129,7 @@ class ActividadApiController extends AbstractController
             return $this->json(['error' => 'Error interno del servidor: ' . $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+    
 
 
 
@@ -158,23 +156,28 @@ class ActividadApiController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        if (!isset($data['actividad_id']) || !isset($data['ponentes'])) {
+        if (!isset($data['actividad_id']) || !isset($data['ponentes'])) 
+        {
             return $this->json(['error' => 'Datos incompletos'], Response::HTTP_BAD_REQUEST);
         }
 
         $detalleActividad = $em->getRepository(DetalleActividad::class)->find($data['actividad_id']);
-        if (!$detalleActividad) {
+        if (!$detalleActividad) 
+        {
             return $this->json(['error' => 'Actividad no encontrada'], Response::HTTP_NOT_FOUND);
         }
 
-        try {
+        try 
+        {
             $this->updatePonentesWithActividadId($em, $detalleActividad, $data['ponentes']);
-        } catch (\Exception $e) {
+        } 
+        catch (\Exception $e) 
+        {
             return $this->json(['error' => 'Error al actualizar los ponentes: ' . $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
 
         return $this->json(['status' => 'Ponentes actualizados exitosamente']);
-    }
+    } 
 
 
 

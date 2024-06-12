@@ -23,15 +23,13 @@ document.addEventListener('DOMContentLoaded', function() {
     //API de recursos
     fetch(apiUrl)
     .then(response => response.json())
-    .then(data => {
-        
-        
+    .then(data => {   
         selectElement.innerHTML = '';
         
         data.forEach(resource => {
             const option = document.createElement('option');
-            option.value = resource.id; // Asigna el ID al valor de la opción
-            option.textContent = resource.Descripcion; // Asigna la descripción al texto de la opción
+            option.value = resource.id; 
+            option.textContent = resource.Descripcion;
             selectElement.appendChild(option);
         });
     })
@@ -48,7 +46,7 @@ document.addEventListener('DOMContentLoaded', function() {
         data.forEach(grupo => {
             const optionElement = document.createElement('option');
             optionElement.textContent = grupo.Nombre;
-            optionElement.value = grupo.Id; // Asegúrate de que cada grupo tenga un campo "Id" o similar
+            optionElement.value = grupo.Id; 
             gruposSelect.appendChild(optionElement);
         });
     })
@@ -64,8 +62,8 @@ document.addEventListener('DOMContentLoaded', function() {
        
        data.forEach(evento => {
            const option = document.createElement('option');
-           option.value = evento.id; // Asigna el ID del evento al valor de la opción
-           option.textContent = evento.titulo; // Asigna el título del evento al texto de la opción
+           option.value = evento.id; 
+           option.textContent = evento.titulo; 
            eventoSelect.appendChild(option);
        });
    })
