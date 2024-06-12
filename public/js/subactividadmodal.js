@@ -33,7 +33,10 @@ document.addEventListener('DOMContentLoaded', function () {
                                 <td>${subactividad.FechaHoraIni}</td>
                                 <td>${subactividad.FechaHoraFin}</td>
                                 <td>${subactividad.descripcion}</td>
-                                <td><button class="btn btn-danger btnDeleteSubactivity" data-id="${subactividad.id}">Borrar</button></td>
+                                <td>
+                                    <button class="btn btn-danger btnDeleteSubactivity" data-id="${subactividad.id}">Borrar</button>
+                                    <button class="btn btn-danger btnActualizarSubactivity" data-id="${subactividad.id}">Actualizar</button>
+                                </td>
                             `;
                             tbody.appendChild(tr);
                         });
@@ -47,7 +50,42 @@ document.addEventListener('DOMContentLoaded', function () {
                     const modal = new bootstrap.Modal(document.getElementById('subactividadesModal'));
                     modal.show();
 
-                    // Añadir event listeners para botones de borrar
+                    document.querySelectorAll('.btnActualizarSubactivity').forEach(button => {
+                        button.addEventListener('click', function () {
+                            const subactivityId = this.getAttribute('data-id');
+                            const tr = this.closest('tr');
+                            
+                            const id = tr.querySelector('td:nth-child(1)').innerText;
+                            const titulo = tr.querySelector('td:nth-child(2)').innerText;
+                            const fechaInicio = tr.querySelector('td:nth-child(3)').innerText;
+                            const fechaFin = tr.querySelector('td:nth-child(4)').innerText;
+                            const descripcion = tr.querySelector('td:nth-child(5)').innerText;
+                
+                            tr.innerHTML = `
+                                <td><input type="text" value="${id}" readonly></td>
+                                <td><input type="text" value="${titulo}"></td>
+                                <td><input type="text" value="${fechaInicio}"></td>
+                                <td><input type="text" value="${fechaFin}"></td>
+                                <td><input type="text" value="${descripcion}"></td>
+                                <td><button class="btn btn-primary btnSaveSubactivity">Guardar</button></td>
+                            `;
+                            
+                            tr.querySelector('.btnSaveSubactivity').addEventListener('click', function () {
+                                const newTitulo = tr.querySelector('input:nth-child(2)').value;
+                                const newFechaInicio = tr.querySelector('input:nth-child(3)').value;
+                                const newFechaFin = tr.querySelector('input:nth-child(4)').value;
+                                const newDescripcion = tr.querySelector('input:nth-child(5)').value;
+                                
+                                // Aquí puedes enviar una solicitud PUT al endpoint de actualización con los nuevos valores
+                                // Por ahora, puedes imprimir los nuevos valores en la consola
+                                console.log('Nuevo título:', newTitulo);
+                                console.log('Nueva fecha de inicio:', newFechaInicio);
+                                console.log('Nueva fecha de fin:', newFechaFin);
+                                console.log('Nueva descripción:', newDescripcion);
+                            });
+                        });
+                    });
+
                     document.querySelectorAll('.btnDeleteSubactivity').forEach(button => {
                         button.addEventListener('click', function () {
                             const subactivityId = this.getAttribute('data-id');
@@ -60,7 +98,6 @@ document.addEventListener('DOMContentLoaded', function () {
                                 })
                                 .then(response => {
                                     if (response.ok) {
-                                        // Actualizar la vista para eliminar la fila de la tabla
                                         this.closest('tr').remove();
                                     } else {
                                         response.json().then(data => {

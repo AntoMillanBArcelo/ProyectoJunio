@@ -226,4 +226,43 @@ class ActividadApiController extends AbstractController
         }
     }
 
+    #[Route('/subactividades/{id}', name: 'api_update_subactivity', methods: ['PUT'])]
+public function updateSubactivity(int $id, Request $request, EntityManagerInterface $em): JsonResponse
+{
+    $subactividad = $em->getRepository(DetalleActividad::class)->find($id);
+
+    if (!$subactividad) {
+        return $this->json(['error' => 'Subactividad no encontrada'], JsonResponse::HTTP_NOT_FOUND);
+    }
+
+    $data = json_decode($request->getContent(), true);
+
+    // Aquí deberías validar los datos recibidos en $data para garantizar que sean correctos
+
+    $em->getConnection()->beginTransaction();
+    try {
+        // Actualizar los campos de la subactividad con los datos recibidos
+        if (isset($data['descripcion'])) {
+            $subactividad->setDescripcion($data['descripcion']);
+        }
+        if (isset($data['fechaInicio'])) {
+            $subactividad->setFechaHoraIni(new \DateTime($data['fechaInicio']));
+        }
+        if (isset($data['fechaFin'])) {
+            $subactividad->setFechaHoraFin(new \DateTime($data['fechaFin']));
+        }
+
+        // Persistir los cambios en la base de datos
+        $em->flush();
+        $em->getConnection()->commit();
+        
+        return $this->json(['status' => 'Subactividad actualizada exitosamente']);
+    } catch (\Exception $e) {
+        // Si ocurre un error, hacer rollback de la transacción y devolver un error
+        $em->getConnection()->rollBack();
+        error_log('Error al actualizar la subactividad: ' . $e->getMessage());
+        return $this->json(['error' => 'Error al actualizar la subactividad: ' . $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
+    }
+}
+
 }
