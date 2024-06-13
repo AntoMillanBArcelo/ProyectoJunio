@@ -34,7 +34,7 @@
         {% if loop.index0 < random_images|length %}
             {% set random_image = random_images[loop.index0] %}
         {% else %}
-            {% set random_image = 'default_image_path.jpg' %} {# fallback image #}
+            {% set random_image = 'default_image_path.jpg' %} 
         {% endif %}
         <div class="col-md-4 mb-4">
           <div class="card h-100">
@@ -46,6 +46,16 @@
                   <a href="{{ path('actividad_descargar', {'id': actividad.id}) }}">
                       <img src="{{ asset('images/descarga-de-archivos.png') }}" alt="Icono de descarga">
                   </a>
+                   {% if actividad.getDetalleActividads()|length > 0 %}
+                                <div class="subactividades">
+                                    <h6>Subactividades:</h6>
+                                    <ul>
+                                        {% for detalleActividad in actividad.getDetalleActividads() %}
+                                            <li>{{ detalleActividad.descripcion }}</li>
+                                        {% endfor %}
+                                    </ul>
+                                </div>
+                       {% endif %}
               </div>
           </div>
         </div>
