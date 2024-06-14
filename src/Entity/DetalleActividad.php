@@ -53,6 +53,10 @@ class DetalleActividad
     #[ORM\JoinColumn(name: "detalle_actividad_evento_id", referencedColumnName: "id", nullable: false)]
     private ?Evento $evento = null;
 
+    #[ORM\ManyToOne(targetEntity: Actividad::class, inversedBy: 'detalleActividads')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Actividad $detalleActividadEvento = null;
+
     #[ORM\Column(nullable: true)]
     private ?int $id_padre = null;
 
@@ -203,4 +207,7 @@ class DetalleActividad
         return $this;
     }
 
+   
+
+    
 }

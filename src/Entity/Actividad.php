@@ -25,11 +25,7 @@ class Actividad
     #[ORM\ManyToOne(inversedBy: 'evento_actividad')]
     private ?Evento $evento = null;
 
-    /**
-     * @var Collection<int, DetalleActividad>
-     */
-    #[ORM\OneToMany(targetEntity: DetalleActividad::class, mappedBy: 'detalle_actividad_evento')]
-    private Collection $detalleActividads;
+
 
     #[ORM\Column(length: 255)]
     private ?string $descripcion = null;
@@ -39,6 +35,9 @@ class Actividad
 
     #[ORM\Column(nullable: true)]
     private ?int $id_padre = null;
+
+    #[ORM\OneToMany(mappedBy: 'detalleActividadEvento', targetEntity: DetalleActividad::class)]
+    private Collection $detalleActividads;
 
     public function __construct()
     {

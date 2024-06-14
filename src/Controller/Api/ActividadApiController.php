@@ -6,6 +6,8 @@ namespace App\Controller\Api;
 use App\Entity\DetalleActividad;
 use App\Entity\Actividad;
 use App\Entity\Evento;
+use App\Entity\Espacio;
+use App\Entity\Recurso;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -15,7 +17,78 @@ use Symfony\Component\Routing\Annotation\Route;
 
 #[Route('/API')]
 class ActividadApiController extends AbstractController
-{
+{ 
+    #[Route('/recursos', name: 'api_recursos', methods: ['GET'])]
+    public function getRecursos(EntityManagerInterface $em): JsonResponse
+    {
+        $recursos = $em->getRepository(Recurso::class)->findAll();
+        $data = [];
+
+        foreach ($recursos as $recurso) {
+            $data[] = [
+                'id' => $recurso->getId(),
+                'descripcion' => $recurso->getDescripcion(),
+            ];
+        }
+
+        return new JsonResponse($data);
+    }
+
+    #[Route('/API/salas', name: 'api_get_salas', methods: ['GET'])]
+    public function getSalas(Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        $recursoIds = $request->query->get('recursos', '');
+
+        if (is_string($recursoIds)) {
+            $recursoIds = explode(',', $recursoIds);
+        }
+
+        if (empty($recursoIds) || !is_array($recursoIds)) {
+            return new JsonResponse([], JsonResponse::HTTP_BAD_REQUEST);
+        }
+
+        $recursos = $em->getRepository(Recurso::class)->findBy(['id' => $recursoIds]);
+
+        $salas = $em->getRepository(Espacio::class)->createQueryBuilder('e')
+            ->join('e.recursos', 'r')
+            ->where('r.id IN (:recursos)')
+            ->groupBy('e.id')
+            ->having('COUNT(DISTINCT r.id) = :recurso_count')
+            ->setParameter('recursos', $recursoIds)
+            ->setParameter('recurso_count', count($recursoIds))
+            ->getQuery()
+            ->getResult();
+
+        $result = [];
+        foreach ($salas as $sala) {
+            $result[] = [
+                'id' => $sala->getId(),
+                'nombre' => $sala->getNombre(),
+            ];
+        }
+
+        return new JsonResponse($result);
+    }
+
+    #[Route('/detalle-actividades', name: 'api_detalle_actividades', methods: ['GET'])]
+    public function getDetalleActividades(DetalleActividadRepository $detalleActividadRepository): JsonResponse
+    {
+        $detalleActividades = $detalleActividadRepository->findAll();
+        $data = [];
+        foreach ($detalleActividades as $detalle) {
+            $data[] = [
+                'id' => $detalle->getId(),
+                'titulo' => $detalle->getTitulo(),
+                'descripcion' => $detalle->getDescripcion(),
+                'fechaHoraIni' => $detalle->getFechaHoraIni()->format('Y-m-d H:i:s'),
+                'fechaHoraFin' => $detalle->getFechaHoraFin()->format('Y-m-d H:i:s'),
+            ];
+        }
+        return $this->json($data);
+    }
+
+  
+    
     #[Route('/actividades', name: 'actividad_create', methods: ['POST'])]
     public function create(Request $request, EntityManagerInterface $em): Response
     {
@@ -130,9 +203,6 @@ class ActividadApiController extends AbstractController
             return $this->json(['error' => 'Error interno del servidor: ' . $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-    
-
-
 
     private function updatePonentesWithActividadId(EntityManagerInterface $em, DetalleActividad $detalleActividad, array $ponentesData): void
     {
@@ -227,21 +297,21 @@ class ActividadApiController extends AbstractController
     }
 
     #[Route('/subactividades/{id}', name: 'api_update_subactivity', methods: ['PUT'])]
-public function updateSubactivity(int $id, Request $request, EntityManagerInterface $em): JsonResponse
-{
-    $subactividad = $em->getRepository(DetalleActividad::class)->find($id);
+    public function updateSubactivity(int $id, Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        $subactividad = $em->getRepository(DetalleActividad::class)->find($id);
 
-    if (!$subactividad) {
-        return $this->json(['error' => 'Subactividad no encontrada'], JsonResponse::HTTP_NOT_FOUND);
-    }
+        if (!$subactividad) {
+            return $this->json(['error' => 'Subactividad no encontrada'], JsonResponse::HTTP_NOT_FOUND);
+        }
 
-    $data = json_decode($request->getContent(), true);
+        $data = json_decode($request->getContent(), true);
 
-    // Aquí deberías validar los datos recibidos en $data para garantizar que sean correctos
+
 
     $em->getConnection()->beginTransaction();
     try {
-        // Actualizar los campos de la subactividad con los datos recibidos
+
         if (isset($data['descripcion'])) {
             $subactividad->setDescripcion($data['descripcion']);
         }
@@ -252,13 +322,11 @@ public function updateSubactivity(int $id, Request $request, EntityManagerInterf
             $subactividad->setFechaHoraFin(new \DateTime($data['fechaFin']));
         }
 
-        // Persistir los cambios en la base de datos
         $em->flush();
         $em->getConnection()->commit();
         
         return $this->json(['status' => 'Subactividad actualizada exitosamente']);
     } catch (\Exception $e) {
-        // Si ocurre un error, hacer rollback de la transacción y devolver un error
         $em->getConnection()->rollBack();
         error_log('Error al actualizar la subactividad: ' . $e->getMessage());
         return $this->json(['error' => 'Error al actualizar la subactividad: ' . $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);

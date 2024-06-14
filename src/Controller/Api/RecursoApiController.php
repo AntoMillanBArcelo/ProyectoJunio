@@ -21,7 +21,7 @@ class RecursoApiController extends AbstractController
     {
         $this->entityManager = $entityManager;
     }
-    
+
     /**
      * @Route("/", name="api_recurso_list", methods={"GET"})
      */
@@ -30,11 +30,11 @@ class RecursoApiController extends AbstractController
         $repository = $this->entityManager->getRepository(Recurso::class);
         $recursos = $repository->findAll();
         $data = [];
-    
+
         foreach ($recursos as $recurso) {
             $data[] = $this->serializeRecurso($recurso);
         }
-    
+
         return new JsonResponse($data, Response::HTTP_OK);
     }
 
@@ -60,7 +60,7 @@ class RecursoApiController extends AbstractController
     public function create(Request $request): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-     
+
         if (!isset($data['Descripcion'])) {
             return new JsonResponse(['message' => 'Descripcion es requerida'], Response::HTTP_BAD_REQUEST);
         }
@@ -81,7 +81,7 @@ class RecursoApiController extends AbstractController
     public function delete(int $id): JsonResponse
     {
         $this->denyAccessUnlessGranted('ROLE_ADMIN');
-        
+
         $recurso = $this->entityManager->getRepository(Recurso::class)->find($id);
 
         if (!$recurso) {
