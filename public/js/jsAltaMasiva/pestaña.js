@@ -39,20 +39,36 @@ document.addEventListener('DOMContentLoaded', function() {
 
 
     // API de grupo
-    fetch(apiUrl2)
+  fetch(apiUrl2)
     .then(response => response.json())
     .then(data => {
-        gruposSelect.innerHTML = '';
+        const checkboxesContainer = document.getElementById('checkboxes-container');
+        checkboxesContainer.innerHTML = ''; // Limpiar contenido anterior
+
         data.forEach(grupo => {
-            const optionElement = document.createElement('option');
-            optionElement.textContent = grupo.Nombre;
-            optionElement.value = grupo.Id; 
-            gruposSelect.appendChild(optionElement);
+            const checkboxDiv = document.createElement('div');
+            checkboxDiv.classList.add('form-check');
+
+            const checkboxInput = document.createElement('input');
+            checkboxInput.classList.add('form-check-input');
+            checkboxInput.type = 'checkbox';
+            checkboxInput.value = grupo.Id;
+            checkboxInput.id = `grupo-${grupo.Id}`;
+
+            const checkboxLabel = document.createElement('label');
+            checkboxLabel.classList.add('form-check-label');
+            checkboxLabel.htmlFor = `grupo-${grupo.Id}`;
+            checkboxLabel.textContent = grupo.Nombre;
+
+            checkboxDiv.appendChild(checkboxInput);
+            checkboxDiv.appendChild(checkboxLabel);
+            checkboxesContainer.appendChild(checkboxDiv);
         });
     })
     .catch(error => {
         console.error('Error al obtener los grupos:', error);
     });
+
 
    // API de eventos
    fetch(apiUrlEventos)

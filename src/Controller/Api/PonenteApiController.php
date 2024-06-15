@@ -19,20 +19,22 @@ class PonenteApiController extends AbstractController
     {
         $data = json_decode($request->getContent(), true);
 
-        if (!isset($data['nombre']) || !isset($data['cargo']) || !isset($data['url']) || !isset($data['evento_id'])) {
+        if (!isset($data['nombre']) || !isset($data['cargo']) || !isset($data['url'])) {
             return $this->json(['error' => 'Datos incompletos para guardar el ponente'], Response::HTTP_BAD_REQUEST);
-        }
-
-        $evento = $em->getRepository(Evento::class)->find($data['evento_id']);
-        if (!$evento) {
-            return $this->json(['error' => 'Evento no encontrado'], Response::HTTP_NOT_FOUND);
         }
 
         $ponente = new Ponente();
         $ponente->setNombre($data['nombre']);
         $ponente->setCArgo($data['cargo']);
         $ponente->setURL($data['url']);
-        $ponente->setEvento($evento);
+
+        if (isset($data['evento_id'])) {
+            $evento = $em->getRepository(Evento::class)->find($data['evento_id']);
+            if (!$evento) {
+                return $this->json(['error' => 'Evento no encontrado'], Response::HTTP_NOT_FOUND);
+            }
+            $ponente->setEvento($evento);
+        }
 
         try {
             $em->persist($ponente);
@@ -44,3 +46,4 @@ class PonenteApiController extends AbstractController
         return $this->json(['message' => 'Ponente guardado correctamente'], Response::HTTP_CREATED);
     }
 }
+

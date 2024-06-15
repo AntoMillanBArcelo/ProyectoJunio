@@ -64,7 +64,6 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
     <!-- MDBootstrap CSS -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.0/mdb.min.css" />
-    <script src="../public/js/script.js"></script>
     {% block stylesheets %}{% endblock %}
     <!--[if lt IE 9]>
         <script src="https://oss.maxcdn.com/html5shiv/3.7.3/html5shiv.min.js"></script>
@@ -93,6 +92,7 @@
     <div class="tab-content" id="ex1-content">
         <div class="tab-pane fade show active" id="ex1-tabs-1" role="tabpanel" aria-labelledby="ex1-tab-1">
             <div class="tab-content">
+             <!-- Agregar la primeros campos de las actividades -->
                 <form class="form-container" method="post" action="{{ path('app_pestañas') }}">
                     <div class="form-row">
                         <div class="form-group">
@@ -159,6 +159,7 @@
                 </form>
             </div> 
         </div>
+         <!-- Muestra todos los recursos -->
         <div class="tab-pane fade" id="ex1-tabs-2" role="tabpanel" aria-labelledby="ex1-tab-2">
             <table id="form-table">
         <tr>
@@ -171,6 +172,7 @@
         </tr>
     </table>
         </div>
+         <!-- Agrega Ponentes -->
         <div class="tab-pane fade" id="ex1-tabs-3" role="tabpanel" aria-labelledby="ex1-tab-3">
             <form class="form-container">
                 <div class="form-group">
@@ -186,15 +188,14 @@
                     <input type="text" id="recurso" name="recurso">
                 </div>
                 <div class="form-group">
-                    <input class="styled" type="button" value="Guardar" id="guardarPonente">
+                    <input class="styled" type="button" value="Añadir Ponente" id="guardarPonente">
                 </div>
             </form>
         </div>
+         <!-- Agrega a que grupo va dirigido -->
         <div class="tab-pane fade" id="ex1-tabs-4" role="tabpanel" aria-labelledby="ex1-tab-4">
             <div class="tab-content">
-                <div id="grupos-container">
-                    <select id="grupos-select" class="form-select" name="grupos" size="10" multiple="multiple"></select>
-                </div>
+                <div id="checkboxes-container"></div>
             </div>
             <input class="styled" type="button" value="Guardar" id="g2"/>
         </div>

@@ -40,10 +40,7 @@
                 <div class="card-body">
                     <h5 class="card-title">{{ evento.Titulo }}</h5>
                     <p class="card-text">Del {{ evento.FechaInicio|date('d-m-Y') }} al {{ evento.FechaFin|date('d-m-Y') }}</p>
-                    
-                  <a href="{{ path('evento_actividades', {'id': evento.id}) }}">Ver Actividades</a>
-
-
+                    <a href="{{ path('evento_actividades', {'id': evento.id}) }}">Ver Actividades</a>
                 </div>
                 <div class="card-footer text-muted">
                     {% if haTerminado %}

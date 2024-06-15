@@ -27,13 +27,20 @@
 </head>
   {% include 'header.html.twig' %}
 {% block body %}
+
+       
 <div class="container">
     <div class="row">
         {% for actividad in actividades %}
+         {% if loop.index0 < random_images|length %}
+            {% set random_image = random_images[loop.index0] %}
+        {% else %}
+            {% set random_image = 'default_image_path.jpg' %} 
+        {% endif %}
         <div class="col-md-4">
             <div class="card {% if loop.index0 % 3 == 1 %}elevate{% endif %}">
                 <a href="#">
-                    <img src="https://via.placeholder.com/500" class="card-img-top" alt="Card image cap">
+                    <img  src="{{ asset(random_image) }}"  class="card-img-top" alt="Card image cap">
                     <div class="card-body">
                         <h5 class="card-title">{{ actividad.descripcion }}</h5>
                         <p class="card-text">

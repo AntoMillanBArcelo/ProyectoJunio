@@ -263,39 +263,38 @@
             <table class="table">
                 <thead>
                     <tr>
-                        {% for field in entities|filter(e => e.isAccessible)|first.fields ?? [] %}
+                        {% for field in entity.fields %}
                             <th>{{ field.label|trans|raw }}</th>
                         {% endfor %}
                         <th>Acciones</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% if entity.isAccessible %}
-                        <tr data-id="{{ entity.primaryKeyValueAsString }}">
-                            {% for field in entity.fields %}
-                                <td>{{ include(field.templatePath, { field: field, entity: entity }, with_context = false) }}</td>
-                            {% endfor %}
-                            <td>
-                                <button class="btn btn-primary openPestañasModal" data-id="{{ entity.primaryKeyValueAsString }}">
-                                    Añadir Actividad
-                                </button>
-                                <button type="button" class="btn btn-primary btnPestaña" data-id="{{ entity.primaryKeyValueAsString }}" id="btnEditActivity">
-                                    Editar Actividad
-                                </button>
-                                <button type="button" class="btn btn-info" data-id="{{ entity.primaryKeyValueAsString }}" id="btnViewSubactivities">
-                                    Ver Subactividades
-                                </button>
-                                <button type="button" class="btn btn-danger" data-id="{{ entity.primaryKeyValueAsString }}" id="btnDeleteActivity">
-                                    Borrar Actividad
-                                </button>
-                            </td>
-                        </tr>
-                    {% endif %}
+                    <tr data-id="{{ entity.primaryKeyValueAsString }}">
+                        {% for field in entity.fields %}
+                            <td>{{ include(field.templatePath, { field: field, entity: entity }, with_context = false) }}</td>
+                        {% endfor %}
+                        <td>
+                            <button class="btn btn-primary openPestañasModal" data-id="{{ entity.primaryKeyValueAsString }}">
+                                Añadir Actividad
+                            </button>
+                            <button type="button" class="btn btn-primary btnPestaña btnEditActivity" data-id="{{ entity.primaryKeyValueAsString }}">
+                                Editar Actividad
+                            </button>
+                            <button type="button" class="btn btn-info" data-id="{{ entity.primaryKeyValueAsString }}" id="btnViewSubactivities">
+                                Ver Subactividades
+                            </button>
+                            <button type="button" class="btn btn-danger" data-id="{{ entity.primaryKeyValueAsString }}" id="btnDeleteActivity">
+                                Borrar Actividad
+                            </button>
+                        </td>
+                    </tr>
                 </tbody>
             </table>
         </div>
     </div>
 {% endfor %}
+
 
 {% endif %}
 
@@ -315,6 +314,7 @@
 </div>
 
 <!-- Modal Subactividad-->
+<!-- Modal Subactividad -->
 <div class="modal fade" id="subactividadesModal" tabindex="-1" aria-labelledby="subactividadesModalLabel" aria-hidden="true">
   <div class="modal-dialog modal-lg">
     <div class="modal-content">
@@ -323,11 +323,62 @@
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <div id="subactividadesContent"></div>
+        <div id="subactividadesContent">
+          <table class="table table-striped">
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Título</th>
+                <th>Fecha Inicio</th>
+                <th>Fecha Fin</th>
+                <th>Descripción</th>
+                <th>Acciones</th>
+              </tr>
+            </thead>
+            <tbody>
+              <!-- Aquí se insertarán dinámicamente las filas de subactividades -->
+            </tbody>
+          </table>
+        </div>
       </div>
     </div>
   </div>
 </div>
+>
+
+<!-- Modal Editar Actividad -->
+<div class="modal fade" id="editarActividadModal" tabindex="-1" aria-labelledby="editarActividadModalLabel" aria-hidden="true">
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="editarActividadModalLabel">Editar Actividad</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <form id="editarActividadForm">
+        <div class="modal-body">
+          <div class="mb-3">
+            <label for="descripcion" class="form-label">Descripción</label>
+            <input type="text" class="form-control" id="descripcion" name="descripcion">
+          </div>
+          <div class="mb-3">
+            <label for="fechaHoraIni" class="form-label">Fecha y Hora de Inicio</label>
+            <input type="datetime-local" class="form-control" id="fechaHoraIni" name="fechaHoraIni">
+          </div>
+          <div class="mb-3">
+            <label for="fechaHoraFin" class="form-label">Fecha y Hora de Fin</label>
+            <input type="datetime-local" class="form-control" id="fechaHoraFin" name="fechaHoraFin">
+          </div>
+          <input type="hidden" id="actividadId" name="actividadId">
+        </div>
+        <div class="modal-footer">
+          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+          <button type="button" id="guardarCambios" class="btn btn-primary">Guardar Cambios</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</div>
+
 
 
 

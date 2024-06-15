@@ -15,18 +15,17 @@ class SubactividadListaController extends AbstractController
     #[Route('/actividad/{id}', name: 'detalle_actividad', methods: ['GET'])]
     public function detalleActividad(int $id, DetalleActividadRepository $detalleActividadRepository, ActividadRepository $actividadRepository): Response
     {
-         // Buscar la actividad principal por su ID
+        $idac = $id;
          $actividad = $actividadRepository->find($id);
 
          if (!$actividad) {
              throw $this->createNotFoundException('Actividad no encontrada');
          }
  
-         // Buscar las subactividades por id_padre igual al ID de la actividad principal
          $subactividades = $detalleActividadRepository->findBy(['id_padre' => $id]);
  
          return $this->render('actividades/subactividades.html.twig', [
-             'actividad' => $actividad,  // Aquí se pasa 'actividad' en lugar de 'detalleActividad'
+             'actividad' => $actividad,  
              'subactividades' => $subactividades,
          ]);
      

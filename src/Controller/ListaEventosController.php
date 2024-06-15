@@ -14,10 +14,9 @@ class ListaEventosController extends AbstractController
     #[Route('/eventos', name: 'eventos_index')]
     public function index(EventoRepository $eventoRepository): Response
     {
-        // Obtener todos los eventos desde la base de datos
+
         $eventos = $eventoRepository->findAll();
 
-        // Calcular días restantes y determinar si el evento ha terminado
         $eventosConDiasRestantes = [];
         foreach ($eventos as $evento) {
             $fechaFin = $evento->getFechaFin();
@@ -33,7 +32,6 @@ class ListaEventosController extends AbstractController
             ];
         }
 
-        // Renderizar la plantilla pasando los eventos con días restantes y estado
         return $this->render('eventos/eventos.html.twig', [
             'eventosConDiasRestantes' => $eventosConDiasRestantes,
         ]);

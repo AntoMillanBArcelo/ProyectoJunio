@@ -1,0 +1,121 @@
+{# templates/actividades/todasactividades.html.html.twig #}
+<html lang="es">
+<head>
+  <!-- Basic meta tags -->
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+  <!-- Site meta tags -->
+  <title>{% block title %}IES Las Fuentezuelas{% endblock %}</title>
+  <meta name="keywords" content="">
+  <meta name="description" content="">
+  <meta name="author" content="">
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+  <!-- Favicon -->
+  <link rel="icon" href="{{ asset('images/fevicon.png') }}" type="image/gif" />
+  <!-- FontAwesome -->
+  <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+  <!-- Fancybox -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
+  <!-- MDBootstrap CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.0/mdb.min.css" />
+  {% block stylesheets %}
+      <link rel="stylesheet" href="{{ asset('css/listaActividad.css') }}">
+      <link rel="stylesheet" href="{{ asset('css/listatodo.css') }}">
+  {% endblock %}
+  <!-- Material Design Iconic Font CSS -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/material-design-iconic-font/2.2.0/css/material-design-iconic-font.min.css" integrity="sha256-3sPp8BkKUE7QyPSl6VfBByBroQbKxKG7tsusY2mhbVY=" crossorigin="anonymous" />
+</head>
+<body>
+    {% include 'header.html.twig' %}
+
+
+        <div class="row">
+            <div class="col-lg-10 mx-auto">
+                <div class="career-search mb-60">
+                    <div class="filter-result">
+                         {% set total_actividades = actividades|length %}
+                        {% set total_detalleactividades = detalleactividades|length %}
+                        {% set total_total = total_actividades + total_detalleactividades %}
+                        <p class="mb-30 ff-montserrat">Actividades totales : {{ total_total }}</p>
+
+
+                        {# Primer bucle para actividades #}
+                        {% for actividad in actividades %}
+                            <div class="job-box d-md-flex align-items-center justify-content-between mb-30">
+                                <div class="job-left my-4 d-md-flex align-items-center flex-wrap">
+                                    <div class="job-content">
+                                    <h5 class=" text-md-left">{{ actividad.descripcion }}</h5>
+                                        <h6 class=" text-md-left">Actividad {{ actividad.id }}</h6>
+                                        <ul class="d-md-flex flex-wrap text-capitalize ff-open-sans">
+                                            <li class="mr-md-4">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar" viewBox="0 0 16 16">
+                                                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+                                                </svg>
+                                                <i class="mr-4"></i> Inicio: {{ actividad.getFechaHoraIni()|date('Y-m-d H:i:s') }}
+                                            </li>
+                                            <li class="mr-md-4">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-check" viewBox="0 0 16 16">
+                                                    <path d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+                                                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+                                                </svg>
+                                                <i class="mr-2"></i> Fin: {{ actividad.getFechaHoraFin()|date('Y-m-d H:i:s') }}
+                                            </li>
+                                            <li class="mr-md-4">
+                                                <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right" viewBox="0 0 16 16">
+                                                    <path d="M6 12.796V3.204L11.481 8zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753"/>
+                                                </svg>
+                                                <i class="mr-2"></i> Tipo: {{ actividad.tipo }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {# Fin del primer bucle para actividades #}
+
+                        {# Segundo bucle para detalleactividades #}
+                        {% for detalleactividad in detalleactividades %}
+                            <div class="job-box d-md-flex align-items-center justify-content-between mb-30">
+                                <div class="job-left my-4 d-md-flex align-items-center flex-wrap">
+                                    <div class="job-content">
+                                        <h5 class="text-md-left">{{ detalleactividad.titulo }}</h5>
+                                        <h6 class="text-md-left">Detalle Actividad {{ detalleactividad.id }}</h6>
+                                        <p class="text-md-left">{{ detalleactividad.descripcion}}</p>
+                                        <ul class="d-md-flex flex-wrap text-capitalize ff-open-sans">
+                                            <li class="mr-md-4">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar" viewBox="0 0 16 16">
+                                                <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+                                                </svg>
+                                                <i class="mr-2"></i> Inicio: {{ detalleactividad.getFechaHoraIni()|date('Y-m-d H:i:s') }}
+                                            </li>
+                                            <li class="mr-md-4">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-check" viewBox="0 0 16 16">
+                                                    <path d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+                                                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+                                                </svg>
+                                                <i class="mr-2"></i> Fin: {{ detalleactividad.getFechaHoraFin()|date('Y-m-d H:i:s') }}
+                                            </li>
+                                            <li class="mr-md-4">
+                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right" viewBox="0 0 16 16">
+                                                    <path d="M6 12.796V3.204L11.481 8zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753"/>
+                                                </svg>
+                                                <i class="mr-2"></i> Tipo: {{ detalleactividad.titulo }}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                        {# Fin del segundo bucle para detalleactividades #}
+
+                    </div>
+                </div>
+                
+    <!-- jQuery and Bootstrap Bundle with Popper.js -->
+    <script src="{{ asset('js/jquery.min.js') }}"></script>
+    <script src="{{ asset('js/bootstrap.bundle.min.js') }}"></script>
+</body>
+</html>

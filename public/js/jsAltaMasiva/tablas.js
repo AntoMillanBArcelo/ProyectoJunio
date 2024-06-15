@@ -2,10 +2,6 @@
 HTMLTableElement.prototype.editada=false;
 HTMLTableElement.prototype.noEditable=[];
 
-HTMLTableElement.prototype.saluda=function(){
-    alert("Hola");
-}
-
 HTMLTableElement.prototype.getData=function(){
     var tBody=this.tBodies[0];
     let datos=[];

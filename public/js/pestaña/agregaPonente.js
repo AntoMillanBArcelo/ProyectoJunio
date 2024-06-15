@@ -1,4 +1,3 @@
-//agregaPonente.js
 document.addEventListener('DOMContentLoaded', function() 
 {
     const eventoSelect = document.getElementById('evento');
@@ -9,7 +8,7 @@ document.addEventListener('DOMContentLoaded', function()
         const cargo = document.getElementById('cargo').value;
         const recurso = document.getElementById('recurso').value;
 
-        if (!eventoId || !nombre || !cargo || !recurso) {
+        if (!nombre || !cargo || !recurso) {
             alert('Por favor complete todos los campos requeridos.');
             return;
         }
@@ -18,7 +17,7 @@ document.addEventListener('DOMContentLoaded', function()
             nombre: nombre,
             cargo: cargo,
             url: recurso,
-            evento_id: eventoId
+            evento_id: eventoId ? eventoId : null // Permitir que evento_id sea nulo
         };
       
         fetch('/API/ponentes', {

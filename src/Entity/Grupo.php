@@ -36,6 +36,9 @@ class Grupo
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'grupos')]
     private Collection $grupo_user;
 
+    #[ORM\ManyToOne(inversedBy: 'detalleActividad_grupo')]
+    private ?DetalleActividad $detalleActividad = null;
+
     public function __construct()
     {
         $this->alumnos = new ArrayCollection();
@@ -147,5 +150,17 @@ class Grupo
     public function __toString(): string
     {
         return $this->getNombre() ?? 'Sin Nombre'; 
+    }
+
+    public function getDetalleActividad(): ?DetalleActividad
+    {
+        return $this->detalleActividad;
+    }
+
+    public function setDetalleActividad(?DetalleActividad $detalleActividad): static
+    {
+        $this->detalleActividad = $detalleActividad;
+
+        return $this;
     }
 }

@@ -22,6 +22,13 @@
                            <li class="nav-item active">
                                  <a class="nav-link" href="{{ path('app_index') }}">Inicio</a>
                            </li>
+                           
+                           <li class="nav-item">
+                                 <a class="nav-link" href="{{ path('eventos_index') }}">Ver Eventos</a>
+                           </li>
+                          <li class="nav-item">
+                                 <a class="nav-link" href="{{ path('todas_actividades') }}">Ver Actividades</a>
+                           </li>
                            {% if is_granted('IS_AUTHENTICATED_FULLY') %}
                                  {% if is_granted('ROLE_ADMIN') %}
                                     <li class="nav-item">
@@ -36,10 +43,6 @@
                                     <a class="nav-link" href="{{ path('app_login') }}">Iniciar Sesión</a>
                                  </li>
                            {% endif %}
-                           <li class="nav-item">
-                                 <a class="nav-link" href="{{ path('eventos_index') }}">Ver Eventos</a>
-                           </li>
-                          
                         </ul>
                      </div>
                      </nav>
@@ -50,6 +53,9 @@
       </header>
       <style>
    .navbar-dark {
-      background-color: #ffffff; /* Fondo blanco */
+      background-color: #ffffff; 
+   }
+   #header{
+      top:-15px;
    }
 </style>

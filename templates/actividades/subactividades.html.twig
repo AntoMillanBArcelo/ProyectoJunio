@@ -1,41 +1,47 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-  <!-- Basic meta tags -->
-  <meta charset="utf-8">
-  <meta http-equiv="X-UA-Compatible" content="IE=edge">
-  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <!-- Site meta tags -->
-  <title>{% block title %}IES Las Fuentezuelas{% endblock %}</title>
-  <meta name="keywords" content="">
-  <meta name="description" content="">
-  <meta name="author" content="">
-  <!-- Bootstrap CSS -->
-  <link rel="stylesheet" href="{{ asset('css/bootstrap.min.css') }}">
-  <link rel="stylesheet" href="{{ asset('css/style.css') }}">
-  <!-- Favicon -->
-  <link rel="icon" href="{{ asset('images/fevicon.png') }}" type="image/gif" />
-  <!-- FontAwesome -->
-  <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
-  <!-- Fancybox -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
-  <!-- MDBootstrap CSS -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.0/mdb.min.css" />
-  {% block stylesheets %}
-      <link rel="stylesheet" href="{{ asset('css/listaActividad.css') }}">
-  {% endblock %}
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <title>{% block title %}IES Las Fuentezuelas{% endblock %}</title>
+    <meta name="keywords" content="">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css">
+
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="{{ asset('css/style.css') }}">
+    
+    <!-- Favicon -->
+    <link rel="icon" href="{{ asset('images/fevicon.png') }}" type="image/gif" />
+
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/font-awesome/4.0.3/css/font-awesome.css">
+
+    <!-- Fancybox -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/fancybox/2.1.5/jquery.fancybox.min.css" media="screen">
+
+    <!-- MDBootstrap CSS -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.0/mdb.min.css" />
+
+    {% block stylesheets %}
+        <!-- Additional Stylesheets -->
+        <link rel="stylesheet" href="{{ asset('css/listaActividad.css') }}">
+    {% endblock %}
 </head>
 <body>
-  {% include 'header.html.twig' %}
-  
-  {% block body %}
+    {% include 'header.html.twig' %}
+    
     <div class="container mt-4">
         <div class="row">
             <div class="col-12">
                 <h1>Detalle de Actividad</h1>
                 <div class="card">
                     <div class="card-body">
-
                         <p class="card-text">
                             Fecha Inicio: {{ actividad.getFechaHoraIni()|date("d-m-Y H:i:s") }}<br>
                             Fecha Fin: {{ actividad.getFechaHoraFin()|date("d-m-Y H:i:s") }}
@@ -47,36 +53,47 @@
                         {% if actividad.getEvento() %}
                             <p class="card-text">Evento: {{ actividad.getEvento().getTitulo() }}</p>
                         {% endif %}
-
-                        
                     </div>
                 </div>
 
                 {% if subactividades is not empty %}
-                    <div class="mt-4">
-                        <h2>Subactividades</h2>
-                        <div class="list-group">
-                            {% for subactividad in subactividades %}
-                                <a href="{{ path('detalle_actividad', {'id': subactividad.getId()}) }}" class="list-group-item list-group-item-action">
-                                    {{ subactividad.getTitulo() }}
-                                </a>
-                            {% endfor %}
-                        </div>
+                    <div class="row mt-4">
+                        {% for subactividad in subactividades %}
+                            <div class="our_solution_category">
+                                <div class="solution_cards_box">
+                                    <div class="solution_card">
+                                        <div class="hover_color_bubble"></div>
+                                        <h2 class="card-title">{{ subactividad.getTitulo() }}</h2>
+                                        <h4 class="card-title">{{ subactividad.getDescripcion() }}</h4>
+                                        <p class="card-text">
+                                            Fecha Inicio: {{ subactividad.getFechaHoraIni()|date("d-m-Y H:i:s") }}<br>
+                                            Fecha Fin: {{ subactividad.getFechaHoraFin()|date("d-m-Y H:i:s") }} 
+                                        </p>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
                     </div>
                 {% else %}
-                    <div class="mt-4">
-                        <p>No se encontraron subactividades para esta actividad.</p>
-                    </div>
+                <svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+                    <symbol id="info-fill" fill="currentColor" viewBox="0 0 16 16">
+                        <path d="M8 16A8 8 0 1 0 8 0a8 8 0 0 0 0 16zm.93-9.412-1 4.705c-.07.34.029.533.304.533.194 0 .487-.07.686-.246l-.088.416c-.287.346-.92.598-1.465.598-.703 0-1.002-.422-.808-1.319l.738-3.468c.064-.293.006-.399-.287-.47l-.451-.081.082-.381 2.29-.287zM8 5.5a1 1 0 1 1 0-2 1 1 0 0 1 0 2z"/>
+                    </symbol>
+                </svg>
+                    <div class="alert alert-primary d-flex align-items-center" role="alert">
+                        <svg class="bi flex-shrink-0 me-2" width="24" height="24" role="img" aria-label="Info:"><use xlink:href="#info-fill"/></svg>
+                            <div>
+                                No se encontraron subactividades para esta actividad.               
+                            </div>
+                        </div>
                 {% endif %}
             </div>
         </div>
     </div>
-  {% endblock %}
-  
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.0/mdb.min.js"></script>
-  <script src="https://kit.fontawesome.com/a076d05399.js"></script>
-    
-  <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+    <!-- JavaScript -->
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.0/mdb.min.js"></script>
+    <script src="https://kit.fontawesome.com/a076d05399.js"></script>
 </body>
 </html>
