@@ -40,9 +40,6 @@
                         {% set total_detalleactividades = detalleactividades|length %}
                         {% set total_total = total_actividades + total_detalleactividades %}
                         <p class="mb-30 ff-montserrat">Actividades totales : {{ total_total }}</p>
-
-
-                        {# Primer bucle para actividades #}
                         {% for actividad in actividades %}
                             <div class="job-box d-md-flex align-items-center justify-content-between mb-30">
                                 <div class="job-left my-4 d-md-flex align-items-center flex-wrap">
@@ -74,9 +71,7 @@
                                 </div>
                             </div>
                         {% endfor %}
-                        {# Fin del primer bucle para actividades #}
 
-                        {# Segundo bucle para detalleactividades #}
                         {% for detalleactividad in detalleactividades %}
                             <div class="job-box d-md-flex align-items-center justify-content-between mb-30">
                                 <div class="job-left my-4 d-md-flex align-items-center flex-wrap">
@@ -98,18 +93,12 @@
                                                 </svg>
                                                 <i class="mr-2"></i> Fin: {{ detalleactividad.getFechaHoraFin()|date('Y-m-d H:i:s') }}
                                             </li>
-                                            <li class="mr-md-4">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-caret-right" viewBox="0 0 16 16">
-                                                    <path d="M6 12.796V3.204L11.481 8zm.659.753 5.48-4.796a1 1 0 0 0 0-1.506L6.66 2.451C6.011 1.885 5 2.345 5 3.204v9.592a1 1 0 0 0 1.659.753"/>
-                                                </svg>
-                                                <i class="mr-2"></i> Tipo: {{ detalleactividad.titulo }}
-                                            </li>
+                                            
                                         </ul>
                                     </div>
                                 </div>
                             </div>
                         {% endfor %}
-                        {# Fin del segundo bucle para detalleactividades #}
 
                     </div>
                 </div>

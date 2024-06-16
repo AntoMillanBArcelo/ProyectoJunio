@@ -74,4 +74,13 @@ class Recurso
     {
         return $this->getDescripcion() ?? 'Sin Nombre'; 
     }
+
+    public function toArray(): array
+    {
+        return [
+            'id' => $this->getId(),
+            'descripcion' => $this->getDescripcion(),
+            // Add more fields as necessary
+        ];
+    }
 }

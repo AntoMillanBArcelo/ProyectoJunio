@@ -67,7 +67,8 @@
                                         <h4 class="card-title">{{ subactividad.getDescripcion() }}</h4>
                                         <p class="card-text">
                                             Fecha Inicio: {{ subactividad.getFechaHoraIni()|date("d-m-Y H:i:s") }}<br>
-                                            Fecha Fin: {{ subactividad.getFechaHoraFin()|date("d-m-Y H:i:s") }} 
+                                            Fecha Fin: {{ subactividad.getFechaHoraFin()|date("d-m-Y H:i:s") }} <br><br><br>
+                                            Sala: {{ subactividad.getDetalleActividadEspacios().getNombre() }}
                                         </p>
                                     </div>
                                 </div>

@@ -71,6 +71,8 @@ class DetalleActividad
         $this->asiste = new ArrayCollection();
         $this->ponentes = new ArrayCollection();
         $this->detalleActividad_grupo = new ArrayCollection();
+        $this->espacios = new ArrayCollection();
+        $this->detalleActividadEspacios = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -196,7 +198,7 @@ class DetalleActividad
         return $this->evento;
     }
 
-    public function setEvento(?Evento $evento): self
+    public function setEvento(?Evento $evento): static
     {
         $this->evento = $evento;
         return $this;
@@ -235,7 +237,6 @@ class DetalleActividad
     public function removeDetalleActividadGrupo(Grupo $detalleActividadGrupo): static
     {
         if ($this->detalleActividad_grupo->removeElement($detalleActividadGrupo)) {
-            // set the owning side to null (unless already changed)
             if ($detalleActividadGrupo->getDetalleActividad() === $this) {
                 $detalleActividadGrupo->setDetalleActividad(null);
             }
@@ -243,4 +244,22 @@ class DetalleActividad
 
         return $this;
     }
+    private $espacios;
+
+   
+
+    public function addEspacio(Espacio $espacio): self
+    {
+        if (!$this->espacios->contains($espacio)) {
+            $this->espacios[] = $espacio;
+        }
+
+        return $this;
+    }
+
+    public function getEspacios()
+    {
+        return $this->espacios;
+    }
+
 }

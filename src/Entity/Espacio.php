@@ -139,4 +139,20 @@ class Espacio
 
         return $this;
     }
+
+    public function toArray(): array
+    {
+        $recursos = [];
+        foreach ($this->getRecursos() as $recurso) {
+            $recursos[] = $recurso->toArray(); // This should now work correctly
+        }
+
+        return [
+            'id' => $this->getId(),
+            'aforo' => $this->getAforo(),
+            'nombre' => $this->getNombre(),
+            'recursos' => $recursos,
+            // Add more fields as necessary
+        ];
+    }
 }
