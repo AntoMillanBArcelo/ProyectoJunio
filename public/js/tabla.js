@@ -32,13 +32,11 @@ document.addEventListener("DOMContentLoaded", function() {
     }
 
     function rellenarTablaConAPI() {
-        // Aquí haces la solicitud a tu API y llenas la tabla con los datos recibidos
-        // Por ejemplo:
         fetch('/api/alumnos')
             .then(response => response.json())
             .then(data => {
                 const tableBody = document.querySelector('#dataTable tbody');
-                tableBody.innerHTML = ''; // Limpiamos el contenido actual de la tabla
+                tableBody.innerHTML = '';
 
                 data.forEach(item => {
                     const row = document.createElement('tr');

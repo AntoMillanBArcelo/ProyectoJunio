@@ -79,3 +79,23 @@ select{
     margin: 10px;
     width: 120%;
 }
+#subactividadesModal .modal-dialog {
+    background-color: #007bff;
+}
+
+#subactividadesModal .modal-content {
+    padding: 20px; /* Espaciado interno del contenido del modal */
+}
+
+#subactividadesModal .modal-body {
+    max-height: calc(100vh - 200px); /* Altura máxima del cuerpo del modal */
+    overflow-y: auto; /* Scroll vertical si el contenido excede la altura máxima */
+}
+
+#subactividadesModal .modal-footer {
+    justify-content: center; /* Centrar los botones del pie del modal */
+}
+
+#subactividadesModal .table {
+    margin-bottom: 0; /* Eliminar el margen inferior de la tabla dentro del modal */
+}

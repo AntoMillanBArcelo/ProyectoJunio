@@ -41,7 +41,9 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.min.js" integrity="sha384-0pUGZvbkm6XF6gxjEnlmuGrJXVbNuzT9qBBavbLwCsOGabYfZo0T0to5eqruptLy" crossorigin="anonymous"></script>
     {{ include('@EasyAdmin/includes/_js_assets.html.twig', { assets: ea_field_assets.jsAssets }, with_context = false) }}
     {{ include('@EasyAdmin/includes/_encore_script_tags.html.twig', { assets: ea_field_assets.webpackEncoreAssets }, with_context = false) }}
-    <!--<script src="{{ asset('js/jsAltaMasiva/ficheros.js') }}"></script>-->
+     {% if ea.i18n.translationParameters['%entity_name%']=='Edificio' or ea.i18n.translationParameters['%entity_name%']=='Alumno' or ea.i18n.translationParameters['%entity_name%']=='User' %}
+        <script src="{{ asset('js/jsAltaMasiva/ficheros.js') }}"></script>
+    {% endif %}
     <script src="{{ asset('js/jsAltaMasiva/libreriaComun.js') }}"></script>
     <script src="{{ asset('js/jsAltaMasiva/select.js') }}"></script>
     <script src="{{ asset('js/jsAltaMasiva/tablas.js') }}"></script>
@@ -299,7 +301,7 @@
 {% endif %}
 
 <!-- Modal -->
-<div class="modal fade" id="pestañasModal" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="pestañasModal" tabindex="-1" aria-labelledby="pestañasModal" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
@@ -342,44 +344,39 @@
     </div>
   </div>
 </div>
->
 
 <!-- Modal Editar Actividad -->
-<div class="modal fade" id="editarActividadModal" tabindex="-1" aria-labelledby="editarActividadModalLabel" aria-hidden="true">
-  <div class="modal-dialog modal-lg">
-    <div class="modal-content">
-      <div class="modal-header">
-        <h5 class="modal-title" id="editarActividadModalLabel">Editar Actividad</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-      </div>
-      <form id="editarActividadForm">
-        <div class="modal-body">
-          <div class="mb-3">
-            <label for="descripcion" class="form-label">Descripción</label>
-            <input type="text" class="form-control" id="descripcion" name="descripcion">
-          </div>
-          <div class="mb-3">
-            <label for="fechaHoraIni" class="form-label">Fecha y Hora de Inicio</label>
-            <input type="datetime-local" class="form-control" id="fechaHoraIni" name="fechaHoraIni">
-          </div>
-          <div class="mb-3">
-            <label for="fechaHoraFin" class="form-label">Fecha y Hora de Fin</label>
-            <input type="datetime-local" class="form-control" id="fechaHoraFin" name="fechaHoraFin">
-          </div>
-          <input type="hidden" id="actividadId" name="actividadId">
+<div id="editarActividadModal" class="modal fade" tabindex="-1" aria-labelledby="editarActividadModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="editarActividadModalLabel">Editar Actividad</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <form id="editarActividadForm">
+                <div class="modal-body">
+                    <div class="mb-3">
+                        <label for="descripcion" class="form-label">Descripción</label>
+                        <input type="text" class="form-control" id="descripcion" name="descripcion">
+                    </div>
+                    <div class="mb-3">
+                        <label for="fechaHoraIni" class="form-label">Fecha y Hora de Inicio</label>
+                        <input type="datetime-local" class="form-control" id="fechaHoraIni" name="fechaHoraIni">
+                    </div>
+                    <div class="mb-3">
+                        <label for="fechaHoraFin" class="form-label">Fecha y Hora de Fin</label>
+                        <input type="datetime-local" class="form-control" id="fechaHoraFin" name="fechaHoraFin">
+                    </div>
+                    <input type="hidden" id="actividadId" name="actividadId">
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" id="guardarCambios" class="btn btn-primary">Guardar Cambios</button>
+                </div>
+            </form>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" id="guardarCambios" class="btn btn-primary">Guardar Cambios</button>
-        </div>
-      </form>
     </div>
-  </div>
 </div>
-
-
-
-
 
     <table class="table datagrid {{ entities is empty ? 'datagrid-empty' }}">
         {% if num_results > 0 %}

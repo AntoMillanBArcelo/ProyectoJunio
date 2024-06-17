@@ -150,8 +150,7 @@ class ActividadApiController extends AbstractController
     public function createSimple(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-        if (!isset($data['id_padre']) || empty($data['id_padre'])) 
-        {
+        
 
             if (
                 !isset($data['descripcion']) ||
@@ -187,6 +186,15 @@ class ActividadApiController extends AbstractController
                     }
                 $detalleActividad->setDetalleActividadEspacios($espacio);
                 }
+
+                foreach ($data['grupos'] as $grupoId) {
+                    $grupo = $em->getRepository(Grupo::class)->find($grupoId);
+                    if (!$grupo) {
+                        $em->getConnection()->rollBack();
+                        return $this->json(['error' => 'Grupo no encontrado'], Response::HTTP_NOT_FOUND);
+                    }
+                    $detalleActividad->addDetalleActividadGrupo($grupo);
+                }
         
                 if (isset($data['id_padre'])) {
                     $detalleActividad->setIdPadre($data['id_padre']);
@@ -195,6 +203,7 @@ class ActividadApiController extends AbstractController
                 $em->persist($detalleActividad);
                 $em->flush();
         
+                
                 $em->getConnection()->commit();
         
                 return $this->json([
@@ -211,6 +220,12 @@ class ActividadApiController extends AbstractController
                             'id' => $espacio->getId(),
                             'nombre' => $espacio->getNombre()
                         ];
+                    })->toArray(),
+                    'grupos' => $detalleActividad->getDetalleActividadGrupo()->map(function($grupo) {
+                        return [
+                            'id' => $grupo->getId(),
+                            'nombre' => $grupo->getNombre()
+                        ];
                     })->toArray()
                 ], Response::HTTP_CREATED);
             } 
@@ -219,32 +234,6 @@ class ActividadApiController extends AbstractController
                 $em->getConnection()->rollBack();
                 return $this->json(['error' => 'Error interno del servidor: ' . $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
-        }
-        else
-        {
-
-        }
-    
-       
-    }
-    
-
-    private function updatePonentesWithActividadId(EntityManagerInterface $em, DetalleActividad $detalleActividad, array $ponentesData): void
-    {
-        foreach ($ponentesData as $ponenteData) {
-            if (!isset($ponenteData['id'])) {
-                throw new \InvalidArgumentException('Cada ponente debe tener un ID.');
-            }
-
-            $ponenteId = $ponenteData['id'];
-            $ponente = $em->getRepository(Ponente::class)->find($ponenteId);
-
-            if ($ponente) {
-                $ponente->setPonenteDetalleActividad($detalleActividad);
-            }
-        }
-
-        $em->flush();
     }
 
     
@@ -293,53 +282,7 @@ class ActividadApiController extends AbstractController
             return $this->json(['error' => 'Error al borrar la actividad: ' . $e->getMessage()], JsonResponse::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
-
-    #[Route('/actividades/{id}', name: 'actividad_update', methods: ['PUT'])]
-    public function updateActividad(int $id, Request $request, EntityManagerInterface $em): JsonResponse
-    {
-        $data = json_decode($request->getContent(), true);
-
-        $actividad = $em->getRepository(Actividad::class)->find($id);
-
-        if (!$actividad) {
-            return $this->json(['error' => 'Actividad no encontrada'], Response::HTTP_NOT_FOUND);
-        }
-
-        if (isset($data['descripcion'])) {
-            $actividad->setDescripcion($data['descripcion']);
-        }
-        if (isset($data['fechaInicio'])) {
-            $actividad->setFechaHoraIni(new \DateTime($data['fechaInicio']));
-        }
-        if (isset($data['fechaFin'])) {
-            $actividad->setFechaHoraFin(new \DateTime($data['fechaFin']));
-        }
-
-        try {
-            $em->flush();
-            return $this->json(['status' => 'Actividad actualizada exitosamente']);
-        } catch (\Exception $e) {
-            return $this->json(['error' => 'Error al actualizar la actividad: ' . $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
-        }
-    }
-
-
-    #[Route('/actividades/{id}', name: 'api_get_actividad', methods: ['GET'])]
-    public function getActividad(int $id, EntityManagerInterface $em): JsonResponse
-    {
-        $actividad = $em->getRepository(Actividad::class)->find($id);
-
-        if (!$actividad) {
-            return $this->json(['error' => 'Actividad no encontrada'], JsonResponse::HTTP_NOT_FOUND);
-        }
-
-        return $this->json([
-            'id' => $actividad->getId(),
-            'descripcion' => $actividad->getDescripcion(),
-            'fechaHoraIni' => $actividad->getFechaHoraIni()->format('Y-m-d H:i:s'),
-            'fechaHoraFin' => $actividad->getFechaHoraFin()->format('Y-m-d H:i:s'),
-        ]);
-    }
+    
 
     #[Route('/subactividades/{id}', name: 'api_get_actividad', methods: ['GET'])]
     public function update(Request $request, DetalleActividad $detalleActividad): Response
@@ -391,5 +334,44 @@ class ActividadApiController extends AbstractController
             return $this->json(['error' => 'Error al actualizar la subactividad: ' . $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
         }
     }
+
+    #[Route('/actividades/{id}', name: 'api_get_actividad', methods: ['GET', 'PUT'])]
+public function handleActividad(int $id, Request $request, EntityManagerInterface $em): JsonResponse
+{
+    $actividad = $em->getRepository(Actividad::class)->find($id);
+
+    if (!$actividad) {
+        return $this->json(['error' => 'Actividad no encontrada'], JsonResponse::HTTP_NOT_FOUND);
+    }
+
+    if ($request->getMethod() === 'GET') {
+        return $this->json([
+            'id' => $actividad->getId(),
+            'descripcion' => $actividad->getDescripcion(),
+            'fechaHoraIni' => $actividad->getFechaHoraIni()->format('Y-m-d H:i:s'),
+            'fechaHoraFin' => $actividad->getFechaHoraFin()->format('Y-m-d H:i:s'),
+        ]);
+    }
+
+    // Método PUT para actualizar la actividad
+    $data = json_decode($request->getContent(), true);
+
+    if (isset($data['descripcion'])) {
+        $actividad->setDescripcion($data['descripcion']);
+    }
+    if (isset($data['fechaInicio'])) {
+        $actividad->setFechaHoraIni(new \DateTime($data['fechaInicio']));
+    }
+    if (isset($data['fechaFin'])) {
+        $actividad->setFechaHoraFin(new \DateTime($data['fechaFin']));
+    }
+
+    try {
+        $em->flush();
+        return $this->json(['status' => 'Actividad actualizada exitosamente']);
+    } catch (\Exception $e) {
+        return $this->json(['error' => 'Error al actualizar la actividad: ' . $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+    }
+}
 
 }

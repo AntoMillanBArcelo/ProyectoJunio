@@ -22,6 +22,7 @@ document.addEventListener("DOMContentLoaded", function() {
   let tabla = document.getElementById("ponentes");
   let btnRellenarTabla = document.getElementById("btnRellenarTabla");
   let btnAlta = document.getElementById("btnAlta");
+  let entidad = btnAlta.getAttribute("data-entidad");
   //let entidad = btnAlta.getAttribute("data-entidad");
   let apiUrl;
   
@@ -138,7 +139,6 @@ document.addEventListener("DOMContentLoaded", function() {
       let url = entidad === 'User' ? '/api/users' : (entidad === 'Alumno' ? 'http://127.0.0.1:8000/api/alumnos' : '');
       if (url) {
         tableData.forEach(data => {
-          debugger
           fetch(url, {
             method: 'POST',
             headers: {
@@ -164,10 +164,9 @@ document.addEventListener("DOMContentLoaded", function() {
     }
   };
 
-  // Función para mostrar los datos en la tabla
   function mostrarTabla(datos) {
     let tbody = tabla.querySelector("tbody");
-    tbody.innerHTML = ""; // Limpiar la tabla antes de agregar los nuevos datos
+    tbody.innerHTML = "";
     datos.forEach(dato => {
       let fila = document.createElement("tr");
       dato.forEach(celda => {

@@ -14,16 +14,17 @@ class Ponente
     private ?int $id = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $Nombre = null;
+    private ?string $nombre = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $URL = null;
+    private ?string $url = null;
 
     #[ORM\Column(length: 255)]
-    private ?string $CArgo = null;
+    private ?string $cargo = null;
 
-    #[ORM\ManyToOne(inversedBy: 'ponentes')]
-    private ?DetalleActividad $ponente_detalle_actividad = null;
+    #[ORM\ManyToOne(targetEntity: DetalleActividad::class)]
+    #[ORM\JoinColumn(nullable: true)]
+    private ?DetalleActividad $ponenteDetalleActividad = null;
 
     #[ORM\ManyToOne(targetEntity: Evento::class)]
     private ?Evento $evento = null;
@@ -35,49 +36,45 @@ class Ponente
 
     public function getNombre(): ?string
     {
-        return $this->Nombre;
+        return $this->nombre;
     }
 
-    public function setNombre(string $Nombre): static
+    public function setNombre(string $nombre): static
     {
-        $this->Nombre = $Nombre;
-
+        $this->nombre = $nombre;
         return $this;
     }
 
-    public function getURL(): ?string
+    public function getUrl(): ?string
     {
-        return $this->URL;
+        return $this->url;
     }
 
-    public function setURL(string $URL): static
+    public function setUrl(string $url): static
     {
-        $this->URL = $URL;
-
+        $this->url = $url;
         return $this;
     }
 
-    public function getCArgo(): ?string
+    public function getCargo(): ?string
     {
-        return $this->CArgo;
+        return $this->cargo;
     }
 
-    public function setCArgo(string $CArgo): static
+    public function setCargo(string $cargo): static
     {
-        $this->CArgo = $CArgo;
-
+        $this->cargo = $cargo;
         return $this;
     }
 
     public function getPonenteDetalleActividad(): ?DetalleActividad
     {
-        return $this->ponente_detalle_actividad;
+        return $this->ponenteDetalleActividad;
     }
 
-    public function setPonenteDetalleActividad(?DetalleActividad $ponente_detalle_actividad): static
+    public function setPonenteDetalleActividad(?DetalleActividad $ponenteDetalleActividad): static
     {
-        $this->ponente_detalle_actividad = $ponente_detalle_actividad;
-
+        $this->ponenteDetalleActividad = $ponenteDetalleActividad;
         return $this;
     }
 
@@ -89,21 +86,6 @@ class Ponente
     public function setEvento(?Evento $evento): static
     {
         $this->evento = $evento;
-
         return $this;
     }
-
-    public function setActividad(?DetalleActividad $actividad): static
-    {
-        $this->ponente_detalle_actividad = $actividad;
-
-        return $this;
-    }
-    
-    public function setActividadId(int $actividadId): static
-    {
-        $this->ponente_detalle_actividad_id = $actividadId;
-        return $this;
-    }
-    
 }

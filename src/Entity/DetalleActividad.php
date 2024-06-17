@@ -73,6 +73,7 @@ class DetalleActividad
         $this->detalleActividad_grupo = new ArrayCollection();
         $this->espacios = new ArrayCollection();
         $this->detalleActividadEspacios = new ArrayCollection();
+        $this->detalle_actividad_grupo = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -173,7 +174,6 @@ class DetalleActividad
     public function removePonente(Ponente $ponente): static
     {
         if ($this->ponentes->removeElement($ponente)) {
-            // set the owning side to null (unless already changed)
             if ($ponente->getPonenteDetalleActividad() === $this) {
                 $ponente->setPonenteDetalleActividad(null);
             }
@@ -245,6 +245,12 @@ class DetalleActividad
         return $this;
     }
     private $espacios;
+
+    /**
+     * @var Collection<int, Grupo>
+     */
+    #[ORM\ManyToMany(targetEntity: Grupo::class, inversedBy: 'detalleActividads')]
+    private Collection $detalle_actividad_grupo;
 
    
 

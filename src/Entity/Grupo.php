@@ -39,11 +39,18 @@ class Grupo
     #[ORM\ManyToOne(inversedBy: 'detalleActividad_grupo')]
     private ?DetalleActividad $detalleActividad = null;
 
+    /**
+     * @var Collection<int, DetalleActividad>
+     */
+    #[ORM\ManyToMany(targetEntity: DetalleActividad::class, mappedBy: 'detalle_actividad_grupo')]
+    private Collection $detalleActividads;
+
     public function __construct()
     {
         $this->alumnos = new ArrayCollection();
         $this->grupo_niveleducativo = new ArrayCollection();
         $this->grupo_user = new ArrayCollection();
+        $this->detalleActividads = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -160,6 +167,33 @@ class Grupo
     public function setDetalleActividad(?DetalleActividad $detalleActividad): static
     {
         $this->detalleActividad = $detalleActividad;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection<int, DetalleActividad>
+     */
+    public function getDetalleActividads(): Collection
+    {
+        return $this->detalleActividads;
+    }
+
+    public function addDetalleActividad(DetalleActividad $detalleActividad): static
+    {
+        if (!$this->detalleActividads->contains($detalleActividad)) {
+            $this->detalleActividads->add($detalleActividad);
+            $detalleActividad->addDetalleActividadGrupo($this);
+        }
+
+        return $this;
+    }
+
+    public function removeDetalleActividad(DetalleActividad $detalleActividad): static
+    {
+        if ($this->detalleActividads->removeElement($detalleActividad)) {
+            $detalleActividad->removeDetalleActividadGrupo($this);
+        }
 
         return $this;
     }

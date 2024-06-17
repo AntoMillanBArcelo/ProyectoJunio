@@ -12,7 +12,7 @@ document.addEventListener('DOMContentLoaded', function () {
                     }
 
                     const tbody = subactividadesContent.querySelector('tbody');
-                    tbody.innerHTML = ''; // Limpiar contenido anterior
+                    tbody.innerHTML = '';
 
                     if (data.subactividades.length > 0) {
                         data.subactividades.forEach(subactividad => {
@@ -31,7 +31,6 @@ document.addEventListener('DOMContentLoaded', function () {
                             tbody.appendChild(tr);
                         });
 
-                        // Delegación de eventos para los botones de actualizar
                         tbody.addEventListener('click', function (event) {
                             if (event.target.classList.contains('btnActualizarSubactivity')) {
                                 const tr = event.target.closest('tr');
@@ -41,7 +40,6 @@ document.addEventListener('DOMContentLoaded', function () {
                                 const fechaFin = tr.querySelector('td:nth-child(4)').innerText;
                                 const descripcion = tr.querySelector('td:nth-child(5)').innerText;
 
-                                // Modificar el tr para el modo de edición
                                 tr.innerHTML = `
                                     <td>${id}</td>
                                     <td><input type="text" id="titulo" class="form-control" value="${titulo}"></td>
@@ -52,8 +50,6 @@ document.addEventListener('DOMContentLoaded', function () {
                                         <button class="btn btn-primary btnSaveSubactivity">Guardar</button>
                                     </td>
                                 `;
-
-                                // Evento para guardar la subactividad actualizada
                                 tr.querySelector('.btnSaveSubactivity').addEventListener('click', function () {
                                     const newTitulo = tr.querySelector('#titulo').value;
                                     const newFechaInicio = tr.querySelector('#fechaInicio').value;
@@ -75,15 +71,31 @@ document.addEventListener('DOMContentLoaded', function () {
                                     .then(response => {
                                         if (response.ok) {
                                             console.log('Subactividad actualizada correctamente');
-                                            // Puedes actualizar visualmente la fila si es necesario
+                                            location.reload();
                                         } else {
                                             throw new Error('Error al actualizar la subactividad');
                                         }
                                     })
                                     .catch(error => {
                                         console.error('Error al actualizar la subactividad:', error);
-                                        // Manejar errores y mostrar mensajes al usuario si la actualización falla
                                     });
+                                });
+                            } else if (event.target.classList.contains('btnDeleteSubactivity')) {
+                                const id = event.target.getAttribute('data-id');
+
+                                fetch(`/API/subactividades/${id}`, {
+                                    method: 'DELETE'
+                                })
+                                .then(response => {
+                                    if (response.ok) {
+                                        console.log('Subactividad eliminada correctamente');
+                                        location.reload();
+                                    } else {
+                                        throw new Error('Error al eliminar la subactividad');
+                                    }
+                                })
+                                .catch(error => {
+                                    console.error('Error al eliminar la subactividad:', error);
                                 });
                             }
                         });
@@ -96,7 +108,6 @@ document.addEventListener('DOMContentLoaded', function () {
                 })
                 .catch(error => {
                     console.error('Error al obtener subactividades:', error);
-                    // Manejar el error de manera apropiada
                 });
         });
     });

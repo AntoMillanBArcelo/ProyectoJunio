@@ -1,5 +1,4 @@
 document.addEventListener('DOMContentLoaded', function() {
-    var openModalButtons = document.querySelectorAll('.openPestañasModal');
     const btnEditActivitys = document.querySelectorAll('.btnEditActivity');
     const editarActividadModal = new bootstrap.Modal(document.getElementById('editarActividadModal'));
 
@@ -11,8 +10,8 @@ document.addEventListener('DOMContentLoaded', function() {
                     document.getElementById('descripcion').value = datosActividad.descripcion;
                     document.getElementById('fechaHoraIni').value = datosActividad.fechaHoraIni;
                     document.getElementById('fechaHoraFin').value = datosActividad.fechaHoraFin;
-                    document.getElementById('evento').value = datosActividad.evento;
                     document.getElementById('actividadId').value = actividadId;
+
                     editarActividadModal.show();
                 })
                 .catch(error => {
@@ -24,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('guardarCambios').addEventListener('click', function(event) {
         event.preventDefault();
 
-        const actividadId = document.getElementById('actividadId').value;
+        
         const descripcion = document.getElementById('descripcion').value;
         const fechaHoraIni = document.getElementById('fechaHoraIni').value;
         const fechaHoraFin = document.getElementById('fechaHoraFin').value;
@@ -61,8 +60,10 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
+    
+
     function obtenerDatosActividad(id) {
-        return fetch(`/API/actividades/${id}`)
+        return fetch(`API/actividades/${id}`)
             .then(response => {
                 if (!response.ok) {
                     throw new Error('Error al obtener los datos de la actividad');
@@ -75,34 +76,7 @@ document.addEventListener('DOMContentLoaded', function() {
             });
     }
 
-    var modalElement = document.getElementById('pestañasModal');
-    if (modalElement) {
-        var modal = new bootstrap.Modal(modalElement, {
-            backdrop: 'static',
-            keyboard: false
-        });
-
-        openModalButtons.forEach(function(openModalButton) {
-            openModalButton.addEventListener('click', function() {
-                modal.show();
-            });
-        });
-    } else {
-        console.error('El elemento con ID "pestañasModal" no se encontró.');
+    function actualizarActividadEnInterfaz(actividad) {
+        
     }
-
-    var buttons = document.querySelectorAll('.btnPestaña');
-    buttons.forEach(function(button) {
-        button.addEventListener('click', function() {
-            var iframeContainer = document.getElementById('iframeContainer2');
-            if (iframeContainer) {
-                iframeContainer.style.display = 'block';
-                document.querySelectorAll('.card.w-75').forEach(function(card) {
-                    card.style.display = 'none';
-                });
-            } else {
-                console.error('El elemento con ID "iframeContainer2" no se encontró.');
-            }
-        });
-    });
 });
