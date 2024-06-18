@@ -44,8 +44,8 @@
                             <div class="job-box d-md-flex align-items-center justify-content-between mb-30">
                                 <div class="job-left my-4 d-md-flex align-items-center flex-wrap">
                                     <div class="job-content">
-                                    <h5 class=" text-md-left">{{ actividad.descripcion }}</h5>
-                                        <h6 class=" text-md-left">Actividad {{ actividad.id }}</h6>
+                                    <h5 class=" text-md-left">Descripcion: {{ actividad.descripcion }}</h5>
+                                        <h6 class=" text-md-left">Actividad n°: {{ actividad.id }}</h6>
                                         <ul class="d-md-flex flex-wrap text-capitalize ff-open-sans">
                                             <li class="mr-md-4">
                                                 <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar" viewBox="0 0 16 16">
@@ -71,33 +71,41 @@
                                 </div>
                             </div>
                         {% endfor %}
-
-                        {% for detalleactividad in detalleactividades %}
-                            <div class="job-box d-md-flex align-items-center justify-content-between mb-30">
-                                <div class="job-left my-4 d-md-flex align-items-center flex-wrap">
-                                    <div class="job-content">
-                                        <h5 class="text-md-left">{{ detalleactividad.titulo }}</h5>
-                                        <h6 class="text-md-left">Detalle Actividad {{ detalleactividad.id }}</h6>
-                                        <p class="text-md-left">{{ detalleactividad.descripcion}}</p>
-                                        <ul class="d-md-flex flex-wrap text-capitalize ff-open-sans">
-                                            <li class="mr-md-4">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar" viewBox="0 0 16 16">
-                                                <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
-                                                </svg>
-                                                <i class="mr-2"></i> Inicio: {{ detalleactividad.getFechaHoraIni()|date('Y-m-d H:i:s') }}
-                                            </li>
-                                            <li class="mr-md-4">
-                                            <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-check" viewBox="0 0 16 16">
-                                                    <path d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
-                                                    <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
-                                                </svg>
-                                                <i class="mr-2"></i> Fin: {{ detalleactividad.getFechaHoraFin()|date('Y-m-d H:i:s') }}
-                                            </li>
-                                        </ul>
+                            {% for detalleactividad in detalleactividades %}
+                                <div class="job-box d-md-flex align-items-center justify-content-between mb-30">
+                                    <div class="job-left my-4 d-md-flex align-items-center flex-wrap">
+                                        <div class="job-content">
+                                            <h5 class="text-md-left">Titulo: {{ detalleactividad.titulo }}</h5>
+                                            <h6 class="text-md-left">Detalle Actividad n°: {{ detalleactividad.id }}</h6>
+                                            <p class="text-md-left">Descripcion: {{ detalleactividad.descripcion }}</p>
+                                            <ul class="d-md-flex flex-wrap text-capitalize ff-open-sans">
+                                                <li class="mr-md-4">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar" viewBox="0 0 16 16">
+                                                        <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+                                                    </svg>
+                                                    <i class="mr-2"></i> Inicio: {{ detalleactividad.getFechaHoraIni()|date('Y-m-d H:i:s') }}
+                                                </li>
+                                                <li class="mr-md-4">
+                                                    <svg xmlns="http://www.w3.org/2000/svg" width="16" height="16" fill="currentColor" class="bi bi-calendar-check" viewBox="0 0 16 16">
+                                                        <path d="M10.854 7.146a.5.5 0 0 1 0 .708l-3 3a.5.5 0 0 1-.708 0l-1.5-1.5a.5.5 0 1 1 .708-.708L7.5 9.793l2.646-2.647a.5.5 0 0 1 .708 0"/>
+                                                        <path d="M3.5 0a.5.5 0 0 1 .5.5V1h8V.5a.5.5 0 0 1 1 0V1h1a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H2a2 2 0 0 1-2-2V3a2 2 0 0 1 2-2h1V.5a.5.5 0 0 1 .5-.5M1 4v10a1 1 0 0 0 1 1h12a1 1 0 0 0 1-1V4z"/>
+                                                    </svg>
+                                                    <i class="mr-2"></i> Fin: {{ detalleactividad.getFechaHoraFin()|date('Y-m-d H:i:s') }}
+                                                </li>
+                                            </ul>
+                                            {% if ponentesPorSubactividad[detalleactividad.id] is not empty %}
+                                                <h5 class="mt-4">Ponentes:</h5>
+                                                <ul>
+                                                    {% for ponente in ponentesPorSubactividad[detalleactividad.id] %}
+                                                        <li>{{ ponente.getNombre() }} - {{ ponente.getCargo() }}</li>
+                                                    {% endfor %}
+                                                </ul>
+                                            {% endif %}
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        {% endfor %}
+                            {% endfor %}
+
 
                     </div>
                 </div>
