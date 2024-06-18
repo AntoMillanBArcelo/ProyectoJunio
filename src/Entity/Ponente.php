@@ -77,7 +77,23 @@ class Ponente
         $this->ponenteDetalleActividad = $ponenteDetalleActividad;
         return $this;
     }
+  /**
+     * @return Collection|DetalleActividad[]
+     */
+    public function getDetalleActividades(): Collection
+    {
+        return $this->detalleActividades;
+    }
 
+    public function addDetalleActividad(DetalleActividad $detalleActividad): self
+    {
+        if (!$this->detalleActividades->contains($detalleActividad)) {
+            $this->detalleActividades[] = $detalleActividad;
+            $detalleActividad->addPonente($this);
+        }
+
+        return $this;
+    }
     public function getEvento(): ?Evento
     {
         return $this->evento;

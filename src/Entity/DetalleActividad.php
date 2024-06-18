@@ -11,6 +11,8 @@ use Doctrine\ORM\Mapping as ORM;
 #[ORM\Entity(repositoryClass: DetalleActividadRepository::class)]
 class DetalleActividad
 {
+
+    
     #[ORM\Id]
     #[ORM\GeneratedValue]
     #[ORM\Column]
@@ -43,15 +45,16 @@ class DetalleActividad
     #[ORM\ManyToOne(inversedBy: 'detalleActividads')]
     private ?Actividad $detalle_actividad_evento = null;
 
+
+    #[ORM\ManyToOne(inversedBy: "detalleActividads")]
+    #[ORM\JoinColumn(name: "detalle_actividad_evento_id", referencedColumnName: "id", nullable: false)]
+    private ?Evento $evento = null;
+
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $URL = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $descripcion = null;
-
-    #[ORM\ManyToOne(inversedBy: "detalleActividads")]
-    #[ORM\JoinColumn(name: "detalle_actividad_evento_id", referencedColumnName: "id", nullable: false)]
-    private ?Evento $evento = null;
 
     #[ORM\ManyToOne(targetEntity: Actividad::class, inversedBy: 'detalleActividads')]
     #[ORM\JoinColumn(nullable: false)]

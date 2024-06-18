@@ -64,6 +64,7 @@ document.addEventListener('DOMContentLoaded', function() {
         var inicio = document.getElementById('inicio').value;
         var fin = document.getElementById('fin').value;
         var evento = parseInt(document.getElementById('evento').value);
+        console.log(evento);
         var aforo = parseInt(document.getElementById('aforo').value);
         var idPadre = parseInt(document.getElementById('idd').value);
         var titulo = document.getElementById('titulo').value;
@@ -73,7 +74,15 @@ document.addEventListener('DOMContentLoaded', function() {
             .map(option => parseInt(option.value));
         var gruposSeleccionados = Array.from(document.querySelectorAll('input[name="grupo"]:checked'))
             .map(checkbox => parseInt(checkbox.value));
-
+            
+            const ponentes = [
+                {
+                    nombre: document.getElementById('nombre').value,
+                    cargo: document.getElementById('cargo').value,
+                    recurso: document.getElementById('recurso').value
+                }
+            ];
+            console.log(ponentes)
         var actividadDataSimple = {
             descripcion: descripcion,
             fechaInicio: inicio,
@@ -82,6 +91,7 @@ document.addEventListener('DOMContentLoaded', function() {
             aforo: aforo,
             id_padre: idPadre,
             espacios: espacios,
+            ponentes: ponentes,
             grupos: gruposSeleccionados,
             titulo: titulo,
         };
@@ -101,6 +111,7 @@ document.addEventListener('DOMContentLoaded', function() {
         })
         .then(data => {
             console.log('Actividad simple agregada exitosamente:', data);
+            guardarPonente();
             location.reload(); 
         })
         .catch(error => {
@@ -133,4 +144,57 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         });
     });
+
+    function guardarPonente() {
+        const nombre = document.getElementById('nombre').value;
+        const cargo = document.getElementById('cargo').value;
+        const recurso = document.getElementById('recurso').value;
+    
+        if (!nombre || !cargo || !recurso) {
+            alert('Por favor complete todos los campos requeridos.');
+            return;
+        }
+    
+        const data = {
+            nombre: nombre,
+            cargo: cargo,
+            url: recurso,
+            evento_id: null
+        };
+    
+        fetch('/API/ponentes', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (response.ok) {
+                return response.json();
+            } else {
+                return response.json().then(error => {
+                    throw new Error(error.message);
+                });
+            }
+        })
+        .then(data => {
+            alert('Ponente guardado correctamente.');
+            console.log('Ponente guardado:', data);
+    
+            const mostrarPonentes = document.getElementById('ponentesAgregados');
+            const ponenteElement = document.createElement('div');
+            ponenteElement.textContent = `Nombre: ${data.nombre}, Cargo: ${data.cargo}, Recurso: ${data.url}`;
+            mostrarPonentes.appendChild(ponenteElement);
+    
+            document.getElementById('nombre').value = '';
+            document.getElementById('cargo').value = '';
+            document.getElementById('recurso').value = '';
+        })
+        .catch(error => {
+            alert('Error al guardar el ponente: ' + error.message);
+            console.error('Error:', error);
+        });
+    }
+    
 });

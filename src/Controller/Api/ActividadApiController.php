@@ -9,6 +9,7 @@ use App\Entity\Evento;
 use App\Entity\Espacio;
 use App\Entity\Recurso;
 use App\Entity\Grupo;
+use App\Entity\Ponente;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -150,18 +151,18 @@ class ActividadApiController extends AbstractController
     public function createSimple(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-        
 
-            if (
-                !isset($data['descripcion']) ||
-                !isset($data['titulo']) ||
-                !isset($data['fechaInicio']) ||
-                !isset($data['fechaFin']) ||
-                !isset($data['evento']) ||
-                !isset($data['espacios'])
-            ) {
-                return $this->json(['error' => 'Faltan datos'], Response::HTTP_BAD_REQUEST);
-            }
+    // Validar que los campos requeridos estén presentes y no estén vacíos o nulos
+    if (
+        empty($data['descripcion']) ||
+        empty($data['titulo']) ||
+        empty($data['fechaInicio']) ||
+        empty($data['fechaFin']) ||
+        empty($data['espacios']) 
+    ) {
+        return $this->json(['error' => 'Faltan datos o datos vacíos
+    '], Response::HTTP_BAD_REQUEST);
+    }
         
             $em->getConnection()->beginTransaction();
         
@@ -171,7 +172,7 @@ class ActividadApiController extends AbstractController
                 $detalleActividad->setFechaHoraIni(new \DateTime($data['fechaInicio']));
                 $detalleActividad->setFechaHoraFin(new \DateTime($data['fechaFin']));
                 $detalleActividad->setTitulo($data['titulo']);
-        
+    
                 $evento = $em->getRepository(Evento::class)->find($data['evento']);
                 if (!$evento) {
                     return $this->json(['error' => 'Evento no encontrado'], Response::HTTP_NOT_FOUND);
@@ -203,7 +204,8 @@ class ActividadApiController extends AbstractController
                 $em->persist($detalleActividad);
                 $em->flush();
         
-                
+              
+
                 $em->getConnection()->commit();
         
                 return $this->json([
@@ -235,7 +237,6 @@ class ActividadApiController extends AbstractController
                 return $this->json(['error' => 'Error interno del servidor: ' . $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
             }
     }
-
     
     #[Route('/subactividades/{id}', name: 'api_delete_subactivity', methods: ['DELETE'])]
     public function deleteSubactivity(int $id, EntityManagerInterface $em): JsonResponse
@@ -353,7 +354,6 @@ public function handleActividad(int $id, Request $request, EntityManagerInterfac
         ]);
     }
 
-    // Método PUT para actualizar la actividad
     $data = json_decode($request->getContent(), true);
 
     if (isset($data['descripcion'])) {

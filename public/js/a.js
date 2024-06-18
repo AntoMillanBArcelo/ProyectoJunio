@@ -2,9 +2,11 @@ document.addEventListener('DOMContentLoaded', function() {
     const btnEditActivitys = document.querySelectorAll('.btnEditActivity');
     const editarActividadModal = new bootstrap.Modal(document.getElementById('editarActividadModal'));
 
+    let actividadId; 
+
     btnEditActivitys.forEach(function(btnEditActivity) {
         btnEditActivity.addEventListener('click', function() {
-            const actividadId = btnEditActivity.getAttribute('data-id');
+            actividadId = parseInt(btnEditActivity.getAttribute('data-id'), 10);
             obtenerDatosActividad(actividadId)
                 .then(datosActividad => {
                     document.getElementById('descripcion').value = datosActividad.descripcion;
@@ -23,7 +25,6 @@ document.addEventListener('DOMContentLoaded', function() {
     document.getElementById('guardarCambios').addEventListener('click', function(event) {
         event.preventDefault();
 
-        
         const descripcion = document.getElementById('descripcion').value;
         const fechaHoraIni = document.getElementById('fechaHoraIni').value;
         const fechaHoraFin = document.getElementById('fechaHoraFin').value;
@@ -60,8 +61,6 @@ document.addEventListener('DOMContentLoaded', function() {
         });
     });
 
-    
-
     function obtenerDatosActividad(id) {
         return fetch(`API/actividades/${id}`)
             .then(response => {
@@ -74,9 +73,5 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.error('Error al obtener los datos de la actividad:', error);
                 throw error; 
             });
-    }
-
-    function actualizarActividadEnInterfaz(actividad) {
-        
     }
 });
