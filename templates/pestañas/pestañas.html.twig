@@ -252,46 +252,56 @@
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdb-ui-kit/6.0.0/mdb.min.js"></script>  
     <script>
         document.addEventListener('DOMContentLoaded', function() {
-            var tabs = document.querySelectorAll('[data-mdb-toggle="tab"]');
-            var btnGuardarSimple = document.getElementById('g1');
-            var flexShrinkDiv = document.getElementById('alerta');
-            var actividadSelect = document.getElementById('actividad-select');
-            var tabLinks = document.querySelectorAll('.nav-link');
+    var tabs = document.querySelectorAll('[data-mdb-toggle="tab"]');
+    var btnGuardarSimple = document.getElementById('g1');
+    var flexShrinkDiv = document.getElementById('alerta');
+    var actividadSelect = document.getElementById('actividad-select');
+    var tabLinks = document.querySelectorAll('.nav-link');
 
-            tabs.forEach(function(tab) {
-                tab.addEventListener('click', function(event) {
-                    event.preventDefault();
-                    var target = document.querySelector(tab.getAttribute('href'));
-                    var allContent = document.querySelectorAll('.tab-pane');
-                    allContent.forEach(function(content) {
-                        content.classList.remove('show', 'active');
-                    });
-                    target.classList.add('show', 'active');
-                });
+    tabs.forEach(function(tab) {
+        tab.addEventListener('click', function(event) {
+            event.preventDefault();
+            var target = document.querySelector(tab.getAttribute('href'));
+            var allContent = document.querySelectorAll('.tab-pane');
+            
+            allContent.forEach(function(content) {
+                content.classList.remove('show', 'active');
             });
+            
+            target.classList.add('show', 'active');
 
-            actividadSelect.addEventListener('change', function() {
-                if (actividadSelect.value === 'simple') {
-                    btnGuardarSimple.classList.add('hidden');
-                    flexShrinkDiv.classList.remove('hidden');
-                    tabLinks.forEach(function(link, index) {
-                        if (index > 0) { 
-                            link.classList.remove('disabled');
-                        }
-                    });
-                } else if (actividadSelect.value === 'compuesta') {
-                    btnGuardarSimple.classList.remove('hidden');
-                    flexShrinkDiv.classList.add('hidden');
-                    tabLinks.forEach(function(link, index) {
-                        if (index > 0) { 
-                            link.classList.add('disabled');
-                        }
-                    });
+            // Aplicar estilos adicionales cuando el tab está activo
+            if (target.classList.contains('active')) {
+                tab.classList.add('active-tab'); // Añadir clase de estilo activo
+            } else {
+                tab.classList.remove('active-tab'); // Remover clase de estilo activo
+            }
+        });
+    });
+
+    actividadSelect.addEventListener('change', function() {
+        if (actividadSelect.value === 'simple') {
+            btnGuardarSimple.classList.add('hidden');
+            flexShrinkDiv.classList.remove('hidden');
+            tabLinks.forEach(function(link, index) {
+                if (index > 0) { 
+                    link.classList.remove('disabled');
                 }
             });
+        } else if (actividadSelect.value === 'compuesta') {
+            btnGuardarSimple.classList.remove('hidden');
+            flexShrinkDiv.classList.add('hidden');
+            tabLinks.forEach(function(link, index) {
+                if (index > 0) { 
+                    link.classList.add('disabled');
+                }
+            });
+        }
+    });
 
-            actividadSelect.dispatchEvent(new Event('change'));
-        });
+    actividadSelect.dispatchEvent(new Event('change'));
+});
+
 
         document.getElementById('fuente').addEventListener('change', function() {
     var seleccionados = Array.from(this.selectedOptions).map(option => option.value);

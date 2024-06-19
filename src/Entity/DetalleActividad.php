@@ -45,20 +45,19 @@ class DetalleActividad
     #[ORM\ManyToOne(inversedBy: 'detalleActividads')]
     private ?Actividad $detalle_actividad_evento = null;
 
-
     #[ORM\ManyToOne(inversedBy: "detalleActividads")]
     #[ORM\JoinColumn(name: "detalle_actividad_evento_id", referencedColumnName: "id", nullable: false)]
     private ?Evento $evento = null;
+
+    #[ORM\ManyToOne(targetEntity: Actividad::class, inversedBy: 'detalleActividads')]
+    #[ORM\JoinColumn(nullable: false)]
+    private ?Actividad $detalleActividadEvento = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $URL = null;
 
     #[ORM\Column(length: 255, nullable: true)]
     private ?string $descripcion = null;
-
-    #[ORM\ManyToOne(targetEntity: Actividad::class, inversedBy: 'detalleActividads')]
-    #[ORM\JoinColumn(nullable: false)]
-    private ?Actividad $detalleActividadEvento = null;
 
     #[ORM\Column(nullable: true)]
     private ?int $id_padre = null;
@@ -77,6 +76,7 @@ class DetalleActividad
         $this->espacios = new ArrayCollection();
         $this->detalleActividadEspacios = new ArrayCollection();
         $this->detalle_actividad_grupo = new ArrayCollection();
+        $this->grupos = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -269,6 +269,28 @@ class DetalleActividad
     public function getEspacios()
     {
         return $this->espacios;
+    }
+
+    public function getGrupos(): Collection
+    {
+        return $this->grupos;
+    }
+
+    public function addGrupo(Grupo $grupo): static
+    {
+        if (!$this->grupos->contains($grupo)) {
+            $this->grupos->add($grupo);
+            $grupo->addDetalleActividad($this);
+        }
+        return $this;
+    }
+
+    public function removeGrupo(Grupo $grupo): static
+    {
+        if ($this->grupos->removeElement($grupo)) {
+            $grupo->removeDetalleActividad($this);
+        }
+        return $this;
     }
 
 }

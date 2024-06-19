@@ -36,9 +36,6 @@ class Grupo
     #[ORM\ManyToMany(targetEntity: User::class, inversedBy: 'grupos')]
     private Collection $grupo_user;
 
-    #[ORM\ManyToOne(inversedBy: 'detalleActividad_grupo')]
-    private ?DetalleActividad $detalleActividad = null;
-
     /**
      * @var Collection<int, DetalleActividad>
      */
@@ -183,7 +180,7 @@ class Grupo
     {
         if (!$this->detalleActividads->contains($detalleActividad)) {
             $this->detalleActividads->add($detalleActividad);
-            $detalleActividad->addDetalleActividadGrupo($this);
+            $detalleActividad->addGrupo($this);
         }
 
         return $this;

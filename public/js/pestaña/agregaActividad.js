@@ -55,70 +55,158 @@ document.addEventListener('DOMContentLoaded', function() {
             btnGuardarSimple.disabled = false;
         }
     });
+    
+        //Guardar actividades compuestas
+        btnGuardarCompuesta.addEventListener('click', function(event) {
+            event.preventDefault();
 
-    //Guardar actividades
+            var descripcion = document.getElementById('descripcion').value;
+            var inicio = document.getElementById('inicio').value;
+            var fin = document.getElementById('fin').value;
+            var evento = parseInt(document.getElementById('evento').value);
+
+            var actividadDataSimple = {
+                descripcion: descripcion,
+                fechaInicio: inicio,
+                fechaFin: fin,
+                evento: evento,
+            };
+
+            fetch('/API/actividades', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(actividadDataSimple)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { throw err; });
+                }
+                return response.json();
+            })
+            .then(data => {
+                console.log('Actividad agregada exitosamente:', data);
+            })
+            .then(() => {
+                location.reload(); 
+            })
+            .catch(error => {
+                console.error('Error al agregar la actividad:', error);
+                alert(`Error al agregar la actividad: ${error.message || error}`);
+            });
+        });
+
+    //Guardar actividades simples
     btnGuardarSimple.addEventListener('click', function(event) {
         event.preventDefault();
-
+    
         var descripcion = document.getElementById('descripcion').value;
         var inicio = document.getElementById('inicio').value;
         var fin = document.getElementById('fin').value;
         var evento = parseInt(document.getElementById('evento').value);
-        console.log(evento);
         var aforo = parseInt(document.getElementById('aforo').value);
-        var idPadre = parseInt(document.getElementById('idd').value);
+        var idPadre = document.getElementById('idd').value; 
         var titulo = document.getElementById('titulo').value;
         var espaciosSelect = document.getElementById('seleccionados');
+        
         var espacios = Array.from(espaciosSelect.options)
             .filter(option => option.selected)
             .map(option => parseInt(option.value));
-        var gruposSeleccionados = Array.from(document.querySelectorAll('input[name="grupo"]:checked'))
-            .map(checkbox => parseInt(checkbox.value));
-            
-            const ponentes = [
-                {
-                    nombre: document.getElementById('nombre').value,
-                    cargo: document.getElementById('cargo').value,
-                    recurso: document.getElementById('recurso').value
-                }
-            ];
-            console.log(ponentes)
-        var actividadDataSimple = {
-            descripcion: descripcion,
-            fechaInicio: inicio,
-            fechaFin: fin,
-            evento: evento,
-            aforo: aforo,
-            id_padre: idPadre,
-            espacios: espacios,
-            ponentes: ponentes,
-            grupos: gruposSeleccionados,
-            titulo: titulo,
-        };
-
-        fetch('/API/subactividades/simple', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json'
-            },
-            body: JSON.stringify(actividadDataSimple)
-        })
-        .then(response => {
-            if (!response.ok) {
-                return response.json().then(err => { throw err; });
+    
+        const ponentes = [
+            {
+                nombre: document.getElementById('nombre').value,
+                cargo: document.getElementById('cargo').value,
+                recurso: document.getElementById('recurso').value
             }
-            return response.json();
-        })
-        .then(data => {
-            console.log('Actividad simple agregada exitosamente:', data);
-            guardarPonente();
-            location.reload(); 
-        })
-        .catch(error => {
-            console.error('Error al agregar la actividad simple:', error);
-            alert(`Error al agregar la actividad simple: ${error.message || error}`);
-        });
+        ];
+    
+        // Funcion para crear actividad padre
+        function crearActividadPadre() {
+            return fetch('API/actividades', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify({
+                    descripcion: descripcion,
+                    fechaInicio: inicio,
+                    fechaFin: fin,
+                    evento: evento
+                })
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { throw err; });
+                }
+                return response.json();
+            });
+        }
+    
+        // Funcion para crear detalleActividad con id del padre
+        function crearDetalleActividad(idPadre) {
+            var actividadDataSimple = {
+                descripcion: descripcion,
+                fechaInicio: inicio,
+                fechaFin: fin,
+                evento: evento,
+                aforo: aforo,
+                id_padre: idPadre,
+                espacios: espacios,
+                ponentes: ponentes,
+                titulo: titulo
+            };
+    
+            return fetch('/API/subactividades/simple', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json'
+                },
+                body: JSON.stringify(actividadDataSimple)
+            })
+            .then(response => {
+                if (!response.ok) {
+                    return response.json().then(err => { throw err; });
+                }
+                return response.json();
+            });
+        }
+    
+        //Comprobar si idPAdre viene null o no, si viene null llamo a la funcion para crear actividad padre y
+        //luego crear detalleActividad, si viene idPAdre con algun valor crea detalleActividad pasandole esa id :)
+        if (!idPadre || isNaN(idPadre)) {
+            crearActividadPadre()
+            .then(data => {
+                console.log('Actividad padre creada exitosamente:', data);
+                return crearDetalleActividad(data.id);
+            })
+            .then(data => {
+                console.log('Detalle de actividad creado exitosamente:', data);
+                guardarPonente();
+                asociarEventoConActividad(evento, data.id);
+                location.reload(data.id, grupos); 
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(`Error: ${error.message || error}`);
+            });
+        } else {
+            crearDetalleActividad(parseInt(idPadre))
+            .then(data => {
+                console.log('Detalle de actividad creado exitosamente:', data);
+                guardarPonente();
+                asociarEventoConActividad(evento, data.id);
+                guardarGruposYActividad();
+                location.reload(); 
+            })
+            .catch(error => {
+                console.error('Error:', error);
+                alert(`Error: ${error.message || error}`);
+            });
+        }
     });
+    
 
     // Borrar actividad
     document.querySelectorAll('button[id="btnDeleteActivity"]').forEach(button => {
@@ -196,5 +284,65 @@ document.addEventListener('DOMContentLoaded', function() {
             console.error('Error:', error);
         });
     }
+
+   // Función para guardar grupos
+    function guardarGruposYActividad(actividadId, gruposSeleccionados) {
+        const data = {
+            actividadId: actividadId,
+            grupos: gruposSeleccionados
+        };
+
+        return fetch('/API/detalle_actividad_grupo', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (!response.ok) {
+                return response.json().then(err => { throw err; });
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Grupos relacionados con la actividad:', data);
+        })
+        .catch(error => {
+            console.error('Error al guardar los grupos en detalle_actividad_grupo:', error);
+            alert('Error al guardar los grupos en detalle_actividad_grupo: ' + error.message);
+            throw error;
+        });
+    }
+
+    function asociarEventoConActividad(eventoId, actividadId) {
+        const data = {
+            eventoId: eventoId,
+            detalleActividadId: actividadId
+        };
     
+        return fetch(`/API/asociar_evento_detalle_actividad/${actividadId}`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify(data)
+        })
+        .then(response => {
+            if (!response.ok) {
+                throw new Error('Error en la solicitud: ' + response.status);
+            }
+            return response.json();
+        })
+        .then(data => {
+            console.log('Evento asociado correctamente:', data);
+            return data;
+        })
+        .catch(error => {
+            console.error('Error al asociar evento con la actividad:', error);
+            throw error;
+        });
+    }
+    
+
 });

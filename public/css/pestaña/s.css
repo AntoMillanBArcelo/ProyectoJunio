@@ -79,3 +79,82 @@ select{
     margin: 10px;
     width: 120%;
 }
+.nav-tabs .nav-link {
+    border: 1px solid transparent;
+    border-top-left-radius: .25rem;
+    border-top-right-radius: .25rem;
+    background-color: #e9ecef;
+    color: #495057;
+}
+.nav-tabs .nav-link.active {
+    color: #007bff;
+    background-color: #fff;
+    border-color: #dee2e6 #dee2e6 #fff;
+}
+.tab-content > .tab-pane {
+    display: none;
+}
+.tab-content > .active {
+    display: block;
+}
+.nav-link.disabled {
+    pointer-events: none;
+    color: #6c757d;
+    background-color: #e9ecef;
+}
+.styled[disabled] {
+    background-color: gray;
+    color: white;
+    cursor: not-allowed;
+}
+.hidden {
+    display: none;
+}
+
+#ponentesAgregados {
+border: 1px solid #ccc;
+padding: 10px;
+margin-top: 20px;
+background-color: #f9f9f9;
+border-radius: 5px;
+}
+
+#ponentesAgregados div {
+padding: 10px;
+margin-bottom: 10px;
+border: 1px solid #ddd;
+background-color: #fff;
+border-radius: 5px;
+box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+#ponentesAgregados div:nth-child(even) {
+background-color: #f1f1f1;
+}
+
+.form-group label {
+display: block;
+margin-bottom: 5px;
+}
+
+.form-group input[type="text"] {
+width: 100%;
+padding: 8px;
+margin-bottom: 10px;
+border: 1px solid #ccc;
+border-radius: 4px;
+}
+
+.form-group input.styled {
+background-color: #007bff;
+color: #fff;
+border: none;
+padding: 10px 20px;
+cursor: pointer;
+border-radius: 4px;
+transition: background-color 0.3s ease;
+}
+
+.form-group input.styled:hover {
+background-color: #0056b3;
+}

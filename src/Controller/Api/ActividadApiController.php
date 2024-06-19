@@ -92,73 +92,77 @@ class ActividadApiController extends AbstractController
   
     
     #[Route('/actividades', name: 'actividad_create', methods: ['POST'])]
-    public function create(Request $request, EntityManagerInterface $em): Response
-    {
-        $data = json_decode($request->getContent(), true);
+public function create(Request $request, EntityManagerInterface $em): Response
+{
+    $data = json_decode($request->getContent(), true);
 
-        if (!isset($data['tipo'])) {
-            return $this->json(['error' => 'Tipo no especificado'], Response::HTTP_BAD_REQUEST);
+    $em->getConnection()->beginTransaction();
+    try {
+        if (!isset($data['descripcion']) || !isset($data['evento']) || !isset($data['fechaInicio']) || !isset($data['fechaFin'])) {
+            return $this->json(['error' => 'Datos incompletos para actividad de tipo 2'], Response::HTTP_BAD_REQUEST);
         }
 
-        $em->getConnection()->beginTransaction();
-        try {
-            if ($data['tipo'] == 2) {
-                if (!isset($data['descripcion']) || !isset($data['evento']) || !isset($data['fechaInicio']) || !isset($data['fechaFin'])) {
-                    return $this->json(['error' => 'Datos incompletos para actividad de tipo 2'], Response::HTTP_BAD_REQUEST);
-                }
-
-                $fechaInicio = new \DateTime($data['fechaInicio']);
-                $fechaFin = new \DateTime($data['fechaFin']);
-
-                $actividad = new Actividad();
-                $actividad->setDescripcion($data['descripcion']);
-                $actividad->setFechaHoraIni($fechaInicio);
-                $actividad->setFechaHoraFin($fechaFin);
-                $actividad->setTipo($data['tipo']);
-
-                $evento = $em->getRepository(Evento::class)->find($data['evento']);
-                if (!$evento) {
-                    return $this->json(['error' => 'Evento no encontrado'], Response::HTTP_NOT_FOUND);
-                }
-                $actividad->setEvento($evento);
-
-                $em->persist($actividad);
-                $em->flush();
-
-                $em->getConnection()->commit();
-
-                return $this->json([
-                    'id' => $actividad->getId(),
-                    'descripcion' => $actividad->getDescripcion(),
-                    'fechaHoraInicio' => $actividad->getFechaHoraIni()->format('d-m-Y H:i:s'),
-                    'fechaHoraFin' => $actividad->getFechaHoraFin()->format('d-m-Y H:i:s'),
-                    'tipo' => $actividad->getTipo(),
-                    'evento' => [
-                        'id' => $evento->getId(),
-                        'nombre' => $evento->getTitulo()
-                    ]
-                ], Response::HTTP_CREATED);
-            } else {
-                return $this->json(['error' => 'Tipo no soportado'], Response::HTTP_BAD_REQUEST);
-            }
+        try 
+        {
+            $fechaInicio = new \DateTime($data['fechaInicio']);
         } catch (\Exception $e) {
-            $em->getConnection()->rollBack();
-            return $this->json(['error' => 'Error interno del servidor: ' . $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+            return $this->json(['error' => 'Fecha de inicio no válida.'], Response::HTTP_BAD_REQUEST);
         }
+
+        try {
+            $fechaFin = new \DateTime($data['fechaFin']);
+        } catch (\Exception $e) {
+            return $this->json(['error' => 'Fecha de fin no válida.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        if ($fechaInicio >= $fechaFin) {
+            return $this->json(['error' => 'La fecha de inicio debe ser anterior a la fecha de fin.'], Response::HTTP_BAD_REQUEST);
+        }
+
+        $actividad = new Actividad();
+        $actividad->setDescripcion($data['descripcion']);
+        $actividad->setFechaHoraIni($fechaInicio);
+        $actividad->setFechaHoraFin($fechaFin);
+        $actividad->setTipo('compuesta');
+
+        $evento = $em->getRepository(Evento::class)->find($data['evento']);
+        if (!$evento) {
+            return $this->json(['error' => 'Evento no encontrado'], Response::HTTP_NOT_FOUND);
+        }
+        $actividad->setEvento($evento);
+
+        $em->persist($actividad);
+        $em->flush();
+
+        $em->getConnection()->commit();
+
+        return $this->json([
+            'id' => $actividad->getId(),
+            'descripcion' => $actividad->getDescripcion(),
+            'fechaHoraInicio' => $actividad->getFechaHoraIni()->format('d-m-Y H:i:s'),
+            'fechaHoraFin' => $actividad->getFechaHoraFin()->format('d-m-Y H:i:s'),
+            'tipo' => $actividad->getTipo(),
+            'evento' => [
+                'id' => $evento->getId(),
+                'nombre' => $evento->getTitulo()
+            ]
+        ], Response::HTTP_CREATED);
+    } catch (\Exception $e) {
+        $em->getConnection()->rollBack();
+        return $this->json(['error' => 'Error interno del servidor: ' . $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
     }
+}
+
 
     #[Route('/subactividades/simple', name: 'api_actividades_simple', methods: ['POST'])]
     public function createSimple(Request $request, EntityManagerInterface $em): JsonResponse
     {
         $data = json_decode($request->getContent(), true);
-
-    // Validar que los campos requeridos estén presentes y no estén vacíos o nulos
     if (
         empty($data['descripcion']) ||
         empty($data['titulo']) ||
         empty($data['fechaInicio']) ||
-        empty($data['fechaFin']) ||
-        empty($data['espacios']) 
+        empty($data['fechaFin']) 
     ) {
         return $this->json(['error' => 'Faltan datos o datos vacíos
     '], Response::HTTP_BAD_REQUEST);
@@ -188,14 +192,14 @@ class ActividadApiController extends AbstractController
                 $detalleActividad->setDetalleActividadEspacios($espacio);
                 }
 
-                foreach ($data['grupos'] as $grupoId) {
+              /*   foreach ($data['grupos'] as $grupoId) {
                     $grupo = $em->getRepository(Grupo::class)->find($grupoId);
                     if (!$grupo) {
                         $em->getConnection()->rollBack();
                         return $this->json(['error' => 'Grupo no encontrado'], Response::HTTP_NOT_FOUND);
                     }
-                    $detalleActividad->addDetalleActividadGrupo($grupo);
-                }
+                    $detalleActividad->addGrupo($grupo);
+                } */
         
                 if (isset($data['id_padre'])) {
                     $detalleActividad->setIdPadre($data['id_padre']);
@@ -337,41 +341,55 @@ class ActividadApiController extends AbstractController
     }
 
     #[Route('/actividades/{id}', name: 'api_get_actividad', methods: ['GET', 'PUT'])]
-public function handleActividad(int $id, Request $request, EntityManagerInterface $em): JsonResponse
-{
-    $actividad = $em->getRepository(Actividad::class)->find($id);
+    public function handleActividad(int $id, Request $request, EntityManagerInterface $em): JsonResponse
+    {
+        $actividad = $em->getRepository(Actividad::class)->find($id);
 
-    if (!$actividad) {
-        return $this->json(['error' => 'Actividad no encontrada'], JsonResponse::HTTP_NOT_FOUND);
+        if (!$actividad) {
+            return $this->json(['error' => 'Actividad no encontrada'], JsonResponse::HTTP_NOT_FOUND);
+        }
+
+        if ($request->getMethod() === 'GET') {
+            return $this->json([
+                'id' => $actividad->getId(),
+                'descripcion' => $actividad->getDescripcion(),
+                'fechaHoraIni' => $actividad->getFechaHoraIni()->format('Y-m-d H:i:s'),
+                'fechaHoraFin' => $actividad->getFechaHoraFin()->format('Y-m-d H:i:s'),
+            ]);
+        }
+
+        $data = json_decode($request->getContent(), true);
+
+        if (isset($data['descripcion'])) {
+            $actividad->setDescripcion($data['descripcion']);
+        }
+        if (isset($data['fechaInicio'])) {
+            $actividad->setFechaHoraIni(new \DateTime($data['fechaInicio']));
+        }
+        if (isset($data['fechaFin'])) {
+            $actividad->setFechaHoraFin(new \DateTime($data['fechaFin']));
+        }
+
+        try {
+            $em->flush();
+            return $this->json(['status' => 'Actividad actualizada exitosamente']);
+        } catch (\Exception $e) {
+            return $this->json(['error' => 'Error al actualizar la actividad: ' . $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
+        }
     }
 
-    if ($request->getMethod() === 'GET') {
-        return $this->json([
-            'id' => $actividad->getId(),
-            'descripcion' => $actividad->getDescripcion(),
-            'fechaHoraIni' => $actividad->getFechaHoraIni()->format('Y-m-d H:i:s'),
-            'fechaHoraFin' => $actividad->getFechaHoraFin()->format('Y-m-d H:i:s'),
-        ]);
-    }
+    #[Route('/asociar_evento_detalle_actividad/{id}', name: 'api_asociar_evento_detalle_actividad', methods: ['POST'])]
+    public function asociarEventoDetalleActividad(Request $request, DetalleActividad $detalleActividad, Evento $evento): Response
+    {
+            $detalleActividad->setEvento($evento);
 
-    $data = json_decode($request->getContent(), true);
+            $entityManager = $this->getDoctrine()->getManager();
+            $entityManager->flush();
 
-    if (isset($data['descripcion'])) {
-        $actividad->setDescripcion($data['descripcion']);
+            return $this->json([
+                'message' => 'Evento asociado correctamente al detalle de actividad.',
+                'detalleActividad' => $detalleActividad->getId(),
+                'evento' => $evento->getId(),
+            ]);
     }
-    if (isset($data['fechaInicio'])) {
-        $actividad->setFechaHoraIni(new \DateTime($data['fechaInicio']));
-    }
-    if (isset($data['fechaFin'])) {
-        $actividad->setFechaHoraFin(new \DateTime($data['fechaFin']));
-    }
-
-    try {
-        $em->flush();
-        return $this->json(['status' => 'Actividad actualizada exitosamente']);
-    } catch (\Exception $e) {
-        return $this->json(['error' => 'Error al actualizar la actividad: ' . $e->getMessage()], Response::HTTP_INTERNAL_SERVER_ERROR);
-    }
-}
-
 }

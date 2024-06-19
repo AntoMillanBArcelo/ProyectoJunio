@@ -53,6 +53,7 @@
     <script src="{{ asset('js/pestaña/agregaActividad.js') }}"></script>
     {% if ea.i18n.translationParameters['%entity_name%'] == 'Actividad' %}
         <script src="{{ asset('js/subactividadmodal.js') }}"></script>
+
     {% endif %}
 {% endblock %}
 
@@ -445,7 +446,7 @@
     <script>
         document.addEventListener('DOMContentLoaded', function() {
             var tabs = document.querySelectorAll('[data-mdb-toggle="tab"]');
-            var btnGuardarSimple = document.getElementById('g1');
+            var btnGuardarCompuesta = document.getElementById('g1');
             var flexShrinkDiv = document.getElementById('alerta');
             var actividadSelect = document.getElementById('actividad-select');
             var tabLinks = document.querySelectorAll('.nav-link');
@@ -464,7 +465,7 @@
 
             actividadSelect.addEventListener('change', function() {
                 if (actividadSelect.value === 'simple') {
-                    btnGuardarSimple.classList.add('hidden');
+                    btnGuardarCompuesta.classList.add('hidden');
                     flexShrinkDiv.classList.remove('hidden');
                     tabLinks.forEach(function(link, index) {
                         if (index > 0) { 
@@ -472,7 +473,7 @@
                         }
                     });
                 } else if (actividadSelect.value === 'compuesta') {
-                    btnGuardarSimple.classList.remove('hidden');
+                    btnGuardarCompuesta.classList.remove('hidden');
                     flexShrinkDiv.classList.add('hidden');
                     tabLinks.forEach(function(link, index) {
                         if (index > 0) { 

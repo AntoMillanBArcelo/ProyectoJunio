@@ -10,7 +10,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
                 const img = document.createElement('img');
                 img.classList.add('card-img-top');
-                img.src = "https://via.placeholder.com/500";  // Reemplazar con URL real si disponible
+                img.src = "https://via.placeholder.com/500"; 
                 img.alt = "Card image cap";
                 card.appendChild(img);
 

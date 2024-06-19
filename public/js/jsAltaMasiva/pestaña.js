@@ -37,13 +37,28 @@ document.addEventListener('DOMContentLoaded', function() {
         console.error('Error al obtener los recursos:', error);
     });
 
+/* 
+    function updateSelectBox() {
+        const selectBox = document.getElementById('seleccionados');
+        selectBox.innerHTML = ''; 
+    
+        const checkboxes = document.querySelectorAll('#checkboxes-container input[type="checkbox"]');
+        checkboxes.forEach(checkbox => {
+            if (checkbox.checked) {
+                const option = document.createElement('option');
+                option.value = checkbox.value;
+                option.textContent = checkbox.nextElementSibling.textContent;
+                selectBox.appendChild(option);
+            }
+        });
+    } */
 
-    // API de grupo
-  fetch(apiUrl2)
+    //API de grupos
+    fetch(apiUrl2)
     .then(response => response.json())
     .then(data => {
         const checkboxesContainer = document.getElementById('checkboxes-container');
-        checkboxesContainer.innerHTML = ''; // Limpiar contenido anterior
+        checkboxesContainer.innerHTML = '';
 
         data.forEach(grupo => {
             const checkboxDiv = document.createElement('div');
@@ -52,23 +67,25 @@ document.addEventListener('DOMContentLoaded', function() {
             const checkboxInput = document.createElement('input');
             checkboxInput.classList.add('form-check-input');
             checkboxInput.type = 'checkbox';
-            checkboxInput.value = grupo.Id;
-            checkboxInput.id = `grupo-${grupo.Id}`;
+            checkboxInput.value = grupo.id;
+            checkboxInput.id = `grupo-${grupo.id}`;
+            checkboxInput.name = 'grupo';
 
             const checkboxLabel = document.createElement('label');
             checkboxLabel.classList.add('form-check-label');
-            checkboxLabel.htmlFor = `grupo-${grupo.Id}`;
+            checkboxLabel.htmlFor = `grupo-${grupo.id}`;
             checkboxLabel.textContent = grupo.Nombre;
 
             checkboxDiv.appendChild(checkboxInput);
             checkboxDiv.appendChild(checkboxLabel);
             checkboxesContainer.appendChild(checkboxDiv);
+
+            /* checkboxInput.addEventListener('change', updateSelectBox); */
         });
     })
     .catch(error => {
         console.error('Error al obtener los grupos:', error);
     });
-
 
    // API de eventos
    fetch(apiUrlEventos)
