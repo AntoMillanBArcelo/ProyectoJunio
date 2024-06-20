@@ -185,7 +185,7 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('Detalle de actividad creado exitosamente:', data);
                 guardarPonente();
                 asociarEventoConActividad(evento, data.id);
-                location.reload(data.id, grupos); 
+                location.reload(); 
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -197,7 +197,6 @@ document.addEventListener('DOMContentLoaded', function() {
                 console.log('Detalle de actividad creado exitosamente:', data);
                 guardarPonente();
                 asociarEventoConActividad(evento, data.id);
-                guardarGruposYActividad();
                 location.reload(); 
             })
             .catch(error => {
@@ -286,7 +285,7 @@ document.addEventListener('DOMContentLoaded', function() {
     }
 
    // Función para guardar grupos
-    function guardarGruposYActividad(actividadId, gruposSeleccionados) {
+    /* function guardarGruposYActividad(actividadId, gruposSeleccionados) {
         const data = {
             actividadId: actividadId,
             grupos: gruposSeleccionados
@@ -313,7 +312,7 @@ document.addEventListener('DOMContentLoaded', function() {
             alert('Error al guardar los grupos en detalle_actividad_grupo: ' + error.message);
             throw error;
         });
-    }
+    } */
 
     function asociarEventoConActividad(eventoId, actividadId) {
         const data = {

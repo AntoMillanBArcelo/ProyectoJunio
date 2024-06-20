@@ -19,7 +19,7 @@
                      </button>
                         <div class="collapse navbar-collapse" id="navbarsExample04">
                         <ul class="navbar-nav mr-auto">
-                           <li class="nav-item active">
+                           <li class="nav-item">
                                  <a class="nav-link" href="{{ path('app_index') }}">Inicio</a>
                            </li>
                            
@@ -52,10 +52,52 @@
          </div>
       </header>
       <style>
-   .navbar-dark {
-      background-color: #ffffff; 
-   }
-   #header{
-      top:-15px;
-   }
+   .header {
+    padding: 20px 0;
+}
+
+.logo_section .logo img {
+    max-width: 100px; 
+    top: -17px;
+}
+
+.navbar-dark {
+    background-color: #ffffff;
+}
+
+.navbar-dark .navbar-nav .nav-link {
+    color: #000000; 
+    transition: color 0.3s, background-color 0.3s;
+}
+
+.navbar-dark .navbar-nav .nav-item:hover .nav-link {
+    color: #ffffff;
+    background-color: #000000;
+}
+
+.navbar-dark .navbar-nav .nav-item.active .nav-link {
+    color: #ffffff;
+    background-color: #000000;
+}
+
+.navbar-toggler {
+    border-color: #000000; 
+}
+
+.navbar-toggler-icon {
+    background-image: url("data:image/svg+xml;charset=utf8,%3Csvg viewBox='0 0 30 30' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath stroke='rgba%280, 0, 0, 1%29' stroke-width='2' stroke-linecap='round' stroke-miterlimit='10' d='M4 7h22M4 15h22M4 23h22'/%3E%3C/svg%3E");
+}
+
+.full, .center-desk, .logo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+}
+
+#logo {
+    max-width: 100%;
+    height: auto;
+}
+
 </style>

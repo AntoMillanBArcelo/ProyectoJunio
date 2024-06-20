@@ -191,15 +191,6 @@ public function create(Request $request, EntityManagerInterface $em): Response
                     }
                 $detalleActividad->setDetalleActividadEspacios($espacio);
                 }
-
-              /*   foreach ($data['grupos'] as $grupoId) {
-                    $grupo = $em->getRepository(Grupo::class)->find($grupoId);
-                    if (!$grupo) {
-                        $em->getConnection()->rollBack();
-                        return $this->json(['error' => 'Grupo no encontrado'], Response::HTTP_NOT_FOUND);
-                    }
-                    $detalleActividad->addGrupo($grupo);
-                } */
         
                 if (isset($data['id_padre'])) {
                     $detalleActividad->setIdPadre($data['id_padre']);
@@ -225,12 +216,6 @@ public function create(Request $request, EntityManagerInterface $em): Response
                         return [
                             'id' => $espacio->getId(),
                             'nombre' => $espacio->getNombre()
-                        ];
-                    })->toArray(),
-                    'grupos' => $detalleActividad->getDetalleActividadGrupo()->map(function($grupo) {
-                        return [
-                            'id' => $grupo->getId(),
-                            'nombre' => $grupo->getNombre()
                         ];
                     })->toArray()
                 ], Response::HTTP_CREATED);

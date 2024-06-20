@@ -7,7 +7,7 @@ document.addEventListener('DOMContentLoaded', function () {
                 .then(data => {
                     const subactividadesContent = document.getElementById('subactividadesContent');
                     if (!subactividadesContent) {
-                        console.error('El elemento subactividadesContent no se encontró en el DOM.');
+                        console.error('error');
                         return;
                     }
 

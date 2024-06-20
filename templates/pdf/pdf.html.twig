@@ -6,11 +6,37 @@
     <title>Detalle de Actividad</title>
 </head>
 <body>
-    {% if imagenCodificada is defined %}
-        <img src="data:image/png;base64,{{ imagenCodificada }}" alt="Logo">
-    {% endif %}
     <h1>Detalle de la Actividad</h1>
-    <p><strong>Descripción:</strong> {{ actividad.descripcion }}</p>
-    <p>La actividad empezará el {{ actividad.fechaHoraIni|date('d-m-Y H:i') }} y termina el {{ actividad.fechaHoraFin|date('d-m-Y H:i') }}</p>
+    <p><strong>Fecha Inicio:</strong> {{ actividad.getFechaHoraIni()|date("d-m-Y H:i:s") }}</p>
+    <p><strong>Fecha Fin:</strong> {{ actividad.getFechaHoraFin()|date("d-m-Y H:i:s") }}</p>
+    {% if actividad.getDescripcion() %}
+        <p><strong>Descripción:</strong> {{ actividad.getDescripcion() }}</p>
+    {% endif %}
+    {% if actividad.getEvento() %}
+        <p><strong>Evento:</strong> {{ actividad.getEvento().getTitulo() }}</p>
+    {% endif %}
+
+    {% if subactividades is not empty %}
+        <h2>Subactividades</h2>
+        {% for subactividad in subactividades %}
+            <h3>{{ subactividad.getTitulo() }}</h3>
+            <p><strong>Descripción:</strong> {{ subactividad.getDescripcion() }}</p>
+            <p><strong>Fecha Inicio:</strong> {{ subactividad.getFechaHoraIni()|date("d-m-Y H:i:s") }}</p>
+            <p><strong>Fecha Fin:</strong> {{ subactividad.getFechaHoraFin()|date("d-m-Y H:i:s") }}</p>
+            <p><strong>Sala:</strong> {{ subactividad.getDetalleActividadEspacios().getNombre() }}</p>
+
+            {% if ponentesPorSubactividad[subactividad.getId()] is not empty %}
+                <h4>Ponentes</h4>
+                <ul>
+                    {% for ponente in ponentesPorSubactividad[subactividad.getId()] %}
+                        <li>
+                            <p><strong>Nombre:</strong> {{ ponente.getNombre() }}</p>
+                            <p><strong>Cargo:</strong> {{ ponente.getCargo() }}</p>
+                        </li>
+                    {% endfor %}
+                </ul>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
 </body>
 </html>
